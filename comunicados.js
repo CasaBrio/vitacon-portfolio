@@ -38,13 +38,12 @@ const COMUNICADOS = [
     texto: "Todas as fichas de empreendimentos disponíveis e de revenda já contam com foto oficial de fachada e link de materiais completos.",
     link: "",
     linkTexto: ""
-  }
-];
+  },
  {
     data: "28/07/2026",
     titulo: "PLANILHA DE ESTOQUE - JULHO/26",
     texto: "SEGUE ABAIXO O LINK PARA O ARQUIVO EM EXCEL - POLÍTICAS DE DESCONTO - ESTOQUE.",
     link: "https://docs.google.com/spreadsheets/d/1_KxSM7o8HkyMEEX9ZDCayusk99gSPOQW/edit?usp=sharing&ouid=111636566725752504338&rtpof=true&sd=true",
-   linkTexto: ""
+   linkTexto: "Planilha Estoque"
   }
 ];
