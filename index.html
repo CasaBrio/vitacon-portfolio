@@ -245,7 +245,7 @@
       <a class="pill-link" id="linkInvestir" href="investir.html">💡 <b>Por que investir com a Vitacon</b></a>
       <a class="pill-link" href="https://drive.google.com/drive/folders/1mW1RhbsVsEnTSjr0HLRZUS24s8Pnh1AQ?usp=drive_link" target="_blank">📁 <b>Prateleira de Negócios — Materiais</b></a>
       <a class="pill-link" id="linkOportunidades" href="https://drive.google.com/drive/folders/1wWfXydX0drehqAkqPomRHeS25Qte845B?usp=sharing" target="_blank">🎯 <b>Consulte aqui as Oportunidades</b></a>
-      <a class="pill-link featured" href="https://vitaconpartners.com.br" target="_blank">🤝 <span class="pill-text"><b>Cadastre-se como Parceiro</b><small id="parceiroSubtitulo">Gerente Luigi</small></span></a>
+      <a class="pill-link featured" href="https://vitaconpartners.com.br" target="_blank">🤝 <span class="pill-text"><b>Cadastre-se como Parceiro</b><small id="parceiroSubtitulo">Gerente - Luigi</small></span></a>
     </div>
   </div>
 </section>
@@ -372,7 +372,7 @@ function aplicarContatoNaPagina(){
   const parceiroSubtitulo = document.getElementById('parceiroSubtitulo');
   if (parceiroSubtitulo){
     const cargoCurto = (CONTATO.cargo || '').split(/[\s·]+/)[0] || '';
-    parceiroSubtitulo.textContent = (cargoCurto ? cargoCurto + ' ' : '') + CONTATO.nome;
+    parceiroSubtitulo.textContent = (cargoCurto ? cargoCurto + ' - ' : '') + CONTATO.nome;
   }
 }
 document.addEventListener('DOMContentLoaded', aplicarContatoNaPagina);
