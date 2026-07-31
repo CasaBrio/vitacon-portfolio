@@ -89,13 +89,20 @@
   }
   .stat .num{font-family:'Archivo Narrow'; font-weight:800; font-size:26px;}
   .stat .lbl{color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:0.05em; margin-top:2px;}
-  .hero-ctas{display:flex; gap:12px; margin-top:24px; flex-wrap:wrap;}
+  .hero-ctas{display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; align-items:stretch;}
   .pill-link{
     border:1px solid var(--blue); background:rgba(39,39,255,0.1);
     border-radius:100px; padding:10px 18px; font-size:13px; display:flex; align-items:center; gap:8px;
   }
   .pill-link b{font-family:'Archivo Narrow'; font-weight:700;}
   .pill-link:hover{background:rgba(39,39,255,0.2);}
+  .pill-link.featured{
+    background:var(--blue); border-color:var(--blue); color:#fff;
+    padding:14px 26px; font-size:15px; box-shadow:0 4px 14px rgba(39,39,255,0.35);
+  }
+  .pill-link.featured:hover{background:var(--blue-deep); border-color:var(--blue-deep);}
+  .pill-link.featured .pill-text{display:flex; flex-direction:column; gap:1px; line-height:1.25;}
+  .pill-link.featured .pill-text small{font-weight:600; font-size:11.5px; opacity:0.85; text-transform:none;}
 
   /* ---------- TABS + FILTERS ---------- */
   .controls{
@@ -152,6 +159,7 @@
     background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--blue);
     border-radius:8px; padding:18px 22px;
   }
+  .comunicado-card .imagem{width:100%; max-width:420px; border-radius:8px; display:block; margin-bottom:12px; border:1px solid var(--line);}
   .comunicado-card .data{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-family:'Archivo Narrow'; font-weight:700;}
   .comunicado-card .titulo{font-family:'Archivo Narrow'; font-weight:800; font-size:17px; text-transform:none; margin-top:4px;}
   .comunicado-card .texto{color:var(--muted); font-size:14px; line-height:1.6; margin-top:8px;}
@@ -236,7 +244,8 @@
     <div class="hero-ctas">
       <a class="pill-link" id="linkInvestir" href="investir.html">💡 <b>Por que investir com a Vitacon</b></a>
       <a class="pill-link" href="https://drive.google.com/drive/folders/1mW1RhbsVsEnTSjr0HLRZUS24s8Pnh1AQ?usp=drive_link" target="_blank">📁 <b>Prateleira de Negócios — Materiais</b></a>
-      <a class="pill-link" href="https://vitaconpartners.com.br" target="_blank">🤝 <b>Cadastre-se como parceiro</b></a>
+      <a class="pill-link" id="linkOportunidades" href="https://drive.google.com/drive/folders/1wWfXydX0drehqAkqPomRHeS25Qte845B?usp=sharing" target="_blank">🎯 <b>Consulte aqui as Oportunidades</b></a>
+      <a class="pill-link featured" href="https://vitaconpartners.com.br" target="_blank">🤝 <span class="pill-text"><b>Cadastre-se como Parceiro</b><small id="parceiroSubtitulo">Gerente Luigi</small></span></a>
     </div>
   </div>
 </section>
@@ -359,6 +368,12 @@ function aplicarContatoNaPagina(){
   }
   const linkInvestir = document.getElementById('linkInvestir');
   if (linkInvestir) linkInvestir.href = REP_ATUAL ? ('/investir/' + REP_ATUAL) : '/investir.html';
+
+  const parceiroSubtitulo = document.getElementById('parceiroSubtitulo');
+  if (parceiroSubtitulo){
+    const cargoCurto = (CONTATO.cargo || '').split(/[\s·]+/)[0] || '';
+    parceiroSubtitulo.textContent = (cargoCurto ? cargoCurto + ' ' : '') + CONTATO.nome;
+  }
 }
 document.addEventListener('DOMContentLoaded', aplicarContatoNaPagina);
 // COMUNICADOS é carregado do arquivo externo "comunicados.js" (ver <script> no <head>/antes deste bloco)
@@ -420,6 +435,7 @@ function renderComunicados(){
   }
   feedComunicados.innerHTML = ordenados.map(c => `
     <div class="comunicado-card">
+      ${c.imagem ? `<img class="imagem" src="${c.imagem}" alt="${c.titulo}">` : ''}
       <div class="data">${c.data}</div>
       <div class="titulo">${c.titulo}</div>
       <div class="texto">${c.texto}</div>
