@@ -234,7 +234,7 @@
       <div class="stat"><div class="num">SP</div><div class="lbl">Capital</div></div>
     </div>
     <div class="hero-ctas">
-      <a class="pill-link" href="investir.html">💡 <b>Por que investir com a Vitacon</b></a>
+      <a class="pill-link" id="linkInvestir" href="investir.html">💡 <b>Por que investir com a Vitacon</b></a>
       <a class="pill-link" href="https://drive.google.com/drive/folders/1mW1RhbsVsEnTSjr0HLRZUS24s8Pnh1AQ?usp=drive_link" target="_blank">📁 <b>Prateleira de Negócios — Materiais</b></a>
       <a class="pill-link" href="https://vitaconpartners.com.br" target="_blank">🤝 <b>Cadastre-se como parceiro</b></a>
     </div>
@@ -319,10 +319,17 @@ const REPS = {
 const CONTATO_PADRAO = REPS.luigi;
 const NUMERO_ORIGINAL_DADOS = "5511998885850"; // numero que está gravado nos links "wa" de cada imóvel nos dados
 
+let REP_ATUAL = null;
 function obterContato(){
   const params = new URLSearchParams(window.location.search);
-  const rep = params.get('rep');
-  return (rep && REPS[rep]) ? REPS[rep] : CONTATO_PADRAO;
+  let rep = params.get('rep'); // compatibilidade com links antigos (?rep=nome)
+  if (!rep){
+    const partes = window.location.pathname.split('/').filter(Boolean);
+    const candidatos = partes.filter(p => p !== 'investir.html' && p !== 'investir' && p !== 'index.html');
+    if (candidatos.length) rep = candidatos[candidatos.length - 1].toLowerCase();
+  }
+  if (rep && REPS[rep]){ REP_ATUAL = rep; return REPS[rep]; }
+  return CONTATO_PADRAO;
 }
 const CONTATO = obterContato();
 const WHATSAPP = CONTATO.whatsapp;
@@ -350,6 +357,8 @@ function aplicarContatoNaPagina(){
       : semDDI.replace(/(\d{2})(\d{4})(\d{4})/, '$1 $2-$3');
     detalheRodape.innerHTML = tel + (CONTATO.email ? ' · ' + CONTATO.email : '') + (CONTATO.creci ? '<br>' + CONTATO.creci : '');
   }
+  const linkInvestir = document.getElementById('linkInvestir');
+  if (linkInvestir) linkInvestir.href = REP_ATUAL ? ('/investir/' + REP_ATUAL) : '/investir.html';
 }
 document.addEventListener('DOMContentLoaded', aplicarContatoNaPagina);
 // COMUNICADOS é carregado do arquivo externo "comunicados.js" (ver <script> no <head>/antes deste bloco)
