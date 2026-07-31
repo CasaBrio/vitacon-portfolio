@@ -145,7 +145,7 @@
 <header>
   <div class="wrap">
     <div class="logo">Vita<b>con</b></div>
-    <a class="header-cta" href="https://wa.me/5511998885850?text=Ol%C3%A1%21%20Vi%20o%20site%20da%20Vitacon%20e%20quero%20saber%20mais%20sobre%20como%20investir." target="_blank" rel="noopener">Falar no WhatsApp</a>
+    <a class="header-cta" id="waHeader" href="https://wa.me/5511998885850?text=Ol%C3%A1%21%20Vi%20o%20site%20da%20Vitacon%20e%20quero%20saber%20mais%20sobre%20como%20investir." target="_blank" rel="noopener">Falar no WhatsApp</a>
   </div>
 </header>
 
@@ -161,7 +161,7 @@
       <div><b>+150</b><span>Projetos desenvolvidos</span></div>
     </div>
     <div class="cta-row">
-      <a class="btn btn-primary" href="https://wa.me/5511998885850?text=Ol%C3%A1%21%20Vi%20o%20site%20da%20Vitacon%20e%20quero%20saber%20mais%20sobre%20como%20investir." target="_blank" rel="noopener">Falar com a Equipe Luigi</a>
+      <a class="btn btn-primary" id="waHero" href="https://wa.me/5511998885850?text=Ol%C3%A1%21%20Vi%20o%20site%20da%20Vitacon%20e%20quero%20saber%20mais%20sobre%20como%20investir." target="_blank" rel="noopener"><span id="waHeroTexto">Falar com a Equipe Luigi</span></a>
       <a class="btn btn-secondary" href="index.html">Ver empreendimentos</a>
     </div>
   </div>
@@ -259,8 +259,8 @@
     <div class="final-cta">
       <div class="cta-block primary">
         <h3>Quer saber mais sobre como investir?</h3>
-        <p>Fale agora com a Equipe Luigi</p>
-        <a class="btn" href="https://wa.me/5511998885850?text=Ol%C3%A1%21%20Vi%20o%20site%20da%20Vitacon%20e%20quero%20saber%20mais%20sobre%20como%20investir." target="_blank" rel="noopener">WhatsApp (11) 99888-5850</a>
+        <p>Fale agora com <span id="nomeCtaFinal">a Equipe Luigi</span></p>
+        <a class="btn" id="waCtaFinal" href="https://wa.me/5511998885850?text=Ol%C3%A1%21%20Vi%20o%20site%20da%20Vitacon%20e%20quero%20saber%20mais%20sobre%20como%20investir." target="_blank" rel="noopener"><span id="waCtaFinalTexto">WhatsApp (11) 99888-5850</span></a>
       </div>
       <div class="cta-block alt">
         <h3>Conheça os empreendimentos</h3>
@@ -274,13 +274,77 @@
 
 <footer>
   <div class="wrap">
-    <div class="who"><b>Luigi</b> | Vitacon<br><span style="color:rgba(245,245,247,0.5);font-size:13px;">Equipe Luigi · Corretor Parceiro</span></div>
-    <div class="contacts">
+    <div class="who"><b id="nomeRodapeInvestir">Luigi</b> | Vitacon<br><span style="color:rgba(245,245,247,0.5);font-size:13px;" id="cargoRodapeInvestir">Equipe Luigi · Corretor Parceiro</span></div>
+    <div class="contacts" id="contatosRodapeInvestir">
       WhatsApp: (11) 99888-5850<br>
       E-mail: luigi@vitacon.com.br
     </div>
   </div>
 </footer>
+
+<script>
+// ===== SISTEMA DE CONTATO POR EXECUTIVO =====
+// Mesmo esquema do index.html — mantenha os dois arquivos com a mesma lista de REPS.
+const REPS = {
+  luigi:   { nome: "Luigi",   cargo: "Gerente de Vendas e Parcerias",     whatsapp: "5511998885850", email: "luigi@vitacon.com.br" },
+  leila:   { nome: "Leila",   cargo: "Coordenadora · Vendas e Parcerias", whatsapp: "5511993333823", email: "leila.mattos@executivoassociado.com.br" },
+  khalila: { nome: "Khalila", cargo: "Coordenadora · Vendas e Parcerias", whatsapp: "5511980783871", email: "khalila.nunes@executivoassociado.com.br" },
+  samuel:  { nome: "Samuel",  cargo: "Coordenador · Vendas e Parcerias",  whatsapp: "5511998981233", email: "samuel.pimenta@executivoassociado.com.br" },
+  andrea:  { nome: "Andréa",  cargo: "Coordenadora · Vendas e Parcerias", whatsapp: "5511985060852", email: "andrea.brunno@executivoassociado.com.br" },
+  akany:   { nome: "Akany",   cargo: "Coordenadora · Vendas e Parcerias", whatsapp: "5511983771556", email: "akany.delphino@executivoassociado.com.br" },
+  // exemplo1: { nome: "Nome Completo", cargo: "Cargo/Time", whatsapp: "5511900000000", email: "nome@vitacon.com.br" },
+};
+// Contato exibido quando o link é acessado sem "?rep=" — Luigi é o padrão da equipe.
+const CONTATO_PADRAO = REPS.luigi;
+
+function obterContato(){
+  const params = new URLSearchParams(window.location.search);
+  const rep = params.get('rep');
+  return (rep && REPS[rep]) ? REPS[rep] : CONTATO_PADRAO;
+}
+const CONTATO = obterContato();
+
+function formatarTelefone(numero){
+  const semDDI = numero.replace(/^55/, '');
+  return semDDI.length === 11
+    ? semDDI.replace(/(\d{2})(\d{5})(\d{4})/, '$1 $2-$3')
+    : semDDI.replace(/(\d{2})(\d{4})(\d{4})/, '$1 $2-$3');
+}
+
+function montarLinkWa(msg){
+  return 'https://wa.me/' + CONTATO.whatsapp + '?text=' + encodeURIComponent(msg);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const msg = `Olá! Vi o site da Vitacon e quero saber mais sobre como investir.`;
+  const link = montarLinkWa(msg);
+
+  ['waHeader','waHero','waCtaFinal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.href = link;
+  });
+
+  const waHeroTexto = document.getElementById('waHeroTexto');
+  if (waHeroTexto) waHeroTexto.textContent = 'Falar com ' + CONTATO.nome;
+
+  const waCtaFinalTexto = document.getElementById('waCtaFinalTexto');
+  if (waCtaFinalTexto) waCtaFinalTexto.textContent = 'WhatsApp ' + formatarTelefone(CONTATO.whatsapp);
+
+  const nomeCtaFinal = document.getElementById('nomeCtaFinal');
+  if (nomeCtaFinal) nomeCtaFinal.textContent = CONTATO.nome;
+
+  const nomeRodape = document.getElementById('nomeRodapeInvestir');
+  if (nomeRodape) nomeRodape.textContent = CONTATO.nome;
+
+  const cargoRodape = document.getElementById('cargoRodapeInvestir');
+  if (cargoRodape) cargoRodape.textContent = CONTATO.cargo;
+
+  const contatosRodape = document.getElementById('contatosRodapeInvestir');
+  if (contatosRodape){
+    contatosRodape.innerHTML = 'WhatsApp: ' + formatarTelefone(CONTATO.whatsapp) + '<br>E-mail: ' + CONTATO.email;
+  }
+});
+</script>
 
 </body>
 </html>
