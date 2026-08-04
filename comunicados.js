@@ -63,7 +63,7 @@ const COMUNICADOS = [
     data: "03/08/2026",
     titulo: "Vitacon - News",
     texto: "aqui vc encontra as mais recentes novidades sobre a Vitacon",
-    imagem: "vitacon_news",
+    imagem: "vitacon_news.jpg",
     link: "https://empreendimentos.vitacon.com.br/vitacon-news-julho-2026",
     linkTexto: "Vitacon News"
   }];
