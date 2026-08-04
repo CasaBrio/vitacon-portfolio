@@ -58,8 +58,7 @@ const COMUNICADOS = [
     imagem: "",
     link: "https://docs.google.com/spreadsheets/d/1_KxSM7o8HkyMEEX9ZDCayusk99gSPOQW/edit?usp=sharing&ouid=111636566725752504338&rtpof=true&sd=true",
    linkTexto: "Planilha Estoque"
-  }
-];
+  },
   {
     data: "03/08/2026",
     titulo: "Vitacon - News",
