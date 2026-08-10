@@ -160,6 +160,9 @@
     border-radius:8px; padding:18px 22px;
   }
   .comunicado-card .imagem{width:100%; max-width:420px; border-radius:8px; display:block; margin-bottom:12px; border:1px solid var(--line);}
+  .comunicado-card .video-wrap{position:relative; width:100%; max-width:480px; aspect-ratio:16/9; border-radius:8px; overflow:hidden; margin-bottom:12px; border:1px solid var(--line); background:var(--surface-2);}
+  .comunicado-card .video-wrap iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .comunicado-card .video-local{width:100%; max-width:480px; border-radius:8px; display:block; margin-bottom:12px; border:1px solid var(--line); background:var(--surface-2);}
   .comunicado-card .data{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; font-family:'Archivo Narrow'; font-weight:700;}
   .comunicado-card .titulo{font-family:'Archivo Narrow'; font-weight:800; font-size:17px; text-transform:none; margin-top:4px;}
   .comunicado-card .texto{color:var(--muted); font-size:14px; line-height:1.6; margin-top:8px;}
@@ -244,7 +247,7 @@
     <div class="hero-ctas">
       <a class="pill-link" id="linkInvestir" href="investir.html">💡 <b>Por que investir com a Vitacon</b></a>
       <a class="pill-link" href="https://drive.google.com/drive/folders/1mW1RhbsVsEnTSjr0HLRZUS24s8Pnh1AQ?usp=drive_link" target="_blank">📁 <b>Prateleira de Negócios — Materiais</b></a>
-      <a class="pill-link" id="linkOportunidades" href="https://drive.google.com/drive/folders/1wWfXydX0drehqAkqPomRHeS25Qte845B?usp=sharing" target="_blank">🎯 <b>Consulte aqui as Oportunidades</b></a>
+      <a class="pill-link" id="linkOportunidades" href="#" target="_blank">🎯 <b>Consulte aqui as Oportunidades</b></a>
       <a class="pill-link featured" href="https://vitaconpartners.com.br" target="_blank">🤝 <span class="pill-text"><b>Cadastre-se como Parceiro</b><small id="parceiroSubtitulo"></small><small id="gerenteFixo" style="display:none;">Gerente - Luigi</small></span></a>
     </div>
   </div>
@@ -430,6 +433,20 @@ function parseDataBR(str){
   return new Date(y, m-1, d);
 }
 
+function embedVideoHtml(url, titulo){
+  if (!url) return '';
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]+)/);
+  if (yt){
+    return `<div class="video-wrap"><iframe src="https://www.youtube.com/embed/${yt[1]}" title="${titulo}" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe></div>`;
+  }
+  const vm = url.match(/vimeo\.com\/(\d+)/);
+  if (vm){
+    return `<div class="video-wrap"><iframe src="https://player.vimeo.com/video/${vm[1]}" title="${titulo}" allowfullscreen allow="autoplay; fullscreen; picture-in-picture"></iframe></div>`;
+  }
+  // arquivo de video local (subido no mesmo repositorio, ex: "meu-video.mp4")
+  return `<video class="video-local" controls src="${url}"></video>`;
+}
+
 function renderComunicados(){
   if (typeof COMUNICADOS === 'undefined'){
     feedComunicados.innerHTML = '<div class="empty-state">Carregando comunicados…</div>';
@@ -443,6 +460,7 @@ function renderComunicados(){
   feedComunicados.innerHTML = ordenados.map(c => `
     <div class="comunicado-card">
       ${c.imagem ? `<img class="imagem" src="${c.imagem}" alt="${c.titulo}">` : ''}
+      ${c.video ? embedVideoHtml(c.video, c.titulo) : ''}
       <div class="data">${c.data}</div>
       <div class="titulo">${c.titulo}</div>
       <div class="texto">${c.texto}</div>
@@ -511,6 +529,11 @@ window.__comunicadosCarregados = function(){
   const badge = document.getElementById('countComunicados');
   if (badge) badge.textContent = `(${COMUNICADOS.length})`;
   if (tabAtual === 'comunicados') render();
+
+  const linkOp = document.getElementById('linkOportunidades');
+  if (linkOp && typeof LINK_OPORTUNIDADES !== 'undefined' && LINK_OPORTUNIDADES) {
+    linkOp.href = LINK_OPORTUNIDADES;
+  }
 };
 
 const modalOverlay = document.getElementById('modalOverlay');
