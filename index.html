@@ -154,6 +154,42 @@
   .card .dif{color:var(--muted); font-size:11.5px; line-height:1.35; margin-top:2px;}
   .empty-state{color:var(--muted); text-align:center; padding:60px 20px; font-size:14px;}
 
+  .compare-check{
+    position:absolute; top:8px; left:8px; z-index:2; display:flex; align-items:center; gap:5px;
+    background:rgba(255,255,255,0.92); border-radius:6px; padding:4px 8px; font-size:11px;
+    font-family:'Archivo Narrow'; font-weight:700; color:var(--text); cursor:pointer;
+    border:1px solid var(--line);
+  }
+  .compare-check input{margin:0; cursor:pointer;}
+  .card{position:relative;}
+
+  .compare-bar{
+    position:fixed; bottom:0; left:0; right:0; background:var(--text); color:#fff;
+    padding:14px 20px; display:none; align-items:center; justify-content:center; gap:16px;
+    z-index:200; box-shadow:0 -4px 14px rgba(0,0,0,0.15);
+  }
+  .compare-bar.show{display:flex;}
+  .compare-bar button{
+    font-family:'Archivo Narrow'; font-weight:700; font-size:13px; padding:9px 18px;
+    border-radius:100px; border:none; cursor:pointer;
+  }
+  .compare-bar .btn-ver{background:var(--blue); color:#fff;}
+  .compare-bar .btn-limpar{background:transparent; color:#fff; border:1px solid rgba(255,255,255,0.4);}
+
+  .compare-table{width:100%; border-collapse:collapse; margin-top:16px; font-size:13px;}
+  .compare-table th, .compare-table td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+  .compare-table th{background:var(--surface-2); font-family:'Archivo Narrow'; font-weight:700; font-size:11px; text-transform:uppercase;}
+  .compare-table td.lbl{background:var(--surface-2); font-weight:700; font-size:11px; text-transform:uppercase; color:var(--muted); white-space:nowrap;}
+  .compare-table img{width:100%; max-width:120px; border-radius:6px;}
+
+  .legend-link{
+    font-family:'Archivo Narrow'; font-weight:700; font-size:12.5px; color:var(--muted);
+    text-decoration:underline; cursor:pointer; background:none; border:none; padding:0;
+  }
+  .legend-table{width:100%; border-collapse:collapse; margin-top:14px; font-size:13px;}
+  .legend-table th, .legend-table td{border:1px solid var(--line); padding:8px 10px; text-align:left;}
+  .legend-table th{background:var(--surface-2); font-family:'Archivo Narrow'; font-size:11px; text-transform:uppercase;}
+
   .feed{max-width:720px; margin:0 auto; display:flex; flex-direction:column; gap:14px;}
   .comunicado-card{
     background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--blue);
@@ -279,6 +315,9 @@
       <select id="filtroFase"><option value="">Todos os status</option></select>
       <div class="result-count" id="resultCount"></div>
     </div>
+    <div style="text-align:right; margin-top:6px;">
+      <button class="legend-link" onclick="abrirLegenda()">O que significa R2V, NR, HIS, HMP? →</button>
+    </div>
   </div>
 </div>
 
@@ -286,6 +325,12 @@
   <div class="grid" id="grid"></div>
   <div class="empty-state" id="emptyState" style="display:none;">Nenhum empreendimento encontrado com esses filtros.</div>
   <div class="feed" id="feedComunicados" style="display:none;"></div>
+</div>
+
+<div class="compare-bar" id="compareBar">
+  <span id="compareCount">0 selecionados</span>
+  <button class="btn-ver" onclick="verComparacao()">Comparar →</button>
+  <button class="btn-limpar" onclick="limparComparacao()">Limpar</button>
 </div>
 
 <div class="modal-overlay" id="modalOverlay">
@@ -430,6 +475,10 @@ function cardHtml(item, isRevenda){
   const dif = isRevenda ? `Interessa revenda? Fale com ${CONTATO.nome}.` : (item.diferencial || '');
   return `
     <div class="card" data-slug="${item.slug}" data-tipo="${isRevenda?'revenda':'disponivel'}">
+      <label class="compare-check" onclick="event.stopPropagation()">
+        <input type="checkbox" data-compare-slug="${item.slug}" data-compare-tipo="${isRevenda?'revenda':'disponivel'}" ${comparados.some(c=>c.slug===item.slug) ? 'checked' : ''} onchange="toggleComparar(this)">
+        Comparar
+      </label>
       <img class="thumb" src="${item.foto}" loading="lazy" alt="${item.nome}">
       <div class="body">
         <div class="badge-row">${badge}</div>
@@ -680,8 +729,103 @@ document.addEventListener('keydown', e=>{ if (e.key === 'Escape') fecharModal();
 
 grid.addEventListener('click', e=>{
   const card = e.target.closest('.card');
-  if (card) abrirModal(card.dataset.slug, card.dataset.tipo);
+  if (card && !e.target.closest('.compare-check')) abrirModal(card.dataset.slug, card.dataset.tipo);
 });
+
+/* ===================== COMPARADOR ===================== */
+let comparados = []; // {slug, tipo}
+
+function toggleComparar(checkbox){
+  const slug = checkbox.dataset.compareSlug;
+  const tipo = checkbox.dataset.compareTipo;
+  if (checkbox.checked){
+    if (comparados.length >= 3){
+      alert('Você já selecionou 3 empreendimentos — o máximo para comparar de uma vez.');
+      checkbox.checked = false;
+      return;
+    }
+    comparados.push({slug, tipo});
+  } else {
+    comparados = comparados.filter(c => c.slug !== slug);
+  }
+  atualizarBarraComparar();
+}
+
+function atualizarBarraComparar(){
+  const bar = document.getElementById('compareBar');
+  const count = document.getElementById('compareCount');
+  if (comparados.length >= 2){
+    bar.classList.add('show');
+    count.textContent = `${comparados.length} selecionados`;
+  } else {
+    bar.classList.remove('show');
+  }
+}
+
+function limparComparacao(){
+  comparados = [];
+  document.querySelectorAll('[data-compare-slug]').forEach(cb => cb.checked = false);
+  atualizarBarraComparar();
+}
+
+function verComparacao(){
+  const itens = comparados.map(c => {
+    const dados = c.tipo === 'revenda' ? REVENDA : DISPONIVEIS;
+    return dados.find(x => x.slug === c.slug);
+  }).filter(Boolean);
+
+  if (itens.length < 2) return;
+
+  const linhas = [
+    {lbl:'Foto', get: i => `<img src="${i.foto}" alt="${i.nome}">`},
+    {lbl:'Bairro', get: i => i.bairro},
+    {lbl:'Status', get: i => i.fase || '100% Vendido'},
+    {lbl:'Endereço', get: i => i.endereco || '—'},
+    {lbl:'Metragem', get: i => i.metragem || '—'},
+    {lbl:'A partir de', get: i => i.valor ? `R$ ${i.valor.toLocaleString('pt-BR')}` : '—'},
+    {lbl:'Materiais', get: i => i.materiaisLink ? `<a href="${i.materiaisLink}" target="_blank">Ver →</a>` : '—'},
+    {lbl:'Tabela', get: i => i.tabelaLink ? `<a href="${i.tabelaLink}" target="_blank">Ver →</a>` : '—'},
+  ];
+
+  let html = `<div class="close" onclick="fecharModal()">✕</div>`;
+  html += `<div class="modal-body">`;
+  html += `<h2 class="nome">Comparação de Empreendimentos</h2>`;
+  html += `<table class="compare-table"><thead><tr><th></th>`;
+  itens.forEach(i => html += `<th>${i.nome}</th>`);
+  html += `</tr></thead><tbody>`;
+  linhas.forEach(linha => {
+    html += `<tr><td class="lbl">${linha.lbl}</td>`;
+    itens.forEach(i => html += `<td>${linha.get(i)}</td>`);
+    html += `</tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  modalContent.innerHTML = html;
+  modalOverlay.classList.add('open');
+}
+
+/* ===================== LEGENDA DE TIPOLOGIAS ===================== */
+function abrirLegenda(){
+  const html = `
+    <div class="close" onclick="fecharModal()">✕</div>
+    <div class="modal-body">
+      <h2 class="nome">O que significa cada sigla</h2>
+      <span class="bairro">Tipologias e enquadramentos habitacionais</span>
+      <table class="legend-table">
+        <thead><tr><th>Sigla</th><th>Significado</th></tr></thead>
+        <tbody>
+          <tr><td><b>R2V</b></td><td>Retrofit / Reforma de edifício vertical — empreendimento resultante da conversão de um prédio já existente.</td></tr>
+          <tr><td><b>NR</b></td><td>Não Residencial — unidade com uso comercial/flexível, sem restrição de moradia.</td></tr>
+          <tr><td><b>HIS</b></td><td>Habitação de Interesse Social — unidade com teto de renda familiar definido por lei municipal, com condições facilitadas de financiamento.</td></tr>
+          <tr><td><b>HMP</b></td><td>Habitação de Mercado Popular — unidade com teto de renda intermediário, entre o HIS e o mercado tradicional.</td></tr>
+        </tbody>
+      </table>
+      <div class="modal-materiais" style="margin-top:12px;">Enquadramentos variam por empreendimento e por unidade — confirme a condição exata com ${CONTATO.nome} antes de fechar negócio.</div>
+    </div>
+  `;
+  modalContent.innerHTML = html;
+  modalOverlay.classList.add('open');
+}
 
 const HOUSI = {"Apresentação da Plataforma Housi": "https://drive.google.com/open?id=1oJuWC3hPyywzvn5bRPeCoxM71r61MJly&usp=drive_copy", "Catálogo Housi 2026": "https://drive.google.com/open?id=1ak9SxXi-Svm0bYTqovIG-fGUH_t_y1OZ&usp=drive_copy", "Padrões Housi Decor": "https://drive.google.com/open?id=1gZMjU8XcrOOGLhbc14V5WgN94O4cwozv&usp=drive_copy"};
 document.getElementById('housiLinks').innerHTML = Object.entries(HOUSI).map(([label,url])=>
