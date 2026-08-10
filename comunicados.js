@@ -33,7 +33,7 @@
 
    Formato da data: DD/MM/AAAA (sempre com barra).
    ============================================================ */
-const LINK_OPORTUNIDADES = "https://docs.google.com/spreadsheets/d/1W8f30uV-wF7aS9JTDJiktridmqpkrSSY/edit?usp=drive_link&ouid=111636566725752504338&rtpof=true&sd=true";
+const LINK_OPORTUNIDADES = "https://docs.google.com/spreadsheets/d/1W8f30uV-wF7aS9JTDJiktridmqpkrSSY/edit?usp=sharing&ouid=111636566725752504338&rtpof=true&sd=true";
 const COMUNICADOS = [
   {
     data: "28/07/2026",
