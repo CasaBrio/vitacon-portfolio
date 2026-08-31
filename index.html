@@ -1595,7 +1595,6 @@ function abrirModal(slug, tipo){
 
   html += `<div class="action-pills">`;
   if (item.materiaisLink) html += `<a class="action-pill materiais" href="${item.materiaisLink}" target="_blank">Materiais</a>`;
-  if (item.tabelaLink) html += `<a class="action-pill tabela" href="${item.tabelaLink}" target="_blank">Tabela</a>`;
   if (item.endereco) html += `<a class="action-pill mapa" href="${linkMapa(item.endereco)}" target="_blank">Mapa</a>`;
   html += `<a class="action-pill airbnb" href="${linkAirbnb(item.bairro)}" target="_blank">Airbnb Diária</a>`;
   if (item.cvId) html += `<a class="action-pill disponibilidade" href="https://vitacon.cvcrm.com.br/imobiliaria/comercial/mapadisponibilidade/${item.cvId}" target="_blank" title="Abre o CV CRM — requer seu login de parceiro">📍 Disponibilidade ao vivo</a>`;
@@ -1779,7 +1778,6 @@ function verComparacao(){
     {lbl:'Metragem', get: i => i.metragem || '—'},
     {lbl:'A partir de', get: i => i.valor ? `R$ ${i.valor.toLocaleString('pt-BR')}` : '—'},
     {lbl:'Materiais', get: i => i.materiaisLink ? `<a href="${i.materiaisLink}" target="_blank">Ver →</a>` : '—'},
-    {lbl:'Tabela', get: i => i.tabelaLink ? `<a href="${i.tabelaLink}" target="_blank">Ver →</a>` : '—'},
   ];
 
   let html = `<div class="close" onclick="fecharModal()">✕</div>`;
