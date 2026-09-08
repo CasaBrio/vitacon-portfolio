@@ -1007,6 +1007,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
       <a class="pill-link" id="linkInvestir" href="investir.html">💡 <b>Por que investir com a Vitacon</b></a>
       <a class="pill-link" href="https://drive.google.com/drive/folders/1mW1RhbsVsEnTSjr0HLRZUS24s8Pnh1AQ?usp=drive_link" target="_blank">📁 <b>Prateleira de Negócios — Materiais</b></a>
       <a class="pill-link" id="linkOportunidades" href="#" target="_blank">🎯 <b>Consulte aqui as Oportunidades</b></a>
+      <a class="pill-link" id="linkOportunidadesHisHmp" href="#" target="_blank">🏠 <b>Consulte aqui as Oportunidades em HIS e HMP</b></a>
       <a class="pill-link featured" href="https://vitaconpartners.com.br/acesso" target="_blank">🤝 <span class="pill-text"><b>Cadastre-se como Parceiro</b><small id="parceiroSubtitulo"></small><small id="gerenteFixo" style="display:none;">Gerente - Luigi</small></span></a>
       <a class="pill-link" href="https://vitaconpartners.com.br" target="_blank">🌐 <b>Conheça o site Vitacon Partners</b></a>
     </div>
@@ -1551,6 +1552,10 @@ window.__comunicadosCarregados = function(){
   const linkOp = document.getElementById('linkOportunidades');
   if (linkOp && typeof LINK_OPORTUNIDADES !== 'undefined' && LINK_OPORTUNIDADES) {
     linkOp.href = LINK_OPORTUNIDADES;
+  }
+  const linkOpHisHmp = document.getElementById('linkOportunidadesHisHmp');
+  if (linkOpHisHmp && typeof LINK_OPORTUNIDADES_HIS_HMP !== 'undefined' && LINK_OPORTUNIDADES_HIS_HMP) {
+    linkOpHisHmp.href = LINK_OPORTUNIDADES_HIS_HMP;
   }
 };
 
