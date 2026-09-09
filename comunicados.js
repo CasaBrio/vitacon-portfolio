@@ -54,10 +54,10 @@ const COMUNICADOS = [
     linkTexto: ""
   },
  {
-    data: "28/07/2026",
-    titulo: "PLANILHA DE ESTOQUE - JULHO/26",
-    texto: "SEGUE ABAIXO O LINK PARA O ARQUIVO EM EXCEL - POLÍTICAS DE DESCONTO - ESTOQUE.",
-    link: "https://docs.google.com/spreadsheets/d/1_KxSM7o8HkyMEEX9ZDCayusk99gSPOQW/edit?usp=sharing&ouid=111636566725752504338&rtpof=true&sd=true",
-   linkTexto: "Planilha Estoque"
+    data: "09/09/2026",
+    titulo: "Vitacon João Ramalho - Linktree",
+    texto: "Já estamos assinando as unidades do Vitacon João Ramalho - Estamos oferecendo antecipação de 12% Ao Ano!.",
+    link: "https://linktr.ee/VitaconJoaoRamalho",
+   linkTexto: "Conheça o projeto no linktree"
   }
 ];
