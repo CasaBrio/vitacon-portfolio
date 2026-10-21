@@ -11,12 +11,32 @@
     return { ...event, url: url.href };
   });
   const clean = value => String(value || '').replace(/\s+/g, ' ').trim().slice(0, 100);
+  let visitorKey;
+  try {
+    const day = new Date().toLocaleDateString('en-CA', {timeZone:'America/Sao_Paulo'});
+    const stored = JSON.parse(localStorage.getItem('central-visitor') || 'null');
+    visitorKey = stored?.day === day ? stored.id : crypto.randomUUID();
+    localStorage.setItem('central-visitor', JSON.stringify({day,id:visitorKey}));
+  } catch (_) { visitorKey = crypto.randomUUID(); }
+  let pending = 0, sent = 0;
+  const record = (name,data) => {
+    const config = window.CENTRAL_CONFIG;
+    if (!config || pending >= 3 || sent >= 100) return;
+    let host = null;
+    try { host = document.referrer ? new URL(document.referrer).hostname.slice(0,100) : null; } catch (_) {}
+    const source = new URLSearchParams(location.search).get('utm_source');
+    const row = {id:crypto.randomUUID(),visitor_key:visitorKey,event_name:name,project_name:data.empreendimento || null,material:data.material || null,action_name:data.acao || data.secao || data.origem || null,device:window.innerWidth<768?'Celular':window.innerWidth<1100?'Tablet':'Computador',referrer_host:host,source:source && /^[a-zA-Z0-9_-]{1,50}$/.test(source)?source:null};
+    pending++;sent++;
+    fetch(config.url+'/rest/v1/central_analytics_events',{method:'POST',headers:{apikey:config.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row),keepalive:true}).catch(()=>{}).finally(()=>pending--);
+  };
   const track = (name, data = {}) => {
     const safe = {};
     for (const [key, value] of Object.entries(data).slice(0, 2)) safe[key] = clean(value);
+    record(name,safe);
     try { window.va('event', { name, data: safe }); } catch (_) { /* Never block navigation. */ }
   };
   window.centralAnalytics = { track };
+  record('Visita',{});
   const script = document.createElement('script');
   script.defer = true;
   script.src = '/_vercel/insights/script.js';
@@ -51,3 +71,4 @@
     track('Video iniciado', { empreendimento: video.closest('.launch-card')?.querySelector('h3')?.textContent || 'Video do portal' });
   }, true);
 })();
+
