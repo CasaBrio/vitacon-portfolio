@@ -18,6 +18,7 @@
   $('resetFilters').addEventListener('click',clearFilters);
   controls.forEach(id=>$(id).addEventListener('input',render));
   function appendDriveMaterials(actions, project){
+    if(project?.launchUrl) actions.append(link('Materiais de lançamento',project.launchUrl));
     const book=project?.slug && window.MATERIAL_PUBLICO?.[project.slug];
     if(book) actions.append(link('Ver book no Drive',book));
     actions.append(link('Materiais no Drive','https://drive.google.com/drive/folders/1mW1RhbsVsEnTSjr0HLRZUS24s8Pnh1AQ'));
@@ -90,7 +91,8 @@
       count++;
       const rows=base.records.filter(r=>!r.historical&&r.project===p.name),unique=new Set(rows.map(r=>r.unit)).size,min=Math.min(...rows.map(r=>r.discountPrice));
       const card=node('article',null,'project-card');card.append(node('span',p.publicDistrict||'Bairro a confirmar','tag'),node('h2',p.name),node('p',[p.region,p.phase,p.area].filter(Boolean).join(' · ')),node('p',rows.length?unique+' unidades distintas · '+rows.length+' registros':'Sem unidades na campanha de outubro','tag'),node('p',rows.length?'Menor valor registrado':'Condições sob consulta','subtext'),node('strong',rows.length?money(min):'Consulte Luigi','price'),node('p',rows.length?'Condições da base '+base.month+'. Confirme vigência e disponibilidade.':'A apresentação está disponível. Consulte preços e disponibilidade com Luigi.'));
-      const actions=node('div',null,'card-actions');const button=node('button','Ver unidades','button primary');button.addEventListener('click',()=>{clearFilters();$('actionFilter').value='OUTUBRO ATUAL';$('projectFilter').value=p.name;render();showView('stock');});if(rows.length)actions.append(button);if(p.slug)actions.append(link('Explorar projeto','https://luigi.sperandeoluis.chatgpt.site/empreendimentos/'+p.slug+'/?origem=parceiros'));else actions.append(link('Consultar materiais','https://wa.me/5511998885850?text='+encodeURIComponent('Olá Luigi, quero os materiais de '+p.name+'.')));appendDriveMaterials(actions,p);card.append(actions);$('projectGrid').append(card);
+      if(p.featuredLaunch)card.append(node('span','LANÇAMENTO EM DESTAQUE','launch-badge'));
+      const actions=node('div',null,'card-actions');if(p.featuredLaunch)actions.append(link('Solicite tabelas e espelhos','https://wa.me/5511998885850?text='+encodeURIComponent('Olá Luigi, sou parceiro e gostaria de solicitar as tabelas e os espelhos de vendas atualizados do '+p.name+'.'),true));const button=node('button','Ver unidades','button primary');button.addEventListener('click',()=>{clearFilters();$('actionFilter').value='OUTUBRO ATUAL';$('projectFilter').value=p.name;render();showView('stock');});if(rows.length)actions.append(button);if(p.slug)actions.append(link('Explorar projeto','https://luigi.sperandeoluis.chatgpt.site/empreendimentos/'+p.slug+'/?origem=parceiros'));else actions.append(link('Consultar materiais','https://wa.me/5511998885850?text='+encodeURIComponent('Olá Luigi, quero os materiais de '+p.name+'.')));appendDriveMaterials(actions,p);card.append(actions);$('projectGrid').append(card);
     }
     $('projectCount').textContent=count+' de '+window.CATALOGO_PROJETOS.length+' empreendimentos';$('projectsEmpty').hidden=count!==0;
   }
