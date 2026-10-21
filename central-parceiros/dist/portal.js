@@ -9,6 +9,7 @@
   let base = null, filtered = [], inferred = {district:'',ready:false,text:'',unit:''};
   const controls=['projectFilter','typeFilter','actionFilter','priorityFilter','budgetFilter','sortFilter'];
   function showView(view){
+    window.centralAnalytics?.track('Secao aberta', { secao: {stock:'Unidades e condições',projects:'Empreendimentos',sources:'Materiais e fontes'}[view] || view });
     for(const key of ['stock','projects','sources']) $('view-'+key).hidden=key!==view;
     document.querySelectorAll('[data-view]').forEach(button=>{button.classList.toggle('active',button.dataset.view===view); if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
     window.scrollTo({top:0,behavior:'smooth'});
@@ -68,6 +69,7 @@
   function field(grid,label,value,full=false){const box=node('div',null,full?'full':'');box.append(node('dt',label),node('dd',value||'Não informado'));grid.append(box);}
   function link(text,href,primary=false){const a=node('a',text,'button'+(primary?' primary':''));a.href=href;a.target='_blank';a.rel='noopener';return a;}
   function openUnit(r){
+    window.centralAnalytics?.track('Condicao consultada', { empreendimento: r.project });
     const root=$('unitDetails');root.replaceChildren();root.append(node('h2',r.project));root.firstChild.id='unitTitle';root.append(node('p',r.unit+' · '+r.type+' · '+num(r.area)+' m²','unit-subtitle'));
     if(r.historical)root.append(node('p','Referência anterior. Esta condição não integra as tabelas atuais de outubro; confirme a vigência com Luigi.','notice'));
     if(r.duplicate)root.append(node('p','Esta unidade aparece em mais de uma condição na base. Confirme o tipo e os valores vigentes com Luigi.','notice'));
@@ -134,3 +136,4 @@
   }
   start();
 })();
+
