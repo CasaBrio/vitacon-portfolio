@@ -1,0 +1,20 @@
+import fs from 'node:fs/promises';
+import {Workbook,SpreadsheetFile} from '@oai/artifact-tool';
+const rows=JSON.parse(await fs.readFile('/workspace/sites/vitacon-parceiros/data/campanha-outubro.json','utf8'));
+const wb=Workbook.create();const units=wb.worksheets.add('Unidades');const summary=wb.worksheets.add('Resumo');
+const headers=['Empreendimento','Unidade','Tipo','Ação','Área privativa (m²)','Tabela 07/10 (R$)','Preço/m² (R$)','Preço/m² com desconto (R$)','Com desconto (R$)','Desconto','Nível de prioridade','Comissão na fonte','Fluxo','Página do PDF'];
+units.getRange('A1').values=[['Campanha HIS/HMP - Outubro/2026']];units.getRange('A2').values=[['Fonte: Campanha HIS_HMP_Outubro.pdf, tabela 07/10/2026. Condições apenas para unidades selecionadas.']];
+units.getRange('A4:N83').values=[headers,...rows.map(r=>[r.project,r.unit,r.type,r.action,r.area,r.tablePrice,r.tablePerM2,r.discountPerM2,r.discountPrice,r.discount,r.priority,r.commission,r.paymentFlow,r.sourcePage])];
+units.tables.add('A4:N83',true,'UnidadesOutubro');units.freezePanes.freezeRows(4);units.freezePanes.freezeColumns(2);
+units.getRange('E5:E83').setNumberFormat('0.00');units.getRange('F5:I83').setNumberFormat('"R$" #,##0.00');units.getRange('J5:J83').setNumberFormat('0%');units.getRange('N5:N83').setNumberFormat('0');
+units.getRange('A4:A83').format.columnWidth=32;units.getRange('B4:D83').format.columnWidth=24;units.getRange('E4:N83').format.columnWidth=24;units.getRange('M4:M83').format.columnWidth=29;
+units.getRange('A4:N4').format.wrapText=true;units.getRange('A4:N4').format.rowHeight=42;units.getRange('A5:N83').format.rowHeight=23;
+units.getRange('A5:N83').conditionalFormats.addCustom('=$A5="VITACON PERDIZES"',{fill:'#EEE5FF'});
+summary.getRange('A1').values=[['Campanha HIS/HMP - Outubro/2026']];summary.getRange('A2').values=[['Fonte: Campanha HIS_HMP_Outubro.pdf, tabela 07/10/2026.']];
+const names=[...new Set(rows.map(r=>r.project))];const data=names.map(name=>{const a=rows.filter(r=>r.project===name);return [name,a.length,a.filter(r=>r.type==='HIS').length,a.filter(r=>r.type==='HMP').length,Math.min(...a.map(r=>r.discountPrice)),Math.max(...a.map(r=>r.discount)),a[0].priority,a[0].commission]});
+summary.getRange('A4:H12').values=[['Empreendimento','Unidades','HIS','HMP','Menor valor (R$)','Maior desconto','Nível','Comissão na fonte'],...data];summary.tables.add('A4:H12',true,'ResumoOutubro');summary.getRange('A4:A12').format.columnWidth=36;summary.getRange('B4:D12').format.columnWidth=12;summary.getRange('E4:H12').format.columnWidth=23;summary.getRange('A4:H4').format.rowHeight=40;summary.getRange('A4:H4').format.wrapText=true;summary.getRange('A5:H12').format.rowHeight=28;summary.getRange('E5:E12').setNumberFormat('"R$" #,##0.00');summary.getRange('F5:F12').setNumberFormat('0%');
+summary.getRange('A14').values=[['Unidades selecionadas']];summary.getRange('B14').formulas=[['=SUM(B5:B12)']];summary.getRange('A16').values=[['Foco: Perdizes e Venâncio Aires, com 24 unidades no Nível 1.']];summary.getRange('A17').values=[['Comissão transcrita do PDF. Os acréscimos não representam a taxa total de corretagem.']];
+for(const s of [units,summary]){s.showGridLines=false;s.getUsedRange().format.font={name:'Arial',size:11};s.getUsedRange().format.verticalAlignment='center';s.getRange('A1').format.font={name:'Arial',size:16,bold:true,color:'#5B20C5'};s.getRange(s===units?'A4:N4':'A4:H4').format.fill='#5123B5';s.getRange(s===units?'A4:N4':'A4:H4').format.font={name:'Arial',size:11,bold:true,color:'#FFFFFF'};}
+wb.recalculate();console.log((await wb.inspect({kind:'table',range:'Resumo!A4:H14',tableMaxRows:12,tableMaxCols:8,maxChars:1800})).ndjson);
+for(const [s,range,file] of [['Resumo','A4:H12','/tmp/oct-resumo.png'],['Unidades','A4:F12','/tmp/oct-unidades.png']]){const blob=await wb.render({sheetName:s,range,scale:1.5,format:'png'});await fs.writeFile(file,new Uint8Array(await blob.arrayBuffer()));}
+const out=await SpreadsheetFile.exportXlsx(wb);await out.save('/workspace/sites/vitacon-parceiros/dist/materiais/campanha-his-hmp-outubro.xlsx');console.log('XLSX exportado.');

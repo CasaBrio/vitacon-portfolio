@@ -1,0 +1,4 @@
+*.tar.gz
+.vercel/
+node_modules/
+.env*
