@@ -19,13 +19,13 @@ grant select on public.central_analytics_events to authenticated;
 create policy central_ingest on public.central_analytics_events for insert to anon, authenticated with check (
  created_at between now()-interval '1 minute' and now()+interval '1 minute' and is_test=false
 );
-create policy central_owner_read on public.central_analytics_events for select to authenticated using ((select auth.uid())='5115b36c-72e8-4bc9-b17d-91c2b0021209'::uuid);
+create policy central_owner_read on public.central_analytics_events for select to authenticated using ((select auth.uid())='e6a450e9-32b0-4a67-80a8-e2c32c24e627'::uuid);
 create index central_analytics_created_idx on public.central_analytics_events (created_at desc);
 create function public.central_dashboard(p_days integer default 7)
 returns jsonb language plpgsql stable security invoker set search_path = '' as $$
 declare report jsonb;
 begin
- if auth.uid() is distinct from '5115b36c-72e8-4bc9-b17d-91c2b0021209'::uuid then
+ if auth.uid() is distinct from 'e6a450e9-32b0-4a67-80a8-e2c32c24e627'::uuid then
   raise exception 'Acesso administrativo não autorizado' using errcode='42501';
  end if;
  if p_days not in (1,7,30,90) then raise exception 'Período inválido'; end if;
