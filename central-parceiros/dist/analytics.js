@@ -59,7 +59,7 @@
       track('Materiais externos', { empreendimento: project || 'Materiais gerais', origem: url.hostname === 'linktr.ee' ? 'Linktree' : 'Drive' });
     } else if (url.hostname === 'vitaconpartners.com.br' && url.pathname === '/acesso') {
       track('Cadastro de parceiro');
-    } else if (url.searchParams.get('tab') === 'mapa') {
+    } else if ((url.origin === location.origin && url.pathname.startsWith('/mapa')) || url.searchParams.get('tab') === 'mapa') {
       track('Mapa consultado');
     }
   });
