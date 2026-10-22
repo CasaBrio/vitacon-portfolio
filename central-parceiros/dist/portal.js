@@ -9,8 +9,9 @@
   let base = null, filtered = [], inferred = {district:'',ready:false,text:'',unit:''};
   const controls=['projectFilter','typeFilter','actionFilter','priorityFilter','budgetFilter','sortFilter'];
   function showView(view){
-    window.centralAnalytics?.track('Secao aberta', { secao: {stock:'Unidades e condições',projects:'Empreendimentos',sources:'Materiais e fontes'}[view] || view });
-    for(const key of ['stock','projects','sources']) $('view-'+key).hidden=key!==view;
+    if(view==='simulator'){const frame=$('simulatorFrame');if(!frame.getAttribute('src'))frame.src=frame.dataset.src;}
+    window.centralAnalytics?.track('Secao aberta', { secao: {stock:'Unidades e condições',projects:'Empreendimentos',sources:'Materiais e fontes',simulator:'Simulador de rentabilidade'}[view] || view });
+    for(const key of ['stock','projects','sources','simulator']) $('view-'+key).hidden=key!==view;
     document.querySelectorAll('[data-view]').forEach(button=>{button.classList.toggle('active',button.dataset.view===view); if(button.dataset.view===view)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
     window.scrollTo({top:0,behavior:'smooth'});
   }
@@ -137,3 +138,4 @@
   start();
 })();
 
+window.addEventListener('message',event=>{const frame=document.getElementById('simulatorFrame');if(frame&&event.origin===location.origin&&event.source===frame.contentWindow&&event.data?.type==='vitacon-simulator-height'&&Number.isFinite(event.data.height)){frame.style.height=Math.max(600,Math.min(10000,event.data.height+30))+'px';}});
