@@ -40,7 +40,7 @@
   if (!root || !Array.isArray(window.CATALOGO_PROJETOS)) return;
   const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   const items = window.CATALOGO_PROJETOS.map(p => {
-    const uncertain = p.name === 'ON PIXEL LIFE VILA MARIANA';
+    const uncertain = false;
     const phase = norm(p.phase);
     const ready = !uncertain && phase.includes('pronto');
     const launch = !uncertain && phase.includes('lancamento') && p.name !== 'H BELA CINTRA';
