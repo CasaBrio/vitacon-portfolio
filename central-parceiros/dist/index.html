@@ -61,11 +61,15 @@
   const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   function openProject(p) {
     document.querySelector('#resetProjects').click();
-    document.querySelector('[data-view="projects"]').click();
     const search = document.querySelector('#projectSearch');
     search.value = p.name;
     search.dispatchEvent(new Event('input', {bubbles:true}));
-    document.querySelector('#view-projects').scrollIntoView({behavior:'smooth'});
+    root.querySelector('details').open = false;
+    const results = document.querySelector('#projectGrid');
+    requestAnimationFrame(() => {
+      results.scrollIntoView({behavior:'smooth', block:'start'});
+      search.focus({preventScroll:true});
+    });
   }
   function render() {
     filters.replaceChildren(); list.replaceChildren();
