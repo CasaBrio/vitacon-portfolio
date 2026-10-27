@@ -1,5 +1,7 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10132d"><title>Central de Parceiros Vitacon | Luigi</title><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/portal.css"></head>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#10132d"><title>Central de Parceiros Vitacon | Luigi</title><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/portal.css"><style>
+.delivery-timeline{background:#fff;border:1px solid #e2dff0;border-radius:18px;padding:22px;margin:22px 0;box-shadow:0 8px 24px #1f10400d}.delivery-timeline h2{margin:4px 0 8px}.delivery-timeline p{color:#626174;margin:6px 0 14px;font-size:14px}.timeline-filters{display:flex;flex-wrap:wrap;gap:8px;margin:15px 0}.timeline-filter{border:1px solid #d9d5e4;border-radius:999px;padding:9px 13px;background:white;color:#282039;cursor:pointer;font:inherit;font-size:13px}.timeline-filter.is-active{background:#5a2bc4;border-color:#5a2bc4;color:#fff}.timeline-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:10px}.timeline-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;border:1px solid #e7e1f1;background:#f9f7fe;color:#271d38;padding:14px;border-radius:12px;font:inherit;cursor:pointer}.timeline-card span{font-size:13px;color:#5a2bc4}.timeline-card small{font-size:12px;color:#5a5267}.timeline-card:hover,.timeline-card:focus-visible{border-color:#6c39d1;outline-offset:2px}.timeline-count{font-size:13px;color:#656071}.timeline-details summary{cursor:pointer;list-style:none}.timeline-details summary::-webkit-details-marker{display:none}@media(max-width:600px){.delivery-timeline{padding:16px}.timeline-list{grid-template-columns:1fr}.timeline-filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:5px}.timeline-filter{white-space:nowrap}}
+</style></head>
 <body>
 <header class="topbar"><a class="brand" href="/">VITA<span>CON</span><small>PARCEIROS</small></a><div class="top-tools"><span class="restricted">Uso exclusivo de parceiros</span><a class="button" href="/mapa/" target="_blank" rel="noopener">Mapa geral dos empreendimentos</a><a class="button primary" href="https://wa.me/5511998885850" target="_blank" rel="noopener">Fale com Luigi</a></div></header>
 <div class="layout"><aside class="side"><div class="side-label">CENTRAL COMERCIAL</div><nav aria-label="Áreas do portal"><button class="nav-button active" data-view="stock" aria-current="page">Unidades e condições</button><button class="nav-button" data-view="projects">Empreendimentos</button><a class="nav-button" href="/mapa/" style="display:block;text-decoration:none">Mapa dos empreendimentos</a><button class="nav-button" data-view="simulator">Simulador de rentabilidade</button><button class="nav-button" data-view="sources">Materiais e fontes</button></nav><div class="side-period"><span>Base recebida</span><strong id="periodSide">Outubro/2026</strong><p>Consulte a condição vigente antes de enviar uma proposta.</p></div><div class="manager"><img src="/luigi-perfil.png" alt="Luigi Sperandeo" width="64" height="64"><strong>Luigi Sperandeo</strong><span>Gerente de Vendas e Parcerias</span><a href="mailto:luigi@vitacon.com.br">luigi@vitacon.com.br</a></div></aside>
@@ -8,7 +10,7 @@
   <div class="registration-card"><span class="eyebrow">PARCERIAS VITACON</span><h2>Ainda não é parceiro?</h2><p>Imobiliárias e corretores podem se cadastrar no programa de parcerias.</p><a class="button primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastre-se</a></div>
   <div class="commission-card"><h2>Taxas de comissão</h2><div class="commission-scroll"><table class="commission-table"><caption class="sr-only">Taxas de comissão de estoque e lançamentos para pessoa jurídica e pessoa física</caption><thead><tr><th scope="col">Categoria</th><th scope="col">PJ <span>Pessoa jurídica</span></th><th scope="col">PF <span>Pessoa física</span></th></tr></thead><tbody><tr><th scope="row">Estoque</th><td>4,5%</td><td>3,0%</td></tr><tr><th scope="row">Lançamentos</th><td>4,0%</td><td>3,0%</td></tr></tbody></table></div><p>Bonificações da campanha aparecem separadamente nas fichas. Confirme as regras de aplicação com Luigi.</p></div>
 </section>
-<section id="view-stock"><div class="page-heading"><div><div class="eyebrow">NEGÓCIOS COM PARCEIROS</div><h1>Encontre a unidade<br>para sua próxima proposta.</h1><p>Valores, descontos e condições por unidade em uma consulta.</p></div><span class="period-pill" id="period">Outubro/2026</span></div>
+<section id="view-stock"><section class="delivery-timeline" id="delivery-timeline" aria-label="Linha do tempo de entregas"><details class="timeline-details" open><summary><span class="eyebrow">PORTFÓLIO VITACON</span><h2>Linha do tempo de entregas</h2><p>Encontre empreendimentos prontos e previsões por ano. Toque em um projeto para ver a ficha.</p></summary><div class="timeline-filters" aria-label="Filtrar por prazo"></div><p class="timeline-count" aria-live="polite"></p><div class="timeline-list"></div><p>Previsões de referência: material de outubro de 2026, sujeitas a alteração. Consulte a tabela vigente e confirme a disponibilidade. Status e prazos não informados aparecem para confirmação.</p></details></section><div class="page-heading"><div><div class="eyebrow">NEGÓCIOS COM PARCEIROS</div><h1>Encontre a unidade<br>para sua próxima proposta.</h1><p>Valores, descontos e condições por unidade em uma consulta.</p></div><span class="period-pill" id="period">Outubro/2026</span></div>
 <section class="launches" id="lancamentos" aria-labelledby="launch-title"><div class="launch-heading"><div><span class="eyebrow">NOVIDADES PARA SUA CARTEIRA</span><h2 id="launch-title">Lançamentos em destaque</h2><p>Materiais prontos para compartilhar. Converse com Luigi para receber tabelas e espelhos de vendas.</p></div><span class="launch-pill">2 lançamentos</span></div><div class="launch-grid"><article class="launch-card"><div class="launch-media"><video controls playsinline preload="none" poster="/materiais/joao-ramalho-poster.jpg" aria-label="Reels de lançamento do Vitacon João Ramalho"><source src="/materiais/joao-ramalho-reels.mp4" type="video/mp4">Seu navegador não reproduz este vídeo. <a href="/materiais/joao-ramalho-reels.mp4">Abrir Reels</a></video></div><div class="launch-body"><span class="tag">LANÇAMENTO · PERDIZES</span><h3>Vitacon João Ramalho</h3><p>Um prédio inteligente, pensado para um dia a dia mais prático, conectado e eficiente. Dê o play e use o conteúdo para apresentar o lançamento aos seus clientes.</p><div class="launch-actions"><a class="button primary" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20parceiro%20e%20gostaria%20de%20solicitar%20as%20tabelas%20e%20os%20espelhos%20de%20vendas%20atualizados%20do%20Vitacon%20Jo%C3%A3o%20Ramalho." target="_blank" rel="noopener">Solicite tabelas e espelhos ↗</a><a class="button" href="https://linktr.ee/VitaconJoaoRamalho" target="_blank" rel="noopener">Materiais e conteúdos de lançamento ↗</a><a class="launch-download" href="/materiais/joao-ramalho-reels.mp4" download="Vitacon-Joao-Ramalho-Reels.mp4">↓ Baixar Reels para compartilhar</a></div></div></article><article class="launch-card"><div class="launch-media"><img src="/materiais/alameda-franca.jpg" alt="Perspectiva ilustrativa da fachada do Vitacon Alameda Franca" loading="lazy" width="1080" height="1512"></div><div class="launch-body"><span class="tag">LANÇAMENTO · JARDINS</span><h3>Vitacon Alameda Franca</h3><p>Ative sua carteira com os materiais do lançamento. O pack de lançamento reúne o e-mail marketing para apoiar a divulgação aos seus clientes.</p><div class="launch-actions"><a class="button primary" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20parceiro%20e%20gostaria%20de%20solicitar%20as%20tabelas%20e%20os%20espelhos%20de%20vendas%20atualizados%20do%20Vitacon%20Alameda%20Franca." target="_blank" rel="noopener">Solicite tabelas e espelhos ↗</a><a class="button" href="https://linktr.ee/VitaconAlamedaFranca" target="_blank" rel="noopener">Pack de lançamento e materiais ↗</a></div></div></article></div><p class="launch-note">Tabelas, espelhos de vendas e disponibilidade atualizados: solicite ao gestor.</p></section>
 <div class="metrics"><div><span>Registros na base</span><strong id="metricRecords">—</strong><small id="metricUnique"></small></div><div><span>Empreendimentos</span><strong id="metricProjects">—</strong><small>com condições na planilha</small></div><div><span>Campanha HIS/HMP</span><strong id="metricCampaign">—</strong><small>unidades de outubro</small></div></div>
 <details class="notice"><summary>Outubro: Tabelão de Estoque + campanha HIS/HMP.</summary><p>O Tabelão reúne 211 unidades em 12 empreendimentos, com tabela de 16/10/2026. A campanha HIS/HMP de 07/10/2026 continua disponível em filtro separado. Condições de fontes diferentes não são cumulativas. Condições válidas somente para as unidades selecionadas. O filtro “Condição da fonte” permite consultar referências anteriores, sem confirmar sua vigência.</p></details>
@@ -24,6 +26,78 @@
 </main></div>
 <dialog id="unitDialog" aria-labelledby="unitTitle"><div class="dialog-top"><span class="eyebrow">CONDIÇÃO POR UNIDADE</span><button id="closeDialog" aria-label="Fechar detalhes">×</button></div><div id="unitDetails"></div></dialog>
 <script src="/central-config.js"></script><script src="/analytics.js"></script>
-<script src="/materiais-publicos.js"></script><script src="/catalogo-projetos.js"></script><script src="/portal.js"></script></body></html>
+<script src="/materiais-publicos.js"></script><script src="/catalogo-projetos.js"></script><script src="/portal.js"></script><script>(() => {
+  'use strict';
+  const dates = {
+    'VITACON BOA VISTA': '2026-12', 'VITACON BELA VISTA': '2027-02',
+    'VITACON BRIGADEIRO': '2027-10', 'VITACON MAESTRO CARDIM': '2027-10',
+    'VITACON VILA OLIMPIA': '2027-10', 'VITACON MOURATO COELHO': '2028-02',
+    'H BELA CINTRA': '2028-04', 'VITACON PERDIZES': '2028-09',
+    'VITACON DOMINGOS DE MORAIS': '2028-10', 'VITACON PINHEIROS': '2029-01',
+    'VITACON JOÃO RAMALHO': '2029-12'
+  };
+  const root = document.querySelector('#delivery-timeline');
+  if (!root || !Array.isArray(window.CATALOGO_PROJETOS)) return;
+  const norm = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const items = window.CATALOGO_PROJETOS.map(p => {
+    const uncertain = p.name === 'ON PIXEL LIFE VILA MARIANA';
+    const phase = norm(p.phase);
+    const ready = !uncertain && phase.includes('pronto');
+    const launch = !uncertain && phase.includes('lancamento') && p.name !== 'H BELA CINTRA';
+    return {p, ready, launch, uncertain, date: dates[p.name] || ''};
+  });
+  let selected = 'todos';
+  const filters = root.querySelector('.timeline-filters');
+  const list = root.querySelector('.timeline-list');
+  const count = root.querySelector('.timeline-count');
+  const matches = (entry, filter) => filter === 'todos' ||
+    (filter === 'prontos' && entry.ready) ||
+    (filter === '2027' && entry.date && Number(entry.date.slice(0,4)) <= 2027) ||
+    (filter === '2028' && entry.date.startsWith('2028')) ||
+    (filter === '2029' && entry.date && Number(entry.date.slice(0,4)) >= 2029) ||
+    (filter === 'lancamentos' && entry.launch) ||
+    (filter === 'confirmar' && !entry.ready && !entry.date);
+  const labels = {todos:'Todos',prontos:'Prontos','2027':'Até 2027','2028':'2028','2029':'2029+',lancamentos:'Lançamentos',confirmar:'Prazo a confirmar'};
+  const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  function openProject(p) {
+    document.querySelector('#resetProjects').click();
+    document.querySelector('[data-view="projects"]').click();
+    const search = document.querySelector('#projectSearch');
+    search.value = p.name;
+    search.dispatchEvent(new Event('input', {bubbles:true}));
+    document.querySelector('#view-projects').scrollIntoView({behavior:'smooth'});
+  }
+  function render() {
+    filters.replaceChildren(); list.replaceChildren();
+    for (const [key,label] of Object.entries(labels)) {
+      const button=document.createElement('button'); button.type='button';
+      button.className='timeline-filter'+(selected===key?' is-active':'');
+      button.setAttribute('aria-pressed',String(selected===key));
+      button.textContent=label+' ('+items.filter(x=>matches(x,key)).length+')';
+      button.addEventListener('click',()=>{selected=key;render();}); filters.append(button);
+    }
+    const visible=items.filter(x=>matches(x,selected)).sort((a,b)=> {
+      if(a.ready!==b.ready)return a.ready?-1:1;
+      if(!!a.date!==!!b.date)return a.date?-1:1;
+      return a.date.localeCompare(b.date)||a.p.name.localeCompare(b.p.name,'pt-BR');
+    });
+    count.textContent=visible.length+' empreendimentos';
+    for (const item of visible) {
+      const card=document.createElement('button'); card.type='button'; card.className='timeline-card';
+      const name=document.createElement('strong');name.textContent=item.p.name;
+      const info=document.createElement('span');
+      if(item.uncertain) info.textContent='Status e prazo a confirmar';
+      else if(item.ready)info.textContent='Pronto';
+      else if(item.date){const [year,month]=item.date.split('-');info.textContent='Previsão: '+months[Number(month)-1]+'/'+year+(item.p.name==='H BELA CINTRA'?' · Retrofit':item.launch?' · Lançamento':'');}
+      else info.textContent=(item.p.phase || 'Status a confirmar')+' · Prazo a confirmar';
+      const action=document.createElement('small');action.textContent='Ver empreendimento →';
+      card.append(name,info,action); card.addEventListener('click',()=>openProject(item.p));list.append(card);
+    }
+    if(!visible.length)list.textContent='Nenhum empreendimento neste filtro.';
+  }
+  render();
+})();
+</script></body></html>
+
 
 
