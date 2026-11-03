@@ -33,5 +33,21 @@
       "destination": "/vitrine/",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "parceirosvitacon.com.br"
+        }
+      ],
+      "destination": "/vitrine/index.html"
+    },
+    {
+      "source": "/central",
+      "destination": "/index.html"
+    }
   ]
 }

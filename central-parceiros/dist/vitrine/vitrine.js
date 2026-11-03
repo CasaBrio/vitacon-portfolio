@@ -261,7 +261,7 @@
     render(); applyHash();
     addEventListener('hashchange', applyHash);
   }).catch(() => {
-    grid.innerHTML = '<div class="empty">Não foi possível carregar as oportunidades agora. Abra a <a href="/">Central de Parceiros</a> ou fale com o Luigi pelo WhatsApp.</div>';
+    grid.innerHTML = '<div class="empty">Não foi possível carregar as oportunidades agora. Abra a <a href="/central">Central de Parceiros</a> ou fale com o Luigi pelo WhatsApp.</div>';
     applyHash();
   });
 })();
