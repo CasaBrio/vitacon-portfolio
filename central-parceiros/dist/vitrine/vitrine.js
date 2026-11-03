@@ -133,12 +133,24 @@
     stage.addEventListener('mouseenter', () => { hovering = true; });
     stage.addEventListener('mouseleave', () => { hovering = false; });
   }
-  stage.addEventListener('pointerdown', ev => { drag = {x: ev.clientX, a: angle, moved: false}; });
+  // No celular: ao tocar ou deslizar o dedo sobre a torre, mostra o andar que está sob o dedo.
+  const floorAt = (x, y) => document.elementFromPoint(x, y)?.closest?.('.floor');
+  const touchShow = ev => {
+    if (ev.pointerType === 'mouse') return;
+    const f = floorAt(ev.clientX, ev.clientY);
+    if (f && f._show) { f._show(true); holdUntil = performance.now() + 5000; }
+  };
+  stage.addEventListener('pointerdown', ev => {
+    if (ev.target.closest('.tag')) return;
+    drag = {x: ev.clientX, a: angle, moved: false};
+    touchShow(ev);
+  });
   addEventListener('pointermove', ev => {
     if (!drag) return;
     const dx = ev.clientX - drag.x;
     if (Math.abs(dx) > 4) drag.moved = true;
     angle = drag.a + dx * 0.5; paint();
+    touchShow(ev);
   });
   const endDrag = () => { if (drag?.moved) holdUntil = performance.now() + 1500; drag = null; };
   addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
@@ -156,11 +168,17 @@
       f.style.bottom = `calc(var(--h) * ${i})`;
       f.style.animationDelay = (0.15 + i * 0.05) + 's';
       f.innerHTML = '<div class="face f-front"></div><div class="face f-back"></div><div class="face f-left"></div><div class="face f-right"></div>' + (i === floors.length - 1 ? '<div class="roof"></div>' : '');
-      const show = () => {
-        tag.innerHTML = `<b>${esc(e.nome)}</b><small>${esc(e.bairro)} · ${S[e.st]} · a partir de ${brl(e.preco)}</small>`;
+      const show = (withLink) => {
+        tag.innerHTML = `<b>${esc(e.nome)}</b><small>${esc(e.bairro)} · ${S[e.st]} · a partir de ${brl(e.preco)}</small>` +
+          (withLink ? `<button type="button" class="tag-go">Ver detalhes ↓</button>` : '');
+        tag.classList.toggle('has-go', !!withLink);
+        const b = tag.querySelector('.tag-go');
+        if (b) b.addEventListener('click', () => focusCard(e));
         tower.querySelectorAll('.floor').forEach(x => x.classList.toggle('on', x === f));
       };
-      const go = () => { if (drag?.moved) return; show(); holdUntil = performance.now() + 4000; focusCard(e); };
+      f._show = show;
+      // Computador: clicar leva ao card. Celular: o toque mostra o nome e o botão "Ver detalhes".
+      const go = () => { if (drag?.moved) return; holdUntil = performance.now() + 5000; if (fine) { show(); focusCard(e); } else show(true); };
       if (fine) f.addEventListener('mouseenter', show);
       f.addEventListener('focus', show); f.addEventListener('click', go);
       f.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); go(); } });
