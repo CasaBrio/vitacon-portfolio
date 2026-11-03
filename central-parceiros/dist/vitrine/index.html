@@ -214,6 +214,21 @@ body{margin:0}
 .pdf-cta{display:inline-flex;align-items:center;gap:8px}
 .tag.has-go{pointer-events:auto;z-index:5;white-space:normal;text-align:center}
 .tag-go{display:block;margin:8px auto 0;font-family:var(--f-body);font-weight:700;font-size:13px;padding:7px 12px;border-radius:8px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+/* Balão da torre no celular: compacto, acima do prédio, sem cobrir os andares */
+.stage{overflow:hidden}
+html,body{overflow-x:hidden}
+@media (max-width:620px){
+  .hero .stage{height:455px}
+  .tag{top:4px;width:calc(100% - 8px);max-width:440px;text-align:left;padding:9px 12px}
+  .tag small{white-space:normal}
+  .tag.has-go{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;align-items:center;text-align:left;white-space:nowrap}
+  .tag.has-go b{grid-column:1;overflow:hidden;text-overflow:ellipsis}
+  .tag.has-go small{grid-column:1}
+  .tag.has-go .tag-go{grid-column:2;grid-row:1 / span 2;margin:0}
+  .tag.has-go .t-st,.tag.has-go .t-long{display:none}
+  .tag.has-go .t-short{display:inline}
+}
+.t-short{display:none}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */

@@ -169,7 +169,7 @@
       f.style.animationDelay = (0.15 + i * 0.05) + 's';
       f.innerHTML = '<div class="face f-front"></div><div class="face f-back"></div><div class="face f-left"></div><div class="face f-right"></div>' + (i === floors.length - 1 ? '<div class="roof"></div>' : '');
       const show = (withLink) => {
-        tag.innerHTML = `<b>${esc(e.nome)}</b><small>${esc(e.bairro)} · ${S[e.st]} · a partir de ${brl(e.preco)}</small>` +
+        tag.innerHTML = `<b>${esc(e.nome)}</b><small>${esc(e.bairro)}<span class="t-st"> · ${S[e.st]}</span> · <span class="t-long">a partir de</span><span class="t-short">desde</span> ${brl(e.preco)}</small>` +
           (withLink ? `<button type="button" class="tag-go">Ver detalhes ↓</button>` : '');
         tag.classList.toggle('has-go', !!withLink);
         const b = tag.querySelector('.tag-go');
