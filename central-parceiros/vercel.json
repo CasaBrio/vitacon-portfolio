@@ -26,5 +26,12 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/v",
+      "destination": "/vitrine/",
+      "permanent": false
+    }
   ]
 }
