@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#10132d">
+<title>Vitrine de Oportunidades | Vitacon Parceiros</title>
+<meta property="og:title" content="Vitrine de Oportunidades Vitacon">
+<meta property="og:description" content="Empreendimentos Vitacon para corretores e imobiliárias parceiras, com condições do mês e atendimento direto com Luigi.">
+<meta property="og:image" content="https://parceirosvitacon.vercel.app/vitrine/luigi.jpg">
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a night-time tower of 21 floors (one per empreendimento) opens the page, then a filterable vitrine of cards that hands off to the Central de Parceiros. Single dark look, by choice. */
+:root{
+  --night:#10132d;
+  --night-2:#171b3d;
+  --panel:#1d2250;
+  --line:#2c3270;
+  --fg:#eef0ff;
+  --muted:#a3a8d4;
+  --accent:#ff8a3d;
+  --accent-ink:#1a0f05;
+  --pronto:#4fd6a8;
+  --obras:#f4cd5a;
+  --lanc:#b59cff;
+  --glass:#6f7bd8;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--night);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* Top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:800;letter-spacing:.06em;font-size:15px}
+.brand span{color:var(--accent)}
+.top-links{display:flex;gap:8px;flex-wrap:wrap}
+.chip-link{font-size:13px;text-decoration:none;padding:7px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted)}
+.chip-link:hover{color:var(--fg);border-color:var(--glass)}
+
+/* Hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center;padding-block:28px 40px}
+.hero-copy{min-width:0;display:flex;flex-direction:column;gap:18px}
+.para{font-family:var(--f-mono);font-size:12px;color:var(--accent);letter-spacing:.08em}
+h1{font-family:var(--f-display);font-weight:800;font-size:clamp(30px,5.2vw,58px);line-height:1.02;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1 em{font-style:normal;color:var(--accent)}
+.lede{color:var(--muted);max-width:52ch;margin:0;font-size:16px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;text-decoration:none;padding:13px 18px;border-radius:10px;border:1px solid transparent;cursor:pointer;font-family:var(--f-body)}
+.btn-primary{background:var(--accent);color:var(--accent-ink)}
+.btn-primary:hover{filter:brightness(1.08)}
+.btn-ghost{border-color:var(--line);color:var(--fg);background:transparent}
+.btn-ghost:hover{border-color:var(--glass)}
+.stats{display:flex;gap:24px;flex-wrap:wrap;padding-top:6px}
+.stat b{display:block;font-family:var(--f-display);font-size:22px;font-weight:600}
+.stat span{font-size:12px;color:var(--muted)}
+
+/* 3D tower */
+.stage{position:relative;height:420px;perspective:1100px;display:flex;align-items:flex-end;justify-content:center;min-width:0}
+.stage::before{content:"";position:absolute;left:10%;right:10%;bottom:8px;height:60px;border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(255,138,61,.28),transparent 70%);filter:blur(4px)}
+.tower{--w:120px;--h:15px;position:relative;width:var(--w);height:calc(var(--h)*21);transform-style:preserve-3d;
+  transform:rotateX(-18deg) rotateY(-32deg);animation:spin 26s linear infinite;margin-bottom:34px}
+.stage:hover .tower,.stage.paused .tower{animation-play-state:paused}
+@keyframes spin{to{transform:rotateX(-18deg) rotateY(328deg)}}
+.floor{position:absolute;left:0;width:var(--w);height:calc(var(--h) - 2px);transform-style:preserve-3d;cursor:pointer;
+  animation:rise .7s cubic-bezier(.2,.8,.2,1) backwards}
+@keyframes rise{from{opacity:0;translate:0 -60px}}
+.face{position:absolute;inset:0;width:var(--w);height:100%;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 6px,var(--night) 6px 8px),
+    linear-gradient(180deg,var(--c,var(--glass)),color-mix(in srgb,var(--c,var(--glass)) 55%,var(--night)));
+  opacity:.82;border-top:1px solid rgba(255,255,255,.18);transition:opacity .2s,filter .2s}
+.f-front{transform:translateZ(calc(var(--w)/2))}
+.f-back{transform:rotateY(180deg) translateZ(calc(var(--w)/2))}
+.f-left{transform:rotateY(-90deg) translateZ(calc(var(--w)/2));filter:brightness(.7)}
+.f-right{transform:rotateY(90deg) translateZ(calc(var(--w)/2));filter:brightness(.85)}
+.roof{position:absolute;left:0;top:0;width:var(--w);height:var(--w);background:var(--panel);
+  transform:rotateX(90deg) translateZ(calc(var(--w)/2));transform-origin:center;border:1px solid var(--line)}
+.floor.on .face,.floor:hover .face{opacity:1;filter:brightness(1.35)}
+.floor[data-s="pronto"]{--c:var(--pronto)}
+.floor[data-s="obras"]{--c:var(--obras)}
+.floor[data-s="lanc"]{--c:var(--lanc)}
+.floor.dim .face{opacity:.18}
+.tag{position:absolute;left:50%;top:12px;translate:-50% 0;background:var(--night-2);border:1px solid var(--line);border-radius:10px;
+  padding:8px 12px;font-size:13px;white-space:nowrap;pointer-events:none;max-width:calc(100% - 8px);overflow:hidden;text-overflow:ellipsis}
+.tag b{font-weight:700}
+.tag small{display:block;color:var(--muted);font-family:var(--f-mono);font-size:11px}
+.legend{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+/* Sections */
+section{padding-block:36px}
+h2{font-family:var(--f-display);font-weight:600;font-size:clamp(20px,2.8vw,28px);margin:6px 0 0;text-wrap:balance}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.sec-head p{margin:6px 0 0;color:var(--muted);max-width:60ch}
+
+/* Highlights */
+.picks{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.pick{background:var(--night-2);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.pick .eyebrow{color:var(--accent)}
+.pick strong{font-family:var(--f-display);font-weight:600;font-size:18px;line-height:1.2}
+.pick span{color:var(--muted);font-size:13px}
+
+/* Launches */
+.launches{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.launch{border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--lanc) 16%,var(--night-2)),var(--night-2))}
+.launch h3{font-family:var(--f-display);font-weight:600;font-size:19px;margin:0}
+.launch p{margin:0;color:var(--muted);font-size:14px}
+.launch .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+
+/* Commission */
+.comm{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.comm-card{background:var(--night-2);border:1px solid var(--line);border-radius:14px;padding:18px}
+.comm-card table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.comm-card th,.comm-card td{text-align:left;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.comm-card th{font-weight:500;color:var(--muted);font-size:12px}
+.comm-card td.n{font-family:var(--f-mono);font-weight:600;font-size:16px}
+.comm-card tr:last-child td{border-bottom:0}
+
+/* Filters */
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{font-family:var(--f-body);font-size:13px;font-weight:600;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--night);border-color:var(--fg)}
+select{font-family:var(--f-body);font-size:13px;padding:8px 10px;border-radius:10px;background:var(--night-2);color:var(--fg);border:1px solid var(--line)}
+.count{margin-left:auto;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+
+/* Cards */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--night-2);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0;transition:border-color .2s,translate .2s}
+.card:hover{border-color:var(--glass)}
+.card.flash{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 30%,transparent)}
+.card-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.card h3{font-family:var(--f-display);font-weight:600;font-size:16px;line-height:1.25;margin:0;text-wrap:balance}
+.card .bairro{color:var(--muted);font-size:13px}
+.pill{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:6px;white-space:nowrap;color:var(--night);font-weight:600}
+.pill.pronto{background:var(--pronto)}
+.pill.obras{background:var(--obras)}
+.pill.lanc{background:var(--lanc)}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.nums small{display:block;font-size:11px;color:var(--muted);letter-spacing:.04em}
+.nums b{font-family:var(--f-mono);font-weight:600;font-size:15px;font-variant-numeric:tabular-nums}
+.nums .price b{color:var(--accent);font-size:17px}
+.actions{display:flex;gap:8px;margin-top:auto}
+.actions a{flex:1;justify-content:center;padding:10px 12px;font-size:13px}
+.links{display:flex;gap:6px;flex-wrap:wrap}
+.links a{font-size:12.5px;font-weight:600;text-decoration:none;padding:7px 10px;border-radius:8px;background:var(--panel);color:var(--fg);border:1px solid var(--line)}
+.links a:hover{border-color:var(--glass)}
+.mgr{display:grid;grid-template-columns:260px 1fr;gap:28px;align-items:center;background:var(--night-2);border:1px solid var(--line);border-radius:18px;padding:22px;overflow:hidden}
+.mgr img{width:100%;aspect-ratio:360/414;max-width:100%;object-fit:cover;border-radius:12px;display:block}
+.mgr-copy{min-width:0;display:flex;flex-direction:column;gap:12px}
+.mgr h2{margin:0}
+.mgr .role{color:var(--accent);font-weight:700;font-size:15px}
+.mgr p{margin:0;color:var(--muted);max-width:56ch}
+.mgr ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.mgr ul li::before{content:"→ ";color:var(--accent)}
+@media (max-width:620px){.mgr{grid-template-columns:1fr}.mgr img{max-width:260px}}
+.empty{grid-column:1/-1;color:var(--muted);padding:24px;border:1px dashed var(--line);border-radius:14px;text-align:center}
+
+/* Footer */
+.foot{border-top:1px solid var(--line);margin-top:8px;padding-block:22px 40px}
+.luigi{display:flex;gap:14px;align-items:center}
+.luigi img{width:56px;height:56px;border-radius:50%;object-fit:cover;background:var(--panel)}
+.luigi b{display:block;font-weight:700}
+.luigi span{color:var(--muted);font-size:13px}
+.contact{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-family:var(--f-mono);font-size:13px}
+.contact button{font-family:var(--f-body);font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.note{grid-column:1/-1;color:var(--muted);font-size:12.5px;margin:0;max-width:80ch}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .stage{height:360px;order:-1}
+  .tower{--w:100px;--h:13px}
+  .picks{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:620px){
+  .picks,.grid,.launches,.comm{grid-template-columns:1fr}
+  .foot{grid-template-columns:1fr}
+  .count{margin-left:0;width:100%}
+  .stage{height:330px}
+}
+@media (prefers-reduced-motion:reduce){
+  .tower{animation:none}
+  .floor{animation:none}
+}
+
+body{margin:0}
+.meta{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.meta b{color:var(--pronto);font-weight:600}
+.pill.estoque{background:var(--glass);color:var(--fg)}
+.pick:hover{border-color:var(--glass)}
+.loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/" style="text-decoration:none">VITACON <span>PARCEIROS</span></a>
+    <nav class="top-links">
+      <a class="chip-link" href="/mapa/">Mapa</a>
+      <a class="chip-link" href="/">Central de Parceiros</a>
+      <a class="chip-link" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastre-se</a>
+    </nav>
+  </header>
+
+  <section class="hero" aria-label="Abertura">
+    <div class="hero-copy">
+      <div class="para" id="para">SELEÇÃO PARA PARCEIROS</div>
+      <h1><span id="h1-n">Os</span> prédios. <em>Uma vitrine</em> para sua próxima proposta.</h1>
+      <p class="lede" id="lede">Cada andar da torre é um empreendimento com unidades no tabelão do mês. Toque em um andar para ver.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#vitrine">Ver as oportunidades ↓</a>
+        <a class="btn btn-ghost" href="/">Abrir Central</a>
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="stage" id="stage" aria-label="Torre com os empreendimentos">
+      <div class="tag" id="tag"><b>Toque em um andar</b><small>cada andar é um empreendimento</small></div>
+      <div class="tower" id="tower"></div>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--pronto)"></i>Pronto</span>
+        <span><i class="dot" style="background:var(--obras)"></i>Em obras</span>
+        <span><i class="dot" style="background:var(--lanc)"></i>Lançamento</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-destaques">
+    <div class="sec-head"><div><div class="eyebrow">Para abrir a conversa com o cliente</div><h2 id="h-destaques">Destaques do mês</h2></div></div>
+    <div class="picks" id="picks"></div>
+  </section>
+
+  <section aria-labelledby="h-lanc" id="lanc-sec">
+    <div class="sec-head"><div><div class="eyebrow">Novidades para sua carteira</div><h2 id="h-lanc">Lançamentos em destaque</h2></div></div>
+    <div class="launches" id="launches"></div>
+  </section>
+
+  <section id="vitrine" aria-labelledby="h-vitrine">
+    <div class="sec-head">
+      <div><div class="eyebrow" id="vit-month">Valores do mês</div><h2 id="h-vitrine">Vitrine de empreendimentos</h2>
+      <p>Filtre pelo perfil do seu cliente e peça a tabela direto no WhatsApp.</p></div>
+    </div>
+    <div class="filters">
+      <div class="seg" role="group" aria-label="Status">
+        <button type="button" id="st-all" data-st="all" aria-pressed="true">Todos</button>
+        <button type="button" id="st-pronto" data-st="pronto" aria-pressed="false">Prontos</button>
+        <button type="button" id="st-obras" data-st="obras" aria-pressed="false">Em obras</button>
+        <button type="button" id="st-lanc" data-st="lanc" aria-pressed="false">Lançamento</button>
+      </div>
+      <select id="f-bairro" aria-label="Bairro"><option value="">Todos os bairros</option></select>
+      <select id="f-ticket" aria-label="Ticket máximo">
+        <option value="">Qualquer ticket</option>
+        <option value="400000">Até R$ 400 mil</option>
+        <option value="500000">Até R$ 500 mil</option>
+        <option value="700000">Até R$ 700 mil</option>
+      </select>
+      <select id="f-sort" aria-label="Ordenar">
+        <option value="preco">Menor preço</option>
+        <option value="desconto">Maior desconto</option>
+        <option value="bairro">Bairro</option>
+        <option value="metragem">Maior metragem</option>
+      </select>
+      <span class="count" id="count"></span>
+    </div>
+    <div class="grid" id="grid"><div class="loading">Carregando as oportunidades do mês…</div></div>
+  </section>
+
+  <section aria-labelledby="h-comm">
+    <div class="sec-head"><div><div class="eyebrow">Parcerias Vitacon</div><h2 id="h-comm">Taxas de comissão</h2>
+      <p>Bonificações de campanha aparecem nas fichas da Central. Confirme as regras de aplicação com o Luigi.</p></div></div>
+    <div class="comm">
+      <div class="comm-card">
+        <div class="eyebrow">Pessoa jurídica</div>
+        <table><thead><tr><th>Categoria</th><th>Taxa</th></tr></thead>
+        <tbody><tr><td>Estoque</td><td class="n">4,5%</td></tr><tr><td>Lançamentos</td><td class="n">4,0%</td></tr></tbody></table>
+      </div>
+      <div class="comm-card">
+        <div class="eyebrow">Pessoa física</div>
+        <table><thead><tr><th>Categoria</th><th>Taxa</th></tr></thead>
+        <tbody><tr><td>Estoque</td><td class="n">3,0%</td></tr><tr><td>Lançamentos</td><td class="n">3,0%</td></tr></tbody></table>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-mgr">
+    <div class="mgr">
+      <img src="/vitrine/luigi.jpg" alt="Luigi Sperandeo, Gerente de Vendas e Parcerias da Vitacon">
+      <div class="mgr-copy">
+        <div class="eyebrow">Seu contato na Vitacon</div>
+        <h2 id="h-mgr">Luigi Sperandeo</h2>
+        <div class="role">Gerente de Vendas e Parcerias</div>
+        <p>Atendo imobiliárias e corretores parceiros do primeiro contato ao fechamento. Fale comigo para:</p>
+        <ul>
+          <li>Tabelas, espelhos de vendas e disponibilidade atualizados</li>
+          <li>Confirmar descontos, campanhas e bonificações</li>
+          <li>Montar a proposta e acompanhar o seu cliente</li>
+        </ul>
+        <div class="contact">
+          <a class="btn btn-primary" href="https://wa.me/5511998885850" target="_blank" rel="noopener">WhatsApp (11) 99888-5850</a>
+          <span id="mail">luigi@vitacon.com.br</span>
+          <button type="button" id="copy-mail">Copiar e-mail</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p class="note" id="note">Estoque, valores e condições sujeitos a confirmação antes de qualquer proposta. Material de uso exclusivo de corretores e imobiliárias parceiras.</p>
+  </footer>
+</div>
+
+<script src="/central-config.js"></script>
+<script src="/analytics.js"></script>
+<script src="/materiais-publicos.js"></script>
+<script src="/catalogo-projetos.js"></script>
+<script src="/vitrine/vitrine.js"></script>
+</body>
+</html>
