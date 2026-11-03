@@ -203,6 +203,27 @@ body{margin:0}
 .pill.estoque{background:var(--glass);color:var(--fg)}
 .pick:hover{border-color:var(--glass)}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
+
+/* Torre maior e em destaque */
+.hero{grid-template-columns:1fr 1.05fr}
+.stage{height:620px;perspective:1500px}
+.stage::before{left:-4%;right:-4%;bottom:0;height:110px;background:radial-gradient(ellipse at center,rgba(255,138,61,.42),transparent 68%);filter:blur(6px)}
+.stage::after{content:"";position:absolute;inset:6% 8% 14%;border-radius:50%;background:radial-gradient(circle at 50% 60%,rgba(111,123,216,.22),transparent 65%);pointer-events:none;z-index:-1}
+.tower{--hmax:26px;--w:190px;--h:min(var(--hmax),calc(460px / var(--n,17)));margin-bottom:54px}
+.face{border-top-color:rgba(255,255,255,.28)}
+.tag{font-size:14px;padding:10px 14px}
+@media (max-width:900px){.stage{height:520px}.tower{--hmax:22px;--w:160px;--h:min(var(--hmax),calc(380px / var(--n,17)))}}
+@media (max-width:620px){.stage{height:450px}.tower{--hmax:19px;--w:132px;--h:min(var(--hmax),calc(320px / var(--n,17)));margin-bottom:48px}}
+/* Cadastro em destaque */
+.chip-link.join{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+.chip-link.join:hover{color:var(--accent-ink);filter:brightness(1.08)}
+.signup{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;padding:26px 28px;border-radius:18px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));
+  background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 22%,var(--night-2)),var(--night-2) 70%)}
+.signup h2{margin:4px 0 6px}
+.signup p{margin:0;color:var(--muted);max-width:60ch}
+.signup .eyebrow{color:var(--accent)}
+.signup .btn{font-size:15px;padding:15px 22px}
+@media (max-width:620px){.signup{grid-template-columns:1fr;padding:22px}}
 </style>
 </head>
 <body>
@@ -212,7 +233,7 @@ body{margin:0}
     <nav class="top-links">
       <a class="chip-link" href="/mapa/" target="_blank" rel="noopener">Mapa ↗</a>
       <a class="chip-link" href="/">Central de Parceiros</a>
-      <a class="chip-link" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastre-se</a>
+      <a class="chip-link join" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastre-se ↗</a>
     </nav>
   </header>
 
@@ -235,6 +256,17 @@ body{margin:0}
         <span><i class="dot" style="background:var(--obras)"></i>Em obras</span>
         <span><i class="dot" style="background:var(--lanc)"></i>Lançamento</span>
       </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-signup" style="padding-block:0 12px">
+    <div class="signup">
+      <div>
+        <div class="eyebrow">Programa de parcerias Vitacon</div>
+        <h2 id="h-signup">Cadastre-se para receber informações privilegiadas</h2>
+        <p>Imobiliárias e corretores cadastrados recebem lançamentos, tabelas e condições do programa de parcerias diretamente da Vitacon.</p>
+      </div>
+      <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Quero me cadastrar ↗</a>
     </div>
   </section>
 
