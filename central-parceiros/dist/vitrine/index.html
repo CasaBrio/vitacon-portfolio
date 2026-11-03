@@ -70,12 +70,12 @@ h1 em{font-style:normal;color:var(--accent)}
 .stage::before{content:"";position:absolute;left:10%;right:10%;bottom:8px;height:60px;border-radius:50%;
   background:radial-gradient(ellipse at center,rgba(255,138,61,.28),transparent 70%);filter:blur(4px)}
 .tower{--w:120px;--h:15px;position:relative;width:var(--w);height:calc(var(--h)*21);transform-style:preserve-3d;
-  transform:rotateX(-18deg) rotateY(-32deg);animation:spin 26s linear infinite;margin-bottom:34px}
-.stage:hover .tower,.stage.paused .tower{animation-play-state:paused}
+  transform:rotateX(-18deg) rotateY(-32deg);margin-bottom:34px;will-change:transform}
 @keyframes spin{to{transform:rotateX(-18deg) rotateY(328deg)}}
 .floor{position:absolute;left:0;width:var(--w);height:calc(var(--h) - 2px);transform-style:preserve-3d;cursor:pointer;
   animation:rise .7s cubic-bezier(.2,.8,.2,1) backwards}
-@keyframes rise{from{opacity:0;translate:0 -60px}}
+@keyframes rise{from{transform:translateY(-60px)}}
+@keyframes fadein{from{opacity:0}}
 .face{position:absolute;inset:0;width:var(--w);height:100%;
   background:
     repeating-linear-gradient(90deg,transparent 0 6px,var(--night) 6px 8px),
@@ -202,10 +202,20 @@ body{margin:0}
 .meta b{color:var(--pronto);font-weight:600}
 .pill.estoque{background:var(--glass);color:var(--fg)}
 .pick:hover{border-color:var(--glass)}
+.stage{touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none}
+.stage:active{cursor:grabbing}
+.face{animation:fadein .7s backwards;animation-delay:inherit}
+.pick{text-align:left;color:inherit;font:inherit;cursor:pointer}
+.pills{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.pill.last{background:var(--accent);color:var(--accent-ink)}
+.addr{font-size:13px;color:var(--muted);text-decoration:none;margin-top:-4px}
+.addr:hover{color:var(--fg)}
+.meta.cat{margin-top:-8px;opacity:.85}
+.pdf-cta{display:inline-flex;align-items:center;gap:8px}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */
-.hero{grid-template-columns:1fr 1.05fr}
+@media (min-width:901px){.hero{grid-template-columns:1fr 1.05fr}}
 .stage{height:620px;perspective:1500px}
 .stage::before{left:-4%;right:-4%;bottom:0;height:110px;background:radial-gradient(ellipse at center,rgba(255,138,61,.42),transparent 68%);filter:blur(6px)}
 .stage::after{content:"";position:absolute;inset:6% 8% 14%;border-radius:50%;background:radial-gradient(circle at 50% 60%,rgba(111,123,216,.22),transparent 65%);pointer-events:none;z-index:-1}
@@ -213,7 +223,7 @@ body{margin:0}
 .face{border-top-color:rgba(255,255,255,.28)}
 .tag{font-size:14px;padding:10px 14px}
 @media (max-width:900px){.stage{height:520px}.tower{--hmax:22px;--w:160px;--h:min(var(--hmax),calc(380px / var(--n,17)))}}
-@media (max-width:620px){.stage{height:450px}.tower{--hmax:19px;--w:132px;--h:min(var(--hmax),calc(320px / var(--n,17)));margin-bottom:48px}}
+@media (max-width:620px){.stage{height:400px}.tower{--hmax:17px;--w:122px;--h:min(var(--hmax),calc(290px / var(--n,17)));margin-bottom:46px}}
 /* Cadastro em destaque */
 .chip-link.join{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
 .chip-link.join:hover{color:var(--accent-ink);filter:brightness(1.08)}
@@ -244,12 +254,13 @@ body{margin:0}
       <p class="lede" id="lede">Cada andar da torre é um empreendimento com unidades no tabelão do mês. Toque em um andar para ver.</p>
       <div class="ctas">
         <a class="btn btn-primary" href="#vitrine">Ver as oportunidades ↓</a>
+        <a class="btn btn-ghost pdf-cta" data-pdf href="/materiais/catalogo-oportunidades-outubro-2026.pdf" download>↓ <span id="pdf-label">Catálogo em PDF</span></a>
         <a class="btn btn-ghost" href="/">Abrir Central</a>
       </div>
       <div class="stats" id="stats"></div>
     </div>
     <div class="stage" id="stage" aria-label="Torre com os empreendimentos">
-      <div class="tag" id="tag"><b>Toque em um andar</b><small>cada andar é um empreendimento</small></div>
+      <div class="tag" id="tag"><b>Toque em um andar</b><small>arraste para girar · cada andar é um empreendimento</small></div>
       <div class="tower" id="tower"></div>
       <div class="legend">
         <span><i class="dot" style="background:var(--pronto)"></i>Pronto</span>
@@ -284,6 +295,7 @@ body{margin:0}
     <div class="sec-head">
       <div><div class="eyebrow" id="vit-month">Valores do mês</div><h2 id="h-vitrine">Vitrine de empreendimentos</h2>
       <p>Filtre pelo perfil do seu cliente e peça a tabela direto no WhatsApp.</p></div>
+      <a class="btn btn-primary" data-pdf href="/materiais/catalogo-oportunidades-outubro-2026.pdf" download>↓ Baixar catálogo em PDF</a>
     </div>
     <div class="filters">
       <div class="seg" role="group" aria-label="Status">

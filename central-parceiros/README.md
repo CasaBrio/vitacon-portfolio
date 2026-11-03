@@ -27,3 +27,10 @@ node scripts/check-tabelao.cjs dist
 ```
 
 Base atual de outubro: 290 registros (211 Tabelão e 79 HIS/HMP). Condições históricas permanecem identificadas. Preços, disponibilidade e condições dependem de confirmação.
+
+## Vitrine (/vitrine)
+
+- Lista oficial do mês: `dist/vitrine/oportunidades.json`, gerada a partir do catálogo de oportunidades em PDF.
+- PDF para download: `dist/materiais/catalogo-oportunidades-<mes>-<ano>.pdf` (o caminho fica no campo `pdf` do JSON).
+- Apresentação e book de cada empreendimento vêm de `catalogo-projetos.js` e `materiais-publicos.js` (campo `catalogo` liga o item ao nome do catálogo).
+- Para um novo mês: trocar o PDF, regenerar `oportunidades.json` (nome, bairro, endereço, status, metragens, valor a partir de, desconto, links de mapa, pasta e tabela) e publicar.
