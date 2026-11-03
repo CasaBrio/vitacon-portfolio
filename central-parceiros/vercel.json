@@ -46,8 +46,12 @@
       "destination": "/vitrine/index.html"
     },
     {
+      "source": "/",
+      "destination": "/central.html"
+    },
+    {
       "source": "/central",
-      "destination": "/index.html"
+      "destination": "/central.html"
     }
   ]
 }

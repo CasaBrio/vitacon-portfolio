@@ -34,3 +34,10 @@ Base atual de outubro: 290 registros (211 Tabelão e 79 HIS/HMP). Condições hi
 - PDF para download: `dist/materiais/catalogo-oportunidades-<mes>-<ano>.pdf` (o caminho fica no campo `pdf` do JSON).
 - Apresentação e book de cada empreendimento vêm de `catalogo-projetos.js` e `materiais-publicos.js` (campo `catalogo` liga o item ao nome do catálogo).
 - Para um novo mês: trocar o PDF, regenerar `oportunidades.json` (nome, bairro, endereço, status, metragens, valor a partir de, desconto, links de mapa, pasta e tabela) e publicar.
+
+## Endereços
+
+- parceirosvitacon.com.br → vitrine (página inicial do domínio próprio)
+- parceirosvitacon.vercel.app → Central (página inicial, como antes)
+- /central → Central em qualquer endereço (arquivo dist/central.html)
+- /v e /vitrine/ → vitrine em qualquer endereço
