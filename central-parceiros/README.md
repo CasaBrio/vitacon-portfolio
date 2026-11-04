@@ -48,4 +48,4 @@ Base atual de outubro: 290 registros (211 Tabelão e 79 HIS/HMP). Condições hi
 - /c/<código> → página pública que o cliente recebe (sem comissão nem materiais internos), com o nome e o WhatsApp do corretor.
 - /admin/parceiros/ → o Luigi cria os acessos, ativa ou desativa parceiros e vê as páginas enviadas e as aberturas.
 - Banco: rodar `parceiros-schema.sql` uma vez no Supabase (SQL Editor).
-- Supabase > Authentication: deixar o cadastro por e-mail habilitado, desligar "Confirm email" e incluir `https://parceirosvitacon.com.br/parceiro/` nas Redirect URLs (para "Esqueci a senha").
+- Supabase > Authentication: o cadastro por e-mail precisa ficar habilitado. O e-mail do parceiro é confirmado pelo painel (admin_ativar_login) e as novas senhas provisórias saem pelo painel (admin_nova_senha), sem depender de envio de e-mail.

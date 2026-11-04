@@ -34,11 +34,11 @@
     $('l-senha').value = '';
     route();
   });
-  $('l-esqueci').addEventListener('click', async () => {
+  $('l-esqueci').addEventListener('click', () => {
     const email = $('l-email').value.trim();
-    if (!email) { show($('l-msg'), 'Digite o seu e-mail acima e toque em "Esqueci a senha" de novo.', 'error'); return; }
-    await db.auth.resetPasswordForEmail(email, {redirectTo: location.origin + '/parceiro/'});
-    show($('l-msg'), 'Se o e-mail estiver cadastrado, você vai receber um link para criar uma nova senha. Confira também a caixa de spam.', 'ok');
+    const msg = `Olá Luigi, esqueci a senha da Área do Parceiro${email ? ' (e-mail ' + email + ')' : ''}. Pode me enviar uma nova senha provisória?`;
+    $('l-msg').hidden = false; $('l-msg').className = 'msg ok';
+    $('l-msg').innerHTML = `O Luigi envia uma nova senha provisória pelo WhatsApp. <a href="https://wa.me/5511998885850?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" style="font-weight:700">Pedir nova senha ↗</a>`;
   });
 
   /* Senha */

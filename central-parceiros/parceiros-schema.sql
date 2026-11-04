@@ -1,5 +1,5 @@
 -- Área do parceiro e páginas enviadas aos clientes.
--- Rodar uma vez no Supabase: SQL Editor > New query > colar tudo > Run.
+-- Já aplicado no projeto reconecta-vitacon (migrações area_do_parceiro e area_do_parceiro_admin_acesso).
 -- O administrador (Luigi) é o mesmo usuário do painel de analytics.
 
 create table if not exists public.parceiros (
@@ -81,3 +81,33 @@ returns void language sql security definer set search_path = '' as $$
 $$;
 revoke all on function public.parceiro_senha_trocada() from public, anon;
 grant execute on function public.parceiro_senha_trocada() to authenticated;
+
+-- Só o administrador: confirma o e-mail do login recém-criado do parceiro (dispensa o e-mail de confirmação).
+create or replace function public.admin_ativar_login(p_user uuid)
+returns void language plpgsql security definer set search_path = '' as $$
+begin
+ if (select auth.uid()) is distinct from 'e6a450e9-32b0-4a67-80a8-e2c32c24e627'::uuid then
+  raise exception 'Acesso administrativo não autorizado' using errcode = '42501';
+ end if;
+ update auth.users set email_confirmed_at = coalesce(email_confirmed_at, now()) where id = p_user;
+end;
+$$;
+revoke all on function public.admin_ativar_login(uuid) from public, anon;
+grant execute on function public.admin_ativar_login(uuid) to authenticated;
+
+-- Só o administrador: define uma nova senha provisória para um parceiro (ele troca no próximo login).
+create or replace function public.admin_nova_senha(p_user uuid, p_senha text)
+returns void language plpgsql security definer set search_path = '' as $$
+begin
+ if (select auth.uid()) is distinct from 'e6a450e9-32b0-4a67-80a8-e2c32c24e627'::uuid then
+  raise exception 'Acesso administrativo não autorizado' using errcode = '42501';
+ end if;
+ if length(coalesce(p_senha, '')) < 8 then raise exception 'Senha muito curta'; end if;
+ if not exists (select 1 from public.parceiros where user_id = p_user) then raise exception 'Parceiro não encontrado'; end if;
+ update auth.users set encrypted_password = extensions.crypt(p_senha, extensions.gen_salt('bf')),
+   email_confirmed_at = coalesce(email_confirmed_at, now()), updated_at = now() where id = p_user;
+ update public.parceiros set trocar_senha = true where user_id = p_user;
+end;
+$$;
+revoke all on function public.admin_nova_senha(uuid, text) from public, anon;
+grant execute on function public.admin_nova_senha(uuid, text) to authenticated;

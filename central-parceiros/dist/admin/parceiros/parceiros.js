@@ -71,7 +71,7 @@
           <td>${mine.length}</td>
           <td>${mine.reduce((s, r) => s + r.visualizacoes, 0)}</td>
           <td>${p.ativo ? '<span class="pill pronto">Ativo</span>' : '<span class="pill off">Desativado</span>'}${p.trocar_senha ? '<div class="muted">ainda não trocou a senha</div>' : ''}</td>
-          <td><button class="btn ${p.ativo ? 'btn-danger' : 'btn-ghost'} btn-small" type="button" data-act="toggle">${p.ativo ? 'Desativar' : 'Reativar'}</button></td></tr>`; }).join('')}</tbody></table></div>`
+          <td><div class="row"><button class="btn btn-ghost btn-small" type="button" data-act="senha">Nova senha</button><button class="btn ${p.ativo ? 'btn-danger' : 'btn-ghost'} btn-small" type="button" data-act="toggle">${p.ativo ? 'Desativar' : 'Reativar'}</button></div></td></tr>`; }).join('')}</tbody></table></div>`
         : '<div class="empty">Nenhum parceiro com acesso ainda. Crie o primeiro acima.</div>';
     }
   }
@@ -79,12 +79,34 @@
   $('t-par').addEventListener('click', () => { tab = 'par'; render(); });
   $('t-reload').addEventListener('click', load);
   $('list').addEventListener('click', async ev => {
-    const b = ev.target.closest('button[data-act="toggle"]'); if (!b) return;
+    const b = ev.target.closest('button[data-act]'); if (!b) return;
     const id = b.closest('tr').dataset.id, p = pName(id);
     b.disabled = true;
+    if (b.dataset.act === 'senha') {
+      const nova = gerar();
+      const {error} = await db.rpc('admin_nova_senha', {p_user: id, p_senha: nova});
+      b.disabled = false;
+      if (error) { show($('p-msg'), 'Não foi possível gerar a nova senha. Tente de novo.', 'error'); return; }
+      show($('p-msg'), '');
+      sendBox(p.nome, p.email, nova, p.whatsapp, true);
+      load(); return;
+    }
     await db.from('parceiros').update({ativo: !p.ativo}).eq('user_id', id);
     load();
   });
+
+  /* Mensagem de acesso para o parceiro */
+  function sendBox(nome, email, senha, whatsapp, nova) {
+    const txt = nova
+      ? `Olá ${nome.split(' ')[0]}! Sua nova senha provisória da Área do Parceiro Vitacon:\n\nAcesse: ${location.origin}/parceiro/\nE-mail: ${email}\nSenha provisória: ${senha}\n\nNo próximo acesso você cria uma senha só sua.\n\nLuigi · Vitacon`
+      : `Olá ${nome.split(' ')[0]}! Seu acesso à Área do Parceiro Vitacon está liberado.\n\nAcesse: ${location.origin}/parceiro/\nE-mail: ${email}\nSenha provisória: ${senha}\n\nNo primeiro acesso você cria a sua senha. Lá você monta páginas com os empreendimentos para enviar aos seus clientes, com o seu nome e contato.\n\nLuigi · Vitacon`;
+    $('p-text').textContent = txt;
+    $('p-send').querySelector('.eyebrow').textContent = nova ? `Nova senha de ${nome}: envie ao parceiro` : 'Acesso criado: envie ao parceiro';
+    $('p-wa').href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(txt)}`;
+    $('p-copy').onclick = e => copy(txt, e.currentTarget, $('p-text'));
+    $('p-send').hidden = false;
+    $('p-send').scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
 
   /* Novo parceiro */
   const gerar = () => { const a = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789'; const r = crypto.getRandomValues(new Uint32Array(10)); return 'Vtc-' + [...r].map(n => a[n % a.length]).join(''); };
@@ -110,13 +132,10 @@
       return;
     }
     const {error: e2} = await db.from('parceiros').insert({user_id: uid, nome, email, whatsapp, imobiliaria: $('p-imob').value.trim() || null, creci: $('p-creci').value.trim() || null});
+    if (!e2) await db.rpc('admin_ativar_login', {p_user: uid});
     $('p-go').disabled = false;
     if (e2) { show($('p-msg'), 'O login foi criado, mas não foi possível registrar o parceiro. Tente de novo.', 'error'); return; }
-    const txt = `Olá ${nome.split(' ')[0]}! Seu acesso à Área do Parceiro Vitacon está liberado.\n\nAcesse: ${location.origin}/parceiro/\nE-mail: ${email}\nSenha provisória: ${senha}\n\nNo primeiro acesso você cria a sua senha. Lá você monta páginas com os empreendimentos para enviar aos seus clientes, com o seu nome e contato.\n\nLuigi · Vitacon`;
-    $('p-text').textContent = txt;
-    $('p-wa').href = `https://wa.me/${whatsapp}?text=${encodeURIComponent(txt)}`;
-    $('p-copy').onclick = e => copy(txt, e.currentTarget, $('p-text'));
-    $('p-send').hidden = false;
+    sendBox(nome, email, senha, whatsapp, false);
     $('f-novo').querySelectorAll('input').forEach(i => { i.value = ''; }); $('p-senha').value = gerar();
     tab = 'par'; load();
   });
