@@ -28,6 +28,7 @@
   const reais = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
   const comissao = e => { const t = COMISSAO[e.st === 'lanc' ? 'lanc' : 'estoque']; return {pf: e.preco * t.pf, pj: e.preco * t.pj, t}; };
   const wa = text => `https://wa.me/${WA}?text=${encodeURIComponent(text)}`;
+  const waVisita = n => wa(`Olá Luigi, sou corretor(a) parceiro(a) e quero agendar uma visita ao ${n} com o meu cliente.\nMeu nome: \nData e horário de preferência: \nPerfil do cliente (morar ou investir): `);
   const waTabela = n => wa(`Olá Luigi, sou parceiro e tenho cliente com perfil para o ${n}. Pode me enviar a tabela e a disponibilidade atualizadas?`);
 
   const catalog = Array.isArray(window.CATALOGO_PROJETOS) ? window.CATALOGO_PROJETOS : [];
@@ -225,6 +226,7 @@
           <span><small>PJ ${(c.t.pj * 100).toLocaleString('pt-BR')}%</small> <b>${reais(c.pj)}</b></span>
         </div>`)(comissao(e))}
         <div class="links">
+          <a class="card-links-visit" href="${esc(waVisita(e.nome))}" target="_blank" rel="noopener">Agendar visita ↗</a>
           ${e.tabela ? `<a href="${esc(e.tabela)}" target="_blank" rel="noopener">Tabela do mês ↗</a>` : ''}
           ${e.explorar ? `<a href="${esc(e.explorar)}" target="_blank" rel="noopener">Explorar projeto ↗</a>` : ''}
           ${e.book ? `<a href="${esc(e.book)}" target="_blank" rel="noopener">Book ↗</a>` : ''}
@@ -262,6 +264,8 @@
     Promise.resolve(navigator.clipboard?.writeText(t)).then(() => { b.textContent = 'Copiado'; setTimeout(() => { b.textContent = 'Copiar e-mail'; }, 1500); })
       .catch(() => { const r = document.createRange(); r.selectNodeContents($('mail')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); });
   });
+
+  if (matchMedia('(display-mode: standalone)').matches || navigator.standalone === true) { const a = $('mbar-area'); if (a) a.hidden = false; }
 
   fetch('/vitrine/oportunidades.json', {cache: 'no-store'}).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(data => {
     build(data);

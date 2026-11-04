@@ -5,6 +5,9 @@
   const $ = id => document.getElementById(id);
   const {esc, brl, m2, S, zap, fone} = window.VP;
   const id = (location.pathname.match(/\/c\/([0-9a-f]{10})/) || [])[1];
+  const exemplo = /\/c\/exemplo\/?$/.test(location.pathname);
+  const DEMO = {cliente: 'Mariana', mensagem: 'Separei estas opções que combinam com o que você me contou: perto do metrô e com bom potencial de locação. Qualquer dúvida, me chame no WhatsApp.',
+    itens: ['on-brooklin', 'vitacon-pinheiros', 'vitacon-perdizes'], corretor: {nome: 'Seu Nome', creci: '000000-F', imobiliaria: 'Sua Imobiliária', whatsapp: '5511998885850'}};
   const previa = new URLSearchParams(location.search).has('previa');
   const catalog = Array.isArray(window.CATALOGO_PROJETOS) ? window.CATALOGO_PROJETOS : [];
   const books = window.MATERIAL_PUBLICO || {};
@@ -12,6 +15,15 @@
   const state = s => { ['st-load', 'st-404', 'st-ok'].forEach(k => { $(k).hidden = k !== s; }); };
 
   async function load() {
+    if (exemplo) {
+      const base = await window.VP.oportunidades().catch(() => ({itens: []}));
+      render(DEMO, base);
+      const n = document.createElement('div');
+      n.className = 'msg ok'; n.style.margin = '14px 0 0';
+      n.innerHTML = 'Exemplo: é assim que o seu cliente vê a página. Na sua, aparecem o seu nome, CRECI e WhatsApp. <a href="/parceiro/" style="font-weight:700">Criar a minha ↗</a>';
+      document.querySelector('.hero').prepend(n);
+      state('st-ok'); return;
+    }
     if (!id) { state('st-404'); return; }
     const c = window.CENTRAL_CONFIG;
     const db = window.supabase.createClient(c.url, c.key, {auth: {persistSession: false, autoRefreshToken: false}});

@@ -58,6 +58,10 @@
   ],
   "rewrites": [
     {
+      "source": "/c/exemplo",
+      "destination": "/c/index.html"
+    },
+    {
       "source": "/",
       "has": [
         {

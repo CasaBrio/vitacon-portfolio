@@ -241,6 +241,50 @@ html,body{overflow-x:hidden}
 .card-comm b{font-family:var(--f-mono);font-weight:600;font-size:14.5px;color:var(--pronto)}
 .actions a.send-client{flex:0 0 auto;padding:10px 4px;font-size:12.5px;font-weight:700;text-decoration:none;color:var(--accent);align-self:center}
 .actions a.send-client:hover{text-decoration:underline}
+/* Gerente, página do cliente, como funciona, FAQ, barra fixa */
+.demo{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center;padding:26px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(135deg,color-mix(in srgb,var(--glass) 18%,var(--night-2)),var(--night-2) 65%)}
+.demo-copy{min-width:0;display:flex;flex-direction:column;gap:12px}
+.demo-copy h2{margin:0}
+.demo-copy p{margin:0;color:var(--muted);max-width:58ch}
+.demo-copy p b{color:var(--fg)}
+.ticks{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.ticks li::before{content:"✓ ";color:var(--pronto);font-weight:700}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}
+.demo-shot{display:flex;justify-content:center;text-decoration:none}
+.mini-phone{width:min(240px,100%);aspect-ratio:9/18.5;max-width:100%;border-radius:32px;background:#05061a;padding:8px;box-shadow:0 24px 60px rgba(0,0,0,.5),0 0 0 2px var(--line) inset;transform:rotate(3deg);transition:transform .25s}
+.demo-shot:hover .mini-phone{transform:rotate(0) translateY(-4px)}
+.mini-phone img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:25px;display:block}
+.steps3{list-style:none;margin:0 0 14px;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;counter-reset:st}
+.steps3 li{background:var(--night-2);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:6px;counter-increment:st}
+.steps3 li::before{content:counter(st);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-weight:800;margin-bottom:4px}
+.steps3 b{font-size:15.5px}
+.steps3 span{color:var(--muted);font-size:14px}
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.path{border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;background:var(--night-2)}
+.path h3{font-family:var(--f-display);font-weight:600;font-size:18px;margin:0}
+.path p{margin:0;color:var(--muted);font-size:14px}
+.path .eyebrow{color:var(--accent)}
+.faq{display:flex;flex-direction:column;gap:8px}
+.faq details{background:var(--night-2);border:1px solid var(--line);border-radius:12px;padding:0 18px}
+.faq summary{cursor:pointer;list-style:none;padding:16px 28px 16px 0;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:0;top:12px;font-size:22px;color:var(--accent);font-weight:400}
+.faq details[open] summary::after{content:"–"}
+.faq details p{margin:0 0 16px;color:var(--muted);max-width:75ch}
+.faq details p b{color:var(--fg)}
+.faq a{color:var(--accent)}
+.wa-float{position:fixed;right:calc(18px + env(safe-area-inset-right,0px));bottom:calc(22px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;background:#25d366;display:grid;place-items:center;box-shadow:0 10px 28px rgba(0,0,0,.4);z-index:30}
+[hidden]{display:none!important}
+.mbar{display:none}
+.card-links-visit{color:var(--accent)!important}
+@media (max-width:900px){.demo{grid-template-columns:1fr}.steps3{grid-template-columns:1fr}.paths{grid-template-columns:1fr}}
+@media (max-width:620px){
+  .mbar{display:flex;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:25;padding:10px max(12px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--night) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+  .mbar .btn{flex:1;padding:12px 8px;font-size:14px;white-space:nowrap}
+  .wa-float{bottom:calc(84px + env(safe-area-inset-bottom,0px));width:52px;height:52px}
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+  .demo{padding:20px}
+}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */
@@ -306,7 +350,7 @@ html,body{overflow-x:hidden}
       <div>
         <div class="eyebrow">Programa de parcerias Vitacon</div>
         <h2 id="h-signup">Cadastre-se para receber informações privilegiadas</h2>
-        <p>Imobiliárias e corretores cadastrados recebem lançamentos, tabelas e condições do programa de parcerias diretamente da Vitacon.</p>
+        <p>No Vitacon Partners você entra no nosso CRM: acompanha o fluxo das suas vendas e consulta tabelas e espelhos de vendas em tempo real. E recebe lançamentos e campanhas antes de todo mundo.</p>
       </div>
       <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Quero me cadastrar ↗</a>
     </div>
@@ -315,6 +359,28 @@ html,body{overflow-x:hidden}
   <section aria-labelledby="h-destaques">
     <div class="sec-head"><div><div class="eyebrow">Para abrir a conversa com o cliente</div><h2 id="h-destaques">Destaques do mês</h2></div></div>
     <div class="picks" id="picks"></div>
+  </section>
+
+  <section aria-labelledby="h-mgr" id="gerente">
+    <div class="mgr">
+      <img src="/vitrine/luigi.jpg" alt="Luigi Sperandeo, Gerente de Vendas e Parcerias da Vitacon">
+      <div class="mgr-copy">
+        <div class="eyebrow">Seu gerente de parcerias</div>
+        <h2 id="h-mgr">Luigi Sperandeo</h2>
+        <div class="role">Gerente de Vendas e Parcerias · Vitacon</div>
+        <p>Você não vende sozinho. Estou ao seu lado do primeiro contato ao fechamento:</p>
+        <ul>
+          <li>Acompanho a visita do seu cliente ao decorado ou à obra</li>
+          <li>Negocio condições, descontos e bonificações com a Vitacon</li>
+          <li>Monto a proposta e acompanho cada etapa até a assinatura</li>
+        </ul>
+        <div class="contact">
+          <a class="btn btn-primary" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20corretor%20e%20quero%20falar%20sobre%20a%20parceria%20Vitacon." target="_blank" rel="noopener">WhatsApp (11) 99888-5850</a>
+          <span id="mail">luigi@vitacon.com.br</span>
+          <button type="button" id="copy-mail">Copiar e-mail</button>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section aria-labelledby="h-lanc" id="lanc-sec">
@@ -353,6 +419,51 @@ html,body{overflow-x:hidden}
     <div class="grid" id="grid"><div class="loading">Carregando as oportunidades do mês…</div></div>
   </section>
 
+  <section aria-labelledby="h-demo" id="pagina-cliente">
+    <div class="demo">
+      <div class="demo-copy">
+        <div class="eyebrow">Área do parceiro</div>
+        <h2 id="h-demo">Uma página com o seu nome para cada cliente</h2>
+        <p>Escolha até 6 empreendimentos e envie ao seu cliente um link com fotos, valores e localização. O botão de contato leva ao <b>seu</b> WhatsApp, e você fica sabendo quando o cliente abriu.</p>
+        <ul class="ticks">
+          <li>Pronta em um minuto, direto do celular</li>
+          <li>Sem comissão nem informação interna: só o que o cliente deve ver</li>
+          <li>Aviso de abertura para você saber a hora certa de ligar</li>
+        </ul>
+        <div class="row-btns">
+          <a class="btn btn-primary" href="/c/exemplo" target="_blank" rel="noopener">Ver um exemplo real ↗</a>
+          <a class="btn btn-ghost" href="/parceiro/">Entrar na Área do parceiro</a>
+        </div>
+      </div>
+      <a class="demo-shot" href="/c/exemplo" target="_blank" rel="noopener" aria-label="Abrir o exemplo de página do cliente">
+        <div class="mini-phone"><img src="/vitrine/exemplo-cliente.jpg" alt="Exemplo da página que o cliente recebe" loading="lazy"></div>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-como" id="como-funciona">
+    <div class="sec-head"><div><div class="eyebrow">Como começar</div><h2 id="h-como">Três passos para vender Vitacon</h2></div></div>
+    <ol class="steps3">
+      <li><b>Cadastre-se no Vitacon Partners</b><span>Cadastro online do programa de parcerias. É por ele que você entra no nosso CRM.</span></li>
+      <li><b>Receba o seu acesso</b><span>O Luigi libera a sua Área do parceiro e você instala o app no celular.</span></li>
+      <li><b>Venda com apoio</b><span>Envie seleções aos clientes, agende visitas e acompanhe o fluxo da venda no CRM, com tabelas e espelhos em tempo real.</span></li>
+    </ol>
+    <div class="paths">
+      <div class="path">
+        <div class="eyebrow">Para corretores</div>
+        <h3>Seu talento com estrutura ao lado</h3>
+        <p>Portfólio Vitacon do studio ao alto padrão, comissão clara em cada empreendimento e um gerente de parcerias acompanhando cada negociação.</p>
+        <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Sou corretor ↗</a>
+      </div>
+      <div class="path">
+        <div class="eyebrow">Para imobiliárias</div>
+        <h3>Mais oportunidades para a sua equipe</h3>
+        <p>Conecte a imobiliária ao programa de parcerias, receba os lançamentos primeiro e dê aos seus corretores as ferramentas da Área do parceiro.</p>
+        <a class="btn btn-ghost" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20de%20uma%20imobili%C3%A1ria%20e%20quero%20conhecer%20o%20programa%20de%20parcerias%20Vitacon." target="_blank" rel="noopener">Sou de uma imobiliária ↗</a>
+      </div>
+    </div>
+  </section>
+
   <section aria-labelledby="h-comm">
     <div class="sec-head"><div><div class="eyebrow">Parcerias Vitacon</div><h2 id="h-comm">Taxas de comissão</h2>
       <p>Cada card mostra a comissão estimada sobre o valor "a partir de", sem bonificações de campanha. Confirme as regras de aplicação com o Luigi.</p></div></div>
@@ -370,25 +481,18 @@ html,body{overflow-x:hidden}
     </div>
   </section>
 
-  <section aria-labelledby="h-mgr">
-    <div class="mgr">
-      <img src="/vitrine/luigi.jpg" alt="Luigi Sperandeo, Gerente de Vendas e Parcerias da Vitacon">
-      <div class="mgr-copy">
-        <div class="eyebrow">Seu contato na Vitacon</div>
-        <h2 id="h-mgr">Luigi Sperandeo</h2>
-        <div class="role">Gerente de Vendas e Parcerias</div>
-        <p>Atendo imobiliárias e corretores parceiros do primeiro contato ao fechamento. Fale comigo para:</p>
-        <ul>
-          <li>Tabelas, espelhos de vendas e disponibilidade atualizados</li>
-          <li>Confirmar descontos, campanhas e bonificações</li>
-          <li>Montar a proposta e acompanhar o seu cliente</li>
-        </ul>
-        <div class="contact">
-          <a class="btn btn-primary" href="https://wa.me/5511998885850" target="_blank" rel="noopener">WhatsApp (11) 99888-5850</a>
-          <span id="mail">luigi@vitacon.com.br</span>
-          <button type="button" id="copy-mail">Copiar e-mail</button>
-        </div>
-      </div>
+
+  <section aria-labelledby="h-faq" id="duvidas">
+    <div class="sec-head"><div><div class="eyebrow">Dúvidas frequentes</div><h2 id="h-faq">Perguntas dos parceiros</h2></div></div>
+    <div class="faq">
+      <details><summary>Como faço para ser parceiro Vitacon?</summary><p>Faça o cadastro no <a href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Vitacon Partners</a>. Depois da aprovação, você entra no nosso CRM e o Luigi libera a sua Área do parceiro neste site.</p></details>
+      <details><summary>Onde vejo tabelas e espelhos de vendas?</summary><p>Em tempo real no CRM do Vitacon Partners. Nesta vitrine você vê os valores de referência do catálogo do mês, e cada card tem o link da tabela do mês. Antes de enviar uma proposta, confirme a disponibilidade com o Luigi.</p></details>
+      <details><summary>Como acompanho o andamento da minha venda?</summary><p>Pelo CRM do Vitacon Partners, que mostra o fluxo de cada negociação. O Luigi acompanha junto com você cada etapa, da visita à assinatura.</p></details>
+      <details><summary>Quanto ganho de comissão?</summary><p>No estoque, 4,5% como pessoa jurídica e 3% como pessoa física. Em lançamentos, 4% como PJ e 3% como PF. Cada card mostra o valor estimado em reais sobre o preço "a partir de". Bonificações de campanha são somadas conforme as regras de cada mês.</p></details>
+      <details><summary>O que são HIS, HMP, NR e R2V nos cards?</summary><p><b>HIS</b> e <b>HMP</b> são unidades de habitação de interesse social e de mercado popular, com limite de renda familiar definido pela Prefeitura de São Paulo. Em 2026: HIS-1 até 3 salários mínimos (R$ 4.863), HIS-2 até 6 (R$ 9.726) e HMP até 10 (R$ 16.210). O comprador precisa comprovar o enquadramento. <b>NR</b> é unidade de uso não residencial e <b>R2V</b> é unidade residencial em edifício.</p></details>
+      <details><summary>Como funciona a locação com a Housi?</summary><p>A Housi Decor entrega o apartamento decorado e pronto para alugar, e a Housi Gestão cuida da locação: precificação dinâmica, limpeza, manutenção, vistorias e atendimento 24 horas. É um argumento forte para o cliente investidor, que não precisa lidar com a operação.</p></details>
+      <details><summary>Atuo fora de São Paulo. Posso ser parceiro?</summary><p>Pode. Os empreendimentos ficam em São Paulo, e muitos clientes investidores são de outras cidades. Fale com o Luigi para combinar a apresentação ao seu cliente.</p></details>
+      <details><summary>Como coloco a vitrine no celular?</summary><p>Acesse <a href="/app">parceirosvitacon.com.br/app</a> pelo celular e siga o passo a passo. Leva 30 segundos e não precisa baixar nada da loja.</p></details>
     </div>
   </section>
 
@@ -396,6 +500,13 @@ html,body{overflow-x:hidden}
     <p class="note" id="note">Estoque, valores e condições sujeitos a confirmação antes de qualquer proposta. Material de uso exclusivo de corretores e imobiliárias parceiras.</p>
   </footer>
 </div>
+
+<a class="wa-float" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20vim%20pela%20vitrine%20Vitacon%20Parceiros." target="_blank" rel="noopener" aria-label="Falar com o Luigi no WhatsApp"><svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><path fill="#fff" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3zm0 23.6c-2 0-4-.6-5.7-1.6l-.4-.2-3.9 1 1-3.8-.3-.4A10.6 10.6 0 1 1 16 26.6zm5.8-7.9c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6.3-.5c.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.3 1.4 3.5c.2.2 2.4 3.6 5.7 5 .8.4 1.4.6 1.9.7.8.3 1.5.2 2.1.1.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.2-.6-.4z"/></svg></a>
+<nav class="mbar" aria-label="Ações rápidas">
+  <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener" id="mbar-join">Quero ser parceiro</a>
+  <a class="btn btn-ghost" href="/app" data-install-link id="mbar-app">Instalar o app</a>
+  <a class="btn btn-ghost" href="/parceiro/" id="mbar-area" hidden>Área do parceiro</a>
+</nav>
 
 <script src="/central-config.js"></script>
 <script src="/analytics.js"></script>
