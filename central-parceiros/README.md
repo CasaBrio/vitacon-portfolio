@@ -41,3 +41,11 @@ Base atual de outubro: 290 registros (211 Tabelão e 79 HIS/HMP). Condições hi
 - parceirosvitacon.vercel.app → Central (página inicial, como antes)
 - /central → Central em qualquer endereço (arquivo dist/central.html)
 - /v e /vitrine/ → vitrine em qualquer endereço
+
+## Área do parceiro e página do cliente
+
+- /parceiro/ → login do corretor (e-mail e senha), troca da senha provisória, criação e acompanhamento das páginas.
+- /c/<código> → página pública que o cliente recebe (sem comissão nem materiais internos), com o nome e o WhatsApp do corretor.
+- /admin/parceiros/ → o Luigi cria os acessos, ativa ou desativa parceiros e vê as páginas enviadas e as aberturas.
+- Banco: rodar `parceiros-schema.sql` uma vez no Supabase (SQL Editor).
+- Supabase > Authentication: deixar o cadastro por e-mail habilitado, desligar "Confirm email" e incluir `https://parceirosvitacon.com.br/parceiro/` nas Redirect URLs (para "Esqueci a senha").

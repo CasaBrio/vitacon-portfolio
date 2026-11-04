@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#10132d">
+<title>Seleção de imóveis Vitacon</title>
+<meta property="og:title" content="Seleção de imóveis Vitacon para você">
+<meta property="og:description" content="Empreendimentos selecionados pelo seu corretor, com valores e localização.">
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="/parceiro/area.css">
+<style>
+.hero{padding-block:26px 10px;display:flex;flex-direction:column;gap:14px}
+.quote{border-left:3px solid var(--accent);padding:4px 0 4px 16px;color:var(--fg);max-width:62ch;font-size:16px;white-space:pre-line}
+.by{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-weight:800;font-size:16px;flex:none}
+.by b{display:block}
+.by span{color:var(--muted);font-size:13px}
+.card .btn{width:100%}
+.gone{opacity:.75}
+.contact{display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center;padding:24px;border-radius:18px;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));background:linear-gradient(120deg,color-mix(in srgb,var(--accent) 18%,var(--night-2)),var(--night-2) 70%)}
+.contact .num{font-family:var(--f-mono);font-size:14px;color:var(--muted);margin-top:4px;user-select:all}
+.state{padding-block:60px}
+@media (max-width:620px){.contact{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><span class="brand">VITACON</span><span class="eyebrow" id="h-mes"></span></header>
+
+  <div id="st-load" class="state narrow"><div class="empty">Carregando a sua seleção…</div></div>
+  <div id="st-404" class="state narrow" hidden>
+    <div class="panel stack">
+      <h2>Página não disponível</h2>
+      <p class="muted">Este link não existe mais ou foi desativado. Fale com o corretor que enviou a seleção para receber um link atualizado.</p>
+    </div>
+  </div>
+
+  <main id="st-ok" hidden>
+    <section class="hero">
+      <div class="eyebrow" id="c-eyebrow">Seleção de imóveis</div>
+      <h1 id="c-title">Imóveis selecionados <em>para você</em></h1>
+      <p class="quote" id="c-msg" hidden></p>
+      <div class="by">
+        <div class="avatar" id="c-ini" aria-hidden="true"></div>
+        <div><b id="c-nome"></b><span id="c-dados"></span></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="grid" id="c-grid"></div>
+    </section>
+
+    <section>
+      <div class="contact">
+        <div>
+          <div class="eyebrow">Ficou com alguma dúvida?</div>
+          <h2 id="k-title">Fale comigo</h2>
+          <p class="muted">Tire dúvidas, peça a tabela atualizada ou agende uma visita.</p>
+          <div class="num" id="k-num"></div>
+        </div>
+        <a class="btn btn-primary" id="k-wa" target="_blank" rel="noopener">Conversar no WhatsApp</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot" id="c-foot">Valores de referência a partir de, sujeitos a disponibilidade e a alteração sem aviso prévio. Imagens e informações dos empreendimentos Vitacon.</footer>
+</div>
+<script src="/central-config.js"></script>
+<script src="/vendor/supabase-2.118.0.js"></script>
+<script src="/catalogo-projetos.js"></script>
+<script src="/materiais-publicos.js"></script>
+<script src="/parceiro/comum.js"></script>
+<script src="/c/cliente.js"></script>
+</body>
+</html>

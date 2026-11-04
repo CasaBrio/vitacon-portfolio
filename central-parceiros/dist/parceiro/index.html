@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#10132d">
+<title>Área do Parceiro | Vitacon Parceiros</title>
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="/parceiro/area.css">
+<style>
+.pick-list{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:420px;overflow:auto;padding:2px}
+.pick{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--night);cursor:pointer;color:var(--fg);font-weight:500;flex-direction:row}
+.pick input{width:auto;margin-top:3px;accent-color:var(--accent)}
+.pick b{display:block;font-size:14px}
+.pick small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.pick.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--night))}
+.counter{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.result{border:1px solid color-mix(in srgb,var(--pronto) 50%,var(--line));background:color-mix(in srgb,var(--pronto) 8%,var(--night-2))}
+.linkbox{font-family:var(--f-mono);font-size:14px;padding:12px;border-radius:10px;background:var(--night);border:1px solid var(--line);word-break:break-all;user-select:all}
+.hello{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;flex-wrap:wrap}
+.views b{font-family:var(--f-mono);font-size:16px;color:var(--pronto)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:620px){.pick-list{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/vitrine/">VITACON <span>PARCEIROS</span></a>
+    <nav class="top-links">
+      <a class="chip-link" href="/vitrine/">Vitrine</a>
+      <button type="button" class="chip-link" id="btn-senha" hidden>Alterar senha</button>
+      <button type="button" class="chip-link" id="btn-sair" hidden>Sair</button>
+    </nav>
+  </header>
+
+  <!-- Login -->
+  <section id="v-login" hidden>
+    <div class="narrow stack">
+      <div>
+        <div class="eyebrow">Área exclusiva para parceiros</div>
+        <h1>Monte uma <em>página para o seu cliente</em> em um minuto.</h1>
+        <p class="muted">Escolha os empreendimentos, envie o link pelo WhatsApp e acompanhe quando o cliente abrir. A página leva o seu nome e o seu contato.</p>
+      </div>
+      <form class="panel stack" id="f-login">
+        <label for="l-email">E-mail<input id="l-email" type="email" autocomplete="username" required></label>
+        <label for="l-senha">Senha<input id="l-senha" type="password" autocomplete="current-password" required></label>
+        <button class="btn btn-primary" type="submit" id="l-go">Entrar</button>
+        <button class="chip-link" type="button" id="l-esqueci" style="align-self:flex-start">Esqueci a senha</button>
+        <div class="msg" id="l-msg" hidden></div>
+      </form>
+      <div class="panel stack">
+        <h3>Ainda não tem acesso?</h3>
+        <p class="muted">O acesso é liberado para parceiros cadastrados no programa Vitacon Partners. Faça o seu cadastro e o Luigi envia o seu login.</p>
+        <div class="row">
+          <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastrar no Vitacon Partners ↗</a>
+          <a class="btn btn-ghost" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20parceiro%20e%20gostaria%20de%20receber%20o%20acesso%20%C3%A0%20%C3%81rea%20do%20Parceiro." target="_blank" rel="noopener">Pedir acesso ao Luigi</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Nova senha (primeiro acesso, recuperação ou troca) -->
+  <section id="v-senha" hidden>
+    <form class="narrow panel stack" id="f-senha">
+      <div>
+        <div class="eyebrow" id="s-eyebrow">Primeiro acesso</div>
+        <h2 id="s-title">Crie a sua senha</h2>
+        <p class="muted" id="s-text">Troque a senha provisória que você recebeu por uma senha só sua.</p>
+      </div>
+      <label for="s-nova">Nova senha (mínimo 8 caracteres)<input id="s-nova" type="password" autocomplete="new-password" minlength="8" required></label>
+      <label for="s-conf">Repita a nova senha<input id="s-conf" type="password" autocomplete="new-password" minlength="8" required></label>
+      <div class="row">
+        <button class="btn btn-primary" type="submit" id="s-go">Salvar senha</button>
+        <button class="btn btn-ghost" type="button" id="s-cancel" hidden>Cancelar</button>
+      </div>
+      <div class="msg" id="s-msg" hidden></div>
+    </form>
+  </section>
+
+  <!-- Sem acesso liberado -->
+  <section id="v-bloq" hidden>
+    <div class="narrow panel stack">
+      <h2>Acesso ainda não liberado</h2>
+      <p class="muted">O seu login existe, mas a Área do Parceiro não está ativa para ele. Fale com o Luigi para liberar.</p>
+      <a class="btn btn-primary" href="https://wa.me/5511998885850" target="_blank" rel="noopener">Falar com o Luigi</a>
+    </div>
+  </section>
+
+  <!-- Área do parceiro -->
+  <div id="v-app" hidden>
+    <section class="hello">
+      <div>
+        <div class="eyebrow" id="a-imob">Área do parceiro</div>
+        <h1 id="a-hello">Olá</h1>
+        <p class="muted">Monte uma seleção de empreendimentos e envie ao seu cliente. Ele vê a página com o seu nome e fala direto com você.</p>
+      </div>
+    </section>
+
+    <section>
+      <form class="panel stack" id="f-nova">
+        <div class="hello">
+          <div><div class="eyebrow">Nova página</div><h2>Para qual cliente?</h2></div>
+          <span class="counter" id="n-count">0 de 6 selecionados</span>
+        </div>
+        <div class="two">
+          <label for="n-cliente">Nome do cliente<input id="n-cliente" maxlength="80" required placeholder="Ex.: Mariana"></label>
+          <label for="n-busca">Buscar empreendimento ou bairro<input id="n-busca" type="search" placeholder="Ex.: Pinheiros, pronto, studio"></label>
+        </div>
+        <div class="pick-list" id="n-lista" role="group" aria-label="Empreendimentos"></div>
+        <label for="n-msg">Mensagem para o cliente (opcional)<textarea id="n-msg" maxlength="600"></textarea></label>
+        <div class="row">
+          <button class="btn btn-primary" type="submit" id="n-go">Criar página do cliente</button>
+          <span class="muted" style="font-size:13px">Até 6 empreendimentos por página.</span>
+        </div>
+        <div class="msg" id="n-msg-out" hidden></div>
+      </form>
+    </section>
+
+    <section id="r-box" hidden>
+      <div class="panel result stack">
+        <div><div class="eyebrow" style="color:var(--pronto)">Página criada</div><h2 id="r-title">Pronto</h2></div>
+        <div class="linkbox" id="r-link"></div>
+        <div class="row">
+          <a class="btn btn-primary" id="r-wa" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+          <button class="btn btn-ghost" type="button" id="r-copy">Copiar link</button>
+          <a class="btn btn-ghost" id="r-open" target="_blank" rel="noopener">Ver como o cliente vê ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="hello" style="margin-bottom:12px">
+        <div><div class="eyebrow">Acompanhamento</div><h2>Minhas páginas enviadas</h2></div>
+        <button class="chip-link" type="button" id="p-reload">Atualizar</button>
+      </div>
+      <div id="p-list"><div class="empty">Carregando…</div></div>
+    </section>
+  </div>
+
+  <footer class="foot">Área exclusiva para corretores e imobiliárias parceiras da Vitacon. Valores e condições sujeitos a alteração sem aviso prévio.</footer>
+</div>
+<script src="/central-config.js"></script>
+<script src="/vendor/supabase-2.118.0.js"></script>
+<script src="/parceiro/comum.js"></script>
+<script src="/parceiro/parceiro.js"></script>
+</body>
+</html>

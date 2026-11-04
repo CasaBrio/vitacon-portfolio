@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Parceiros e páginas | Central Vitacon</title>
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="/parceiro/area.css">
+<style>
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi{background:var(--night-2);border:1px solid var(--line);border-radius:14px;padding:16px}
+.kpi b{display:block;font-family:var(--f-display);font-size:24px;font-weight:600}
+.kpi span{color:var(--muted);font-size:12.5px}
+.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pw{display:flex;gap:8px}
+.pw input{font-family:var(--f-mono)}
+.sendbox{white-space:pre-line;font-family:var(--f-mono);font-size:13px;padding:12px;border-radius:10px;background:var(--night);border:1px solid var(--line);user-select:all}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.tabs button[aria-pressed="true"]{background:var(--fg);color:var(--night);border-color:var(--fg)}
+@media (max-width:900px){.kpis{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.form-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="/admin/">VITACON <span>ADMIN</span></a>
+    <nav class="top-links">
+      <a class="chip-link" href="/admin/">Painel de acessos</a>
+      <a class="chip-link" href="/vitrine/">Vitrine</a>
+      <button type="button" class="chip-link" id="btn-sair" hidden>Sair</button>
+    </nav>
+  </header>
+
+  <section id="v-login" hidden>
+    <form class="narrow panel stack" id="f-login">
+      <div><div class="eyebrow">Acesso administrativo</div><h2>Parceiros e páginas enviadas</h2></div>
+      <label for="l-email">E-mail<input id="l-email" type="email" autocomplete="username" required></label>
+      <label for="l-senha">Senha<input id="l-senha" type="password" autocomplete="current-password" required></label>
+      <button class="btn btn-primary" type="submit" id="l-go">Entrar</button>
+      <div class="msg" id="l-msg" hidden></div>
+    </form>
+  </section>
+
+  <div id="v-app" hidden>
+    <section>
+      <div class="eyebrow">Área do parceiro</div>
+      <h1>Parceiros e <em>páginas enviadas</em></h1>
+      <p class="muted">Crie o acesso dos parceiros cadastrados no Vitacon Partners e acompanhe as páginas que eles enviam aos clientes.</p>
+    </section>
+
+    <section class="kpis" id="kpis"></section>
+
+    <section>
+      <form class="panel stack" id="f-novo">
+        <div><div class="eyebrow">Novo acesso</div><h2>Liberar um parceiro</h2></div>
+        <div class="form-grid">
+          <label for="p-nome">Nome completo<input id="p-nome" required maxlength="100"></label>
+          <label for="p-email">E-mail<input id="p-email" type="email" required maxlength="160"></label>
+          <label for="p-zap">WhatsApp com DDD<input id="p-zap" inputmode="tel" required placeholder="11 99999-9999"></label>
+          <label for="p-imob">Imobiliária<input id="p-imob" maxlength="100" placeholder="Autônomo, se não tiver"></label>
+          <label for="p-creci">CRECI<input id="p-creci" maxlength="30"></label>
+          <label for="p-senha">Senha provisória<span class="pw"><input id="p-senha" required minlength="8"><button class="btn btn-ghost btn-small" type="button" id="p-gerar">Gerar</button></span></label>
+        </div>
+        <div class="row"><button class="btn btn-primary" type="submit" id="p-go">Criar acesso</button><span class="muted" style="font-size:13px">No primeiro login o parceiro troca a senha provisória.</span></div>
+        <div class="msg" id="p-msg" hidden></div>
+        <div id="p-send" class="stack" hidden>
+          <div class="eyebrow" style="color:var(--pronto)">Acesso criado: envie ao parceiro</div>
+          <div class="sendbox" id="p-text"></div>
+          <div class="row"><a class="btn btn-primary" id="p-wa" target="_blank" rel="noopener">Enviar pelo WhatsApp</a><button class="btn btn-ghost" type="button" id="p-copy">Copiar mensagem</button></div>
+        </div>
+      </form>
+    </section>
+
+    <section>
+      <div class="tabs" role="group" aria-label="Lista">
+        <button type="button" class="chip-link" id="t-pag" aria-pressed="true">Páginas enviadas</button>
+        <button type="button" class="chip-link" id="t-par" aria-pressed="false">Parceiros</button>
+        <button type="button" class="chip-link" id="t-reload">Atualizar</button>
+      </div>
+      <div id="list"><div class="empty">Carregando…</div></div>
+    </section>
+  </div>
+
+  <footer class="foot">Uso administrativo. Dados dos parceiros e das páginas ficam no banco da Central (Supabase).</footer>
+</div>
+<script src="/central-config.js"></script>
+<script src="/vendor/supabase-2.118.0.js"></script>
+<script src="/parceiro/comum.js"></script>
+<script src="/admin/parceiros/parceiros.js"></script>
+</body>
+</html>

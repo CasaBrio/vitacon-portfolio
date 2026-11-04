@@ -22,6 +22,7 @@
     ? 'R$ ' + (v / 1e6).toLocaleString('pt-BR', {maximumFractionDigits: 2}) + ' mi'
     : 'R$ ' + Math.round(v / 1000).toLocaleString('pt-BR') + ' mil';
   const pct = v => Math.round(v * 100) + '%';
+  const slugOf = n => String(n).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   // Taxas de comissão do programa de parcerias (mesmas da tabela da página).
   const COMISSAO = {estoque: {pf: 0.03, pj: 0.045}, lanc: {pf: 0.03, pj: 0.04}};
   const reais = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
@@ -231,6 +232,7 @@
         </div>
         <div class="actions">
           <a class="btn btn-primary" href="${esc(waTabela(e.nome))}" target="_blank" rel="noopener">Falar com o Luigi</a>
+          <a class="send-client" href="/parceiro/?add=${encodeURIComponent(slugOf(e.nome))}" title="Monte uma página com este empreendimento para o seu cliente">Enviar ao cliente ↗</a>
         </div>
       </article>`).join('') : '<div class="empty">Nenhum empreendimento com esses filtros. Tente outro bairro ou ticket.</div>';
   }
