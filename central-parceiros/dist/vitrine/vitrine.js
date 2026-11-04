@@ -218,7 +218,7 @@
         </div>
         <div class="meta">${esc(e.tipologias)}${e.desconto ? ` · <b>até ${pct(e.desconto)} de desconto</b>` : ''}</div>
         <div class="meta cat">${esc(e.categorias)}</div>
-        ${(c => `<div class="comm" title="Estimativa sobre o valor a partir de, sem bonificações de campanha">
+        ${(c => `<div class="card-comm" title="Estimativa sobre o valor a partir de, sem bonificações de campanha">
           <span class="comm-label">Sua comissão a partir de</span>
           <span><small>PF ${pct(c.t.pf).replace('%', '')}%</small> <b>${reais(c.pf)}</b></span>
           <span><small>PJ ${(c.t.pj * 100).toLocaleString('pt-BR')}%</small> <b>${reais(c.pj)}</b></span>
