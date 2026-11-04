@@ -285,6 +285,15 @@ html,body{overflow-x:hidden}
   body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
   .demo{padding:20px}
 }
+.card .ph{position:relative;margin:-18px -18px 2px;aspect-ratio:16/10;max-width:none;overflow:hidden;border-radius:13px 13px 0 0;background:var(--panel)}
+.card .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.card:hover .ph img{transform:scale(1.04)}
+.card .ph span{position:absolute;left:8px;bottom:8px;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border-radius:5px;background:rgba(16,19,45,.72);color:#cfd3f5}
+.launch.has-ph{padding:0;overflow:hidden;display:grid;grid-template-columns:42% 1fr}
+.launch-ph{min-height:100%;background:var(--panel)}
+.launch-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.launch-body{padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+@media (max-width:620px){.launch.has-ph{grid-template-columns:1fr}.launch-ph{aspect-ratio:16/9}}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */
@@ -350,7 +359,7 @@ html,body{overflow-x:hidden}
       <div>
         <div class="eyebrow">Programa de parcerias Vitacon</div>
         <h2 id="h-signup">Cadastre-se para receber informações privilegiadas</h2>
-        <p>No Vitacon Partners você entra no nosso CRM: acompanha o fluxo das suas vendas e consulta tabelas e espelhos de vendas em tempo real. E recebe lançamentos e campanhas antes de todo mundo.</p>
+        <p>Depois do cadastro no Vitacon Partners, o nosso backoffice de parcerias confere os seus dados e inclui você no CVCRM, o CRM oficial da Vitacon, o mesmo dos nossos executivos. Lá você consulta tabelas e espelhos em tempo real e acompanha leads, clientes e vendas até o recebimento da comissão.</p>
       </div>
       <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Quero me cadastrar ↗</a>
     </div>
@@ -444,9 +453,9 @@ html,body{overflow-x:hidden}
   <section aria-labelledby="h-como" id="como-funciona">
     <div class="sec-head"><div><div class="eyebrow">Como começar</div><h2 id="h-como">Três passos para vender Vitacon</h2></div></div>
     <ol class="steps3">
-      <li><b>Cadastre-se no Vitacon Partners</b><span>Cadastro online do programa de parcerias. É por ele que você entra no nosso CRM.</span></li>
-      <li><b>Receba o seu acesso</b><span>O Luigi libera a sua Área do parceiro e você instala o app no celular.</span></li>
-      <li><b>Venda com apoio</b><span>Envie seleções aos clientes, agende visitas e acompanhe o fluxo da venda no CRM, com tabelas e espelhos em tempo real.</span></li>
+      <li><b>Cadastre-se no Vitacon Partners</b><span>O cadastro é online. A solicitação vai para o nosso backoffice de parcerias, que confere os seus dados.</span></li>
+      <li><b>Entre no CRM oficial da Vitacon</b><span>Você é incluído no CVCRM, o mesmo sistema dos nossos executivos internos, e o Luigi libera a sua Área do parceiro neste site.</span></li>
+      <li><b>Venda com apoio</b><span>Envie seleções aos clientes e agende visitas. No CVCRM você consulta tabelas e espelhos em tempo real e acompanha leads, vendas e comissões.</span></li>
     </ol>
     <div class="paths">
       <div class="path">
@@ -485,9 +494,9 @@ html,body{overflow-x:hidden}
   <section aria-labelledby="h-faq" id="duvidas">
     <div class="sec-head"><div><div class="eyebrow">Dúvidas frequentes</div><h2 id="h-faq">Perguntas dos parceiros</h2></div></div>
     <div class="faq">
-      <details><summary>Como faço para ser parceiro Vitacon?</summary><p>Faça o cadastro no <a href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Vitacon Partners</a>. Depois da aprovação, você entra no nosso CRM e o Luigi libera a sua Área do parceiro neste site.</p></details>
-      <details><summary>Onde vejo tabelas e espelhos de vendas?</summary><p>Em tempo real no CRM do Vitacon Partners. Nesta vitrine você vê os valores de referência do catálogo do mês, e cada card tem o link da tabela do mês. Antes de enviar uma proposta, confirme a disponibilidade com o Luigi.</p></details>
-      <details><summary>Como acompanho o andamento da minha venda?</summary><p>Pelo CRM do Vitacon Partners, que mostra o fluxo de cada negociação. O Luigi acompanha junto com você cada etapa, da visita à assinatura.</p></details>
+      <details><summary>Como faço para ser parceiro Vitacon?</summary><p>Faça o cadastro no <a href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Vitacon Partners</a>. A solicitação vai para o nosso backoffice de parcerias, que confere os seus dados e inclui você no <b>CVCRM</b>, o CRM oficial da Vitacon. Em seguida o Luigi libera a sua Área do parceiro neste site.</p></details>
+      <details><summary>Onde vejo tabelas e espelhos de vendas?</summary><p>Em tempo real no <b>CVCRM</b>, o CRM oficial da Vitacon, o mesmo que os nossos executivos internos usam. Se você ainda não tem acesso, peça ao Luigi por e-mail (<a href="mailto:luigi@vitacon.com.br">luigi@vitacon.com.br</a>), <a href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20parceiro%20e%20preciso%20do%20acesso%20ao%20CVCRM." target="_blank" rel="noopener">WhatsApp</a> ou telefone, (11) 99888-5850. Nesta vitrine ficam os valores de referência do catálogo do mês.</p></details>
+      <details><summary>Como acompanho minhas vendas e comissões?</summary><p>Pelo <b>CVCRM</b>. Lá você acompanha os seus leads, clientes e o fluxo de cada venda até o recebimento da comissão. O Luigi acompanha junto com você cada etapa, da visita à assinatura.</p></details>
       <details><summary>Quanto ganho de comissão?</summary><p>No estoque, 4,5% como pessoa jurídica e 3% como pessoa física. Em lançamentos, 4% como PJ e 3% como PF. Cada card mostra o valor estimado em reais sobre o preço "a partir de". Bonificações de campanha são somadas conforme as regras de cada mês.</p></details>
       <details><summary>O que são HIS, HMP, NR e R2V nos cards?</summary><p><b>HIS</b> e <b>HMP</b> são unidades de habitação de interesse social e de mercado popular, com limite de renda familiar definido pela Prefeitura de São Paulo. Em 2026: HIS-1 até 3 salários mínimos (R$ 4.863), HIS-2 até 6 (R$ 9.726) e HMP até 10 (R$ 16.210). O comprador precisa comprovar o enquadramento. <b>NR</b> é unidade de uso não residencial e <b>R2V</b> é unidade residencial em edifício.</p></details>
       <details><summary>Como funciona a locação com a Housi?</summary><p>A Housi Decor entrega o apartamento decorado e pronto para alugar, e a Housi Gestão cuida da locação: precificação dinâmica, limpeza, manutenção, vistorias e atendimento 24 horas. É um argumento forte para o cliente investidor, que não precisa lidar com a operação.</p></details>

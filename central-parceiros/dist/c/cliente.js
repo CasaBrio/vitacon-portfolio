@@ -59,6 +59,7 @@
       if (!e) return `<article class="card gone"><h3>Opção indisponível</h3><p class="muted">Este empreendimento saiu da seleção do mês. Fale com ${esc(k.nome)} para conhecer alternativas parecidas.</p></article>`;
       const book = bookOf(e);
       return `<article class="card">
+        ${e.foto ? `<div class="ph"><img src="${esc(e.foto)}" alt="Perspectiva ilustrativa do ${esc(e.nome)}" loading="lazy" onerror="this.parentNode.remove()"><span>Imagem ilustrativa</span></div>` : ''}
         <div class="card-top"><div><h3>${esc(e.nome)}</h3><div class="bairro">${esc(e.bairro)}</div></div>
           <div class="pills"><span class="pill ${esc(e.status)}">${S[e.status] || ''}</span>${e.ultimasUnidades ? '<span class="pill last">Últimas unidades</span>' : ''}</div></div>
         ${e.endereco ? `<a class="addr" href="${esc(e.mapa)}" target="_blank" rel="noopener">${esc(e.endereco)} · ver no mapa ↗</a>` : ''}

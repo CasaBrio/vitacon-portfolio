@@ -55,7 +55,7 @@
         preco: it.aPartirDe,
         desconto: it.descontoMax || 0,
         ultimas: !!it.ultimasUnidades,
-        mapa: it.mapa, pasta: it.pasta, tabela: it.tabela,
+        mapa: it.mapa, pasta: it.pasta, tabela: it.tabela, foto: it.foto || '',
         explorar: slug && c.presentationAvailable !== false ? APRESENTACAO(slug) : '',
         book: slug ? books[slug] || '' : ''
       };
@@ -117,8 +117,9 @@
         slug && books[slug] && `<a class="btn btn-ghost" href="${esc(books[slug])}" target="_blank" rel="noopener">Book ↗</a>`,
         `<a class="btn btn-ghost" href="${esc(wa(`Olá Luigi, sou parceiro e gostaria de solicitar as tabelas e os espelhos de vendas atualizados do ${n}.`))}" target="_blank" rel="noopener">Pedir tabela e espelho</a>`
       ].filter(Boolean).join('');
-      return `<article class="launch"><div class="eyebrow">Lançamento · ${esc(p.publicDistrict || '')}</div><h3>${esc(n)}</h3>
-        <p>${esc([p.area, p.address].filter(Boolean).join(' · '))}${esc(from)}</p><div class="row">${btns}</div></article>`;
+      const foto = (D.find(e => e.nome.toLowerCase() === n.toLowerCase()) || {}).foto || `https://elkvnyjzybigivshivox.supabase.co/storage/v1/object/public/vitrine/fachadas/${slug}.jpg`;
+      return `<article class="launch has-ph"><div class="launch-ph"><img src="${esc(foto)}" alt="Perspectiva ilustrativa do ${esc(n)}" loading="lazy" onerror="this.parentNode.remove()"></div><div class="launch-body"><div class="eyebrow">Lançamento · ${esc(p.publicDistrict || '')}</div><h3>${esc(n)}</h3>
+        <p>${esc([p.area, p.address].filter(Boolean).join(' · '))}${esc(from)}</p><div class="row">${btns}</div></div></article>`;
     }).join('');
   }
 
@@ -211,6 +212,7 @@
     count.textContent = `${r.length} de ${D.length} empreendimentos`;
     grid.innerHTML = r.length ? r.map(e => `
       <article class="card" id="card-${e.id}">
+        ${e.foto ? `<div class="ph"><img src="${esc(e.foto)}" alt="Perspectiva ilustrativa do ${esc(e.nome)}" loading="lazy" onerror="this.parentNode.remove()"><span>Imagem ilustrativa</span></div>` : ''}
         <div class="card-top"><div><h3>${esc(e.nome)}</h3><div class="bairro">${esc(e.bairro)}</div></div>
         <div class="pills"><span class="pill ${e.st}">${S[e.st]}</span>${e.ultimas ? '<span class="pill last">Últimas unidades</span>' : ''}</div></div>
         ${e.endereco ? `<a class="addr" href="${esc(e.mapa)}" target="_blank" rel="noopener">${esc(e.endereco)} ↗</a>` : ''}
