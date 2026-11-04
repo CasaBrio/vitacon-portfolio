@@ -294,6 +294,20 @@ html,body{overflow-x:hidden}
 .launch-ph img{width:100%;height:100%;object-fit:cover;display:block}
 .launch-body{padding:20px;display:flex;flex-direction:column;gap:10px;min-width:0}
 @media (max-width:620px){.launch.has-ph{grid-template-columns:1fr}.launch-ph{aspect-ratio:16/9}}
+.perfis-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.perfis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.perfil{display:flex;flex-direction:column;gap:4px;text-align:left;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:var(--night-2);color:var(--fg);font-family:var(--f-body);cursor:pointer;transition:border-color .2s,background .2s}
+.perfil:hover{border-color:var(--glass)}
+.perfil b{font-family:var(--f-display);font-weight:600;font-size:15px}
+.perfil span{color:var(--muted);font-size:12.5px}
+.perfil small{font-family:var(--f-mono);font-size:11px;color:var(--accent)}
+.perfil[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--night-2))}
+.perfil-arg{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;padding:16px 18px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));background:color-mix(in srgb,var(--accent) 8%,var(--night-2))}
+.perfil-arg p{margin:4px 0 0;color:var(--fg);max-width:80ch;font-size:14.5px}
+.perfil-arg .eyebrow{color:var(--accent)}
+.perfil-arg button{font-family:var(--f-body);font-size:12.5px;padding:7px 11px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
+@media (max-width:900px){.perfis{grid-template-columns:1fr 1fr}}
+@media (max-width:620px){.perfil{padding:12px}.perfil b{font-size:14px}.perfil-arg{grid-template-columns:1fr}}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */
@@ -402,6 +416,11 @@ html,body{overflow-x:hidden}
       <div><div class="eyebrow" id="vit-month">Valores do mês</div><h2 id="h-vitrine">Vitrine de empreendimentos</h2>
       <p>Filtre pelo perfil do seu cliente e peça a tabela direto no WhatsApp.</p></div>
       <a class="btn btn-primary" data-pdf href="/materiais/catalogo-oportunidades-outubro-2026.pdf" download>↓ Baixar catálogo em PDF</a>
+    </div>
+    <div class="perfis-wrap">
+      <div class="eyebrow">Para qual cliente você está buscando?</div>
+      <div class="perfis" id="perfis" role="group" aria-label="Perfil do cliente"></div>
+      <div class="perfil-arg" id="perfil-arg" hidden></div>
     </div>
     <div class="filters">
       <div class="seg" role="group" aria-label="Status">

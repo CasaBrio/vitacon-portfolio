@@ -37,6 +37,22 @@
 
   let D = [];
   let st = 'all';
+  let perfil = '';
+  // Entradas por perfil de cliente: regra de seleção e argumento de venda de cada uma.
+  const PERFIS = [
+    {id: 'investidor', nome: 'Cliente investidor', sub: 'Studios com perfil para locação',
+      ok: e => /\bNR\b/.test(e.categorias) && /studio/i.test(e.tipologias) && e.preco <= 520000,
+      arg: 'Unidades compactas em bairros com alta procura por locação. A Housi Decor entrega o apartamento decorado e pronto para alugar, e a Housi Gestão cuida de tudo: precificação dinâmica, limpeza, manutenção, vistorias e atendimento 24 horas. Só na capital paulista o déficit habitacional é de 369 mil moradias (Plano Municipal de Habitação).'},
+    {id: 'primeiro', nome: 'Primeiro imóvel', sub: 'HIS e HMP, menores tickets',
+      ok: e => /HIS|HMP/.test(e.categorias),
+      arg: 'Unidades HIS e HMP com valores de entrada. Em 2026, a renda familiar máxima é de R$ 4.863 para HIS-1, R$ 9.726 para HIS-2 e R$ 16.210 para HMP (Prefeitura de São Paulo). Confirme o enquadramento do cliente antes de enviar a proposta.'},
+    {id: 'morar', nome: 'Morar já', sub: 'Prontos para mudar',
+      ok: e => e.st === 'pronto',
+      arg: 'Prontos para mudar, sem esperar a obra. Endereços nos Jardins, Paraíso, Brooklin, Moema, Itaim e Vila Mariana, perto de trabalho, serviços e transporte. Ótimo para o cliente que quer visitar o apartamento de verdade antes de decidir.'},
+    {id: 'alto', nome: 'Alto padrão', sub: 'Plantas amplas e endereços nobres',
+      ok: e => (e.max || 0) >= 100 || e.preco >= 650000,
+      arg: 'Plantas amplas, duplex e coberturas em endereços como Itaim, Jardins, Paraíso e Perdizes. Para o cliente que busca espaço, acabamento e um endereço reconhecido.'}
+  ];
   let defaultPara = 'SELEÇÃO PARA PARCEIROS';
 
   function build(data) {
@@ -198,7 +214,8 @@
   /* Vitrine */
   const grid = $('grid'), count = $('count'), fB = $('f-bairro'), fT = $('f-ticket'), fS = $('f-sort');
   function list() {
-    const r = D.filter(e => (st === 'all' || e.st === st) && (!fB.value || e.bairro === fB.value) && (!fT.value || e.preco <= +fT.value));
+    const pf = PERFIS.find(p => p.id === perfil);
+    const r = D.filter(e => (!pf || pf.ok(e)) && (st === 'all' || e.st === st) && (!fB.value || e.bairro === fB.value) && (!fT.value || e.preco <= +fT.value));
     const s = fS.value;
     return r.sort(
       s === 'bairro' ? (a, b) => a.bairro.localeCompare(b.bairro, 'pt') || a.preco - b.preco
@@ -240,6 +257,13 @@
         </div>
       </article>`).join('') : '<div class="empty">Nenhum empreendimento com esses filtros. Tente outro bairro ou ticket.</div>';
   }
+  function renderPerfis() {
+    $('perfis').innerHTML = PERFIS.map(p => `<button type="button" class="perfil" data-p="${p.id}" aria-pressed="${perfil === p.id}"><b>${esc(p.nome)}</b><span>${esc(p.sub)}</span><small>${D.filter(p.ok).length} empreendimentos</small></button>`).join('');
+    const pf = PERFIS.find(p => p.id === perfil), box = $('perfil-arg');
+    box.hidden = !pf;
+    if (pf) box.innerHTML = `<div><div class="eyebrow">Argumento para o ${esc(pf.nome.toLowerCase())}</div><p>${esc(pf.arg)}</p></div><button type="button" id="perfil-clear">Ver todos</button>`;
+  }
+  function setPerfil(v) { perfil = v; renderPerfis(); }
   function setStatus(v) {
     st = v;
     document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.st === v)));
@@ -247,7 +271,7 @@
   function focusCard(e) {
     if (!e) return;
     let c = $('card-' + e.id);
-    if (!c) { setStatus('all'); fB.value = ''; fT.value = ''; render(); c = $('card-' + e.id); }
+    if (!c) { setStatus('all'); setPerfil(''); fB.value = ''; fT.value = ''; render(); c = $('card-' + e.id); }
     c.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
     c.classList.add('flash'); setTimeout(() => c.classList.remove('flash'), 1800);
   }
@@ -275,6 +299,9 @@
     [...new Set(D.map(e => e.bairro).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt')).forEach(b => fB.add(new Option(b, b)));
     document.querySelector('.seg').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) { setStatus(b.dataset.st); render(); } });
     [fB, fT, fS].forEach(s => s.addEventListener('change', render));
+    renderPerfis();
+    $('perfis').addEventListener('click', ev => { const b = ev.target.closest('.perfil'); if (!b) return; setPerfil(perfil === b.dataset.p ? '' : b.dataset.p); render(); });
+    $('perfil-arg').addEventListener('click', ev => { if (ev.target.id === 'perfil-clear') { setPerfil(''); render(); } });
     render(); applyHash();
     addEventListener('hashchange', applyHash);
   }).catch(() => {
