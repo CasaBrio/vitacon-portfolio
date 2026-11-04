@@ -7,6 +7,12 @@
 <meta name="theme-color" content="#10132d">
 <title>Área do Parceiro | Vitacon Parceiros</title>
 <link rel="icon" href="/favicon.svg">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="VTC Parceiros">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="/parceiro/area.css">
@@ -31,6 +37,7 @@
   <header class="top">
     <a class="brand" href="/vitrine/">VITACON <span>PARCEIROS</span></a>
     <nav class="top-links">
+      <a class="chip-link" href="/app" data-install-link>Instalar o app</a>
       <a class="chip-link" href="/vitrine/">Vitrine</a>
       <button type="button" class="chip-link" id="btn-senha" hidden>Alterar senha</button>
       <button type="button" class="chip-link" id="btn-sair" hidden>Sair</button>
@@ -147,5 +154,6 @@
 <script src="/vendor/supabase-2.118.0.js"></script>
 <script src="/parceiro/comum.js"></script>
 <script src="/parceiro/parceiro.js"></script>
+<script src="/app/pwa.js"></script>
 </body>
 </html>

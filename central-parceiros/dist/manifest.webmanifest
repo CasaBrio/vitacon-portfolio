@@ -1,0 +1,53 @@
+{
+ "name": "Vitacon Parceiros",
+ "short_name": "VTC Parceiros",
+ "description": "Vitrine de oportunidades, catálogo do mês e Área do Parceiro Vitacon.",
+ "id": "/vitrine/",
+ "start_url": "/vitrine/?utm_source=app",
+ "scope": "/",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#10132d",
+ "theme_color": "#10132d",
+ "lang": "pt-BR",
+ "icons": [
+  {
+   "src": "/icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/icons/maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Área do parceiro",
+   "url": "/parceiro/?utm_source=app",
+   "icons": [
+    {
+     "src": "/icons/icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Mapa dos empreendimentos",
+   "url": "/mapa/?utm_source=app",
+   "icons": [
+    {
+     "src": "/icons/icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  }
+ ]
+}

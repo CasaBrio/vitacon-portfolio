@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10132d">
+<title>Instale o app Vitacon Parceiros</title>
+<meta name="description" content="Coloque a vitrine Vitacon na tela de início do seu celular: catálogo do mês, torre 3D, mapa e Área do Parceiro em um toque.">
+<meta property="og:title" content="Instale o app Vitacon Parceiros">
+<meta property="og:description" content="Catálogo do mês, vitrine 3D e Área do Parceiro na tela de início do seu celular.">
+<meta property="og:image" content="https://parceirosvitacon.com.br/materiais/divulgacao/og-app.jpg">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/favicon.svg">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="VTC Parceiros">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="/parceiro/area.css">
+<style>
+.hero{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;padding-block:18px 8px}
+.hero img{width:112px;height:112px;border-radius:26px;box-shadow:0 18px 50px rgba(255,138,61,.25)}
+.steps{display:grid;gap:12px;counter-reset:s}
+.step{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;background:var(--night-2);border:1px solid var(--line);border-radius:14px;padding:16px}
+.step::before{counter-increment:s;content:counter(s);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-ink);font-family:var(--f-display);font-weight:800;font-size:17px}
+.step b{display:block;font-size:16px;margin-bottom:2px}
+.step p{color:var(--muted);font-size:14px}
+.ico{display:inline-grid;place-items:center;vertical-align:-6px;width:26px;height:26px;border-radius:7px;background:var(--panel);border:1px solid var(--line);margin:0 2px}
+.ico svg{width:16px;height:16px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tabs button[aria-pressed="true"]{background:var(--fg);color:var(--night);border-color:var(--fg)}
+.big{width:100%;font-size:16px;padding:16px 20px}
+.perks{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.perk{background:var(--night-2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.perk b{display:block;font-size:14.5px}
+.perk span{color:var(--muted);font-size:13px}
+.qr{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.qr img{width:170px;height:170px;border-radius:12px;background:#fff;padding:6px}
+.warn{border-color:color-mix(in srgb,var(--obras) 60%,var(--line));background:color-mix(in srgb,var(--obras) 8%,var(--night-2))}
+.linkbox{font-family:var(--f-mono);font-size:14px;padding:12px;border-radius:10px;background:var(--night);border:1px solid var(--line);user-select:all;word-break:break-all}
+@media (max-width:620px){.hero{grid-template-columns:1fr}.hero img{width:92px;height:92px;border-radius:22px}.perks{grid-template-columns:1fr}.qr{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap narrow" style="max-width:640px">
+  <header class="top">
+    <a class="brand" href="/vitrine/">VITACON <span>PARCEIROS</span></a>
+    <a class="chip-link" href="/vitrine/">Abrir a vitrine</a>
+  </header>
+
+  <section class="hero">
+    <img src="/icons/icon-512.png" alt="Ícone do app Vitacon Parceiros">
+    <div>
+      <div class="eyebrow">App para corretores e imobiliárias</div>
+      <h1>A vitrine Vitacon na <em>tela de início</em> do seu celular</h1>
+      <p class="muted">Em um toque: catálogo do mês, valores e comissões, mapa e a Área do Parceiro para enviar seleções aos seus clientes. Grátis e sem baixar nada da loja.</p>
+    </div>
+  </section>
+
+  <!-- Já instalado -->
+  <section id="s-ok" hidden>
+    <div class="panel stack" style="border-color:color-mix(in srgb,var(--pronto) 55%,var(--line))">
+      <h2>O app já está no seu celular</h2>
+      <p class="muted">Tudo certo. Use o ícone VTC Parceiros na tela de início sempre que precisar.</p>
+      <a class="btn btn-primary" href="/vitrine/?utm_source=app">Abrir a vitrine</a>
+    </div>
+  </section>
+
+  <!-- Navegador dentro de outro app (Instagram, Facebook...) -->
+  <section id="s-inapp" hidden>
+    <div class="panel warn stack">
+      <h2>Abra este link no navegador</h2>
+      <p class="muted">Este aplicativo não deixa adicionar páginas à tela de início. Toque nos três pontinhos ou no ícone de compartilhar e escolha <b>Abrir no navegador</b> (Safari no iPhone, Chrome no Android).</p>
+      <div class="linkbox" id="inapp-link">https://parceirosvitacon.com.br/app</div>
+      <button class="btn btn-ghost" type="button" id="inapp-copy">Copiar link</button>
+    </div>
+  </section>
+
+  <!-- Android com instalação direta -->
+  <section id="s-prompt" hidden>
+    <button class="btn btn-primary big" type="button" id="b-install">Instalar o app agora</button>
+    <p class="muted" style="text-align:center;margin-top:8px;font-size:13px">Leva 2 segundos. O ícone aparece junto com os seus outros apps.</p>
+  </section>
+
+  <!-- Passo a passo -->
+  <section id="s-steps">
+    <div class="row" style="justify-content:space-between;margin-bottom:12px">
+      <h2 id="steps-title">Como instalar</h2>
+      <div class="tabs" role="group" aria-label="Sistema do celular">
+        <button type="button" class="chip-link" id="t-ios" aria-pressed="true">iPhone</button>
+        <button type="button" class="chip-link" id="t-and" aria-pressed="false">Android</button>
+      </div>
+    </div>
+    <div class="steps" id="st-ios">
+      <div class="step"><div><b>Abra esta página no Safari</b><p>Se você abriu pelo WhatsApp ou pelo e-mail e não aparece o botão de compartilhar, toque em <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#eef0ff" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M15 9l-6 6M9 9h6v6"/></svg></span> ou em "Abrir no Safari".</p></div></div>
+      <div class="step"><div><b>Toque em Compartilhar</b><p>É o ícone <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#eef0ff" stroke-width="2"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg></span> na barra de baixo (ou de cima, no iPad).</p></div></div>
+      <div class="step"><div><b>Escolha "Adicionar à Tela de Início"</b><p>Role a lista para baixo se não aparecer de primeira. O ícone é um <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#eef0ff" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></span>.</p></div></div>
+      <div class="step"><div><b>Toque em "Adicionar"</b><p>Pronto. O app VTC Parceiros aparece na sua tela de início.</p></div></div>
+    </div>
+    <div class="steps" id="st-and" hidden>
+      <div class="step"><div><b>Abra esta página no Chrome</b><p>Se abriu dentro do WhatsApp ou de outro app, toque nos três pontinhos e escolha "Abrir no Chrome".</p></div></div>
+      <div class="step"><div><b>Toque nos três pontinhos</b><p>No canto superior direito do Chrome <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="#eef0ff"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span>.</p></div></div>
+      <div class="step"><div><b>Escolha "Instalar app" ou "Adicionar à tela inicial"</b><p>O nome muda um pouco conforme o celular.</p></div></div>
+      <div class="step"><div><b>Confirme em "Instalar"</b><p>Pronto. O app VTC Parceiros aparece junto com os seus apps.</p></div></div>
+    </div>
+  </section>
+
+  <!-- Computador -->
+  <section id="s-desk" hidden>
+    <div class="panel qr">
+      <img src="/icons/qr-app.png" alt="QR Code para abrir esta página no celular">
+      <div class="stack">
+        <h2>Aponte a câmera do celular</h2>
+        <p class="muted">O app é feito para o celular. Leia o QR Code com a câmera para abrir esta página no seu telefone e seguir o passo a passo.</p>
+        <div class="linkbox">parceirosvitacon.com.br/app</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 style="margin-bottom:12px">O que você tem no app</h2>
+    <div class="perks">
+      <div class="perk"><b>Catálogo do mês</b><span>Os empreendimentos selecionados, com valores, descontos e o PDF para baixar.</span></div>
+      <div class="perk"><b>Sua comissão em cada card</b><span>Quanto você ganha como PF e PJ, já calculado.</span></div>
+      <div class="perk"><b>Página para o seu cliente</b><span>Monte uma seleção com o seu nome e WhatsApp e saiba quando o cliente abriu.</span></div>
+      <div class="perk"><b>Mapa e materiais</b><span>Localização, apresentações e tabelas de cada empreendimento.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="panel row" style="justify-content:space-between">
+      <div><b>Dúvidas ou ainda não é parceiro?</b><p class="muted" style="font-size:14px">Fale com o Luigi, Gerente de Vendas e Parcerias.</p></div>
+      <a class="btn btn-primary" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20vim%20pelo%20app%20Vitacon%20Parceiros." target="_blank" rel="noopener">WhatsApp do Luigi</a>
+    </div>
+  </section>
+
+  <footer class="foot">Vitacon Parceiros · uso exclusivo de corretores e imobiliárias parceiras.</footer>
+</div>
+<script src="/central-config.js"></script>
+<script src="/analytics.js"></script>
+<script src="/app/pwa.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const ua = navigator.userAgent;
+  const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const android = /Android/.test(ua);
+  const inapp = /Instagram|FBAN|FBAV|FB_IAB|Line\/|LinkedInApp|TikTok/i.test(ua);
+  const setTab = t => { $('t-ios').setAttribute('aria-pressed', t === 'ios'); $('t-and').setAttribute('aria-pressed', t === 'and'); $('st-ios').hidden = t !== 'ios'; $('st-and').hidden = t !== 'and'; };
+  $('t-ios').addEventListener('click', () => setTab('ios'));
+  $('t-and').addEventListener('click', () => setTab('and'));
+  setTab(android ? 'and' : 'ios');
+  if (window.VPApp.standalone) { $('s-ok').hidden = false; $('s-steps').hidden = true; return; }
+  if (inapp) $('s-inapp').hidden = false;
+  if (!ios && !android) $('s-desk').hidden = false;
+  const showPrompt = () => { if (window.VPApp.canPrompt()) { $('s-prompt').hidden = false; $('steps-title').textContent = 'Ou instale manualmente'; } };
+  document.addEventListener('vp:installable', showPrompt); showPrompt();
+  $('b-install').addEventListener('click', async () => { const ok = await window.VPApp.install(); if (ok) { $('s-prompt').hidden = true; $('s-ok').hidden = false; $('s-steps').hidden = true; } });
+  $('inapp-copy').addEventListener('click', async ev => { try { await navigator.clipboard.writeText('https://parceirosvitacon.com.br/app'); ev.currentTarget.textContent = 'Copiado'; } catch (_) {} });
+})();
+</script>
+</body>
+</html>
