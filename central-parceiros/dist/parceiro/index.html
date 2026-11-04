@@ -28,6 +28,10 @@
 .linkbox{font-family:var(--f-mono);font-size:14px;padding:12px;border-radius:10px;background:var(--night);border:1px solid var(--line);word-break:break-all;user-select:all}
 .hello{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;flex-wrap:wrap}
 .views b{font-family:var(--f-mono);font-size:16px;color:var(--pronto)}
+.pieces{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pieces button{padding:0;border:2px solid var(--line);border-radius:10px;overflow:hidden;background:#0a0a0a;cursor:pointer;aspect-ratio:4/5}
+.pieces button[aria-pressed="true"]{border-color:var(--accent)}
+.pieces img{width:100%;height:100%;object-fit:cover;display:block}
 .posts-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
 .pg-prev{background:var(--night);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;justify-content:center}
 .pg-prev canvas{width:100%;max-width:420px;height:auto;border-radius:8px;display:block}
@@ -151,10 +155,12 @@
           <div class="stack">
             <label for="pg-emp">Empreendimento<select id="pg-emp"></select></label>
             <label for="pg-mod">Modelo<select id="pg-mod">
+              <option value="oficial">Peça oficial do lançamento</option>
               <option value="oferta">Oferta de unidade (de / por)</option>
               <option value="destaque">Destaque do empreendimento</option>
               <option value="investidor">Para investidor</option>
             </select></label>
+            <div id="pg-pieces-wrap" hidden><div class="eyebrow" style="margin-bottom:8px">Escolha a peça</div><div class="pieces" id="pg-pieces" role="group" aria-label="Peças oficiais"></div></div>
             <label for="pg-uni" id="pg-uni-wrap">Unidade do tabelão<select id="pg-uni"></select></label>
             <p class="muted" id="pg-note" style="font-size:13px"></p>
             <label for="pg-fmt">Formato<select id="pg-fmt"><option value="feed">Feed (1080 × 1350)</option><option value="stories">Stories e status (1080 × 1920)</option></select></label>

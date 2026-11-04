@@ -12,6 +12,13 @@
   const unidade = u => { const d = String(u || '').match(/\d+/); return d ? String(Number(d[0])) : u; };
   const tipos = t => String(t || '').split(',').map(s => s.trim()).filter(Boolean).map((s, i) => i ? s : s.charAt(0).toUpperCase() + s.slice(1)).join(' · ');
 
+  // Peças oficiais de lançamento (pack de produto), guardadas no Supabase Storage.
+  const PACK = 'https://elkvnyjzybigivshivox.supabase.co/storage/v1/object/public/vitrine/pack/';
+  const PACKS = {
+    'vitacon-alameda-franca': {pasta: 'alameda-franca', n: 8, nome: 'Vitacon Alameda Franca', bairro: 'Jardins', endereco: 'Alameda Franca, Jardins', status: 'lanc',
+      texto: 'Lançamento Vitacon Alameda Franca, nos Jardins: studios e 1 dormitório, powered by Housi.'}
+  };
+  let piece = 1;
   let base = null, recs = [], me = null, logo = null, ready = false;
   const cache = new Map();
 
@@ -30,8 +37,11 @@
     } catch (_) { base = {itens: []}; }
     logo = await loadImg('/parceiro/vitacon-logo.svg').catch(() => null);
     await Promise.all(['800 40px Unbounded', '600 40px Unbounded', '800 40px Manrope', '700 40px Manrope', '500 40px Manrope'].map(f => document.fonts.load(f).catch(() => null)));
-    $('pg-emp').innerHTML = base.itens.map(i => `<option value="${esc(i.id)}">${esc(i.nome)} · ${esc(i.bairro)}</option>`).join('');
-    ['pg-emp', 'pg-mod', 'pg-fmt', 'pg-uni'].forEach(id => $(id).addEventListener('change', () => { if (id === 'pg-emp' || id === 'pg-mod') units(); draw(); }));
+    // Lançamentos com pack oficial entram na lista mesmo fora do catálogo do mês.
+    Object.entries(PACKS).forEach(([id, pk]) => { if (!base.itens.some(i => i.id === id)) base.itens.unshift({id, nome: pk.nome, bairro: pk.bairro, endereco: pk.endereco, status: pk.status, packOnly: true}); });
+    $('pg-emp').innerHTML = base.itens.map(i => `<option value="${esc(i.id)}">${esc(i.nome)} · ${esc(i.bairro)}${PACKS[i.id] ? ' · peças oficiais' : ''}</option>`).join('');
+    $('pg-pieces').addEventListener('click', ev => { const b = ev.target.closest('button[data-n]'); if (!b) return; piece = +b.dataset.n; pieces(); draw(); });
+    ['pg-emp', 'pg-mod', 'pg-fmt', 'pg-uni'].forEach(id => $(id).addEventListener('change', () => { if (id === 'pg-emp' || id === 'pg-mod') units(); if (id === 'pg-fmt') pieces(); draw(); }));
     $('pg-down').addEventListener('click', download);
     $('pg-share').addEventListener('click', share);
     $('pg-copy').addEventListener('click', ev => window.VP.copy($('pg-cap').value, ev.currentTarget, $('pg-cap')));
@@ -44,14 +54,24 @@
     return recs.filter(r => { const p = norm(r.project); return keys.some(k => k === p || k.startsWith(p + ' ') || p.startsWith(k)); })
       .sort((a, b) => b.discount - a.discount || a.discountPrice - b.discountPrice);
   };
+  function pieces() {
+    const it = item(), pk = PACKS[it.id], fmt = $('pg-fmt').value;
+    $('pg-pieces-wrap').hidden = $('pg-mod').value !== 'oficial' || !pk;
+    if (!pk) return;
+    $('pg-pieces').innerHTML = Array.from({length: pk.n}, (_, i) => `<button type="button" data-n="${i + 1}" aria-pressed="${piece === i + 1}" aria-label="Peça ${i + 1}"><img src="${PACK}${pk.pasta}/${fmt}-${i + 1}.jpg" alt="" loading="lazy" crossorigin="anonymous"></button>`).join('');
+  }
   function units() {
-    const it = item(), mod = $('pg-mod'), list = unitsOf(it);
-    const oferta = mod.querySelector('option[value="oferta"]');
-    oferta.disabled = !list.length;
+    const it = item(), mod = $('pg-mod'), list = it.packOnly ? [] : unitsOf(it), pk = PACKS[it.id];
+    const opt = v => mod.querySelector(`option[value="${v}"]`);
+    opt('oficial').disabled = !pk; opt('oferta').disabled = !list.length; opt('destaque').disabled = !!it.packOnly; opt('investidor').disabled = !!it.packOnly;
+    if (pk && (it.packOnly || mod.dataset.emp !== it.id)) mod.value = 'oficial';
+    if (!pk && mod.value === 'oficial') mod.value = list.length ? 'oferta' : 'destaque';
+    mod.dataset.emp = it.id;
     if (!list.length && mod.value === 'oferta') mod.value = 'destaque';
+    pieces();
     $('pg-uni-wrap').hidden = mod.value !== 'oferta';
     $('pg-uni').innerHTML = list.map((r, k) => `<option value="${k}">Unidade ${esc(unidade(r.unit))} · ${m2(r.area)} m² · ${reais(r.discountPrice)} (${Math.round(r.discount * 100)}% off)</option>`).join('');
-    $('pg-note').textContent = list.length ? '' : 'Este empreendimento não tem unidades com desconto no tabelão do mês. O modelo "Oferta de unidade" fica disponível quando houver.';
+    $('pg-note').textContent = mod.value === 'oficial' ? 'Arte oficial da Vitacon com a sua faixa de contato embaixo.' : list.length ? '' : 'Este empreendimento não tem unidades com desconto no tabelão do mês. O modelo "Oferta de unidade" fica disponível quando houver.';
   }
 
   /* Desenho */
@@ -81,6 +101,7 @@
     const fmt = $('pg-fmt').value, mod = $('pg-mod').value, [W, H] = SIZES[fmt], st = fmt === 'stories';
     const cv = $('pg-canvas'); cv.width = W; cv.height = H;
     const ctx = cv.getContext('2d'), P = 64;
+    if (mod === 'oficial' && PACKS[it.id]) return drawOficial(ctx, it, W, H, st, fmt);
     ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);
     // Foto
     const PH = st ? 860 : 520;
@@ -153,6 +174,25 @@
     ctx.font = '700 22px Manrope'; ctx.fillStyle = '#5b4b7a'; ctx.textAlign = 'right'; ctx.fillText('Fale comigo no WhatsApp', W - P, fy + (st ? 191 : 169)); ctx.textAlign = 'left';
 
     $('pg-cap').value = `${cap}\n\nChame no WhatsApp: ${fone(k.whatsapp || '')}\n${k.nome || ''}${k.creci ? ' · CRECI ' + k.creci : ''}\n\n${legal}`;
+  }
+
+  // Peça oficial reduzida dentro da arte, com faixa escura de contato do corretor embaixo.
+  async function drawOficial(ctx, it, W, H, st, fmt) {
+    const pk = PACKS[it.id], P = 64, FH = st ? 250 : 200, fy = H - FH;
+    ctx.fillStyle = '#0a0a0a'; ctx.fillRect(0, 0, W, H);
+    const img = await loadImg(`${PACK}${pk.pasta}/${fmt}-${piece}.jpg`).catch(() => null);
+    if (img) { const s = Math.min(W / img.width, (fy - 8) / img.height), w = img.width * s, h = img.height * s; ctx.drawImage(img, (W - w) / 2, (fy - h) / 2, w, h); }
+    ctx.fillStyle = 'rgba(255,255,255,.28)'; ctx.fillRect(P, fy, W - P * 2, 2);
+    const k = me || {};
+    ctx.fillStyle = '#ffffff'; ctx.font = '800 38px Unbounded'; ctx.fillText(String(k.nome || 'Seu nome').slice(0, 34), P, fy + (st ? 78 : 62));
+    ctx.font = '600 25px Manrope'; ctx.fillStyle = '#bdbdbd';
+    ctx.fillText([k.imobiliaria, k.creci && 'CRECI ' + k.creci].filter(Boolean).join(' · ').slice(0, 60), P, fy + (st ? 122 : 100));
+    ctx.fillStyle = C.green; ctx.beginPath(); ctx.arc(P + 16, fy + (st ? 176 : 145), 16, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffffff'; ctx.font = '800 36px Manrope'; ctx.fillText(fone(k.whatsapp || ''), P + 46, fy + (st ? 189 : 158));
+    ctx.font = '700 22px Manrope'; ctx.fillStyle = '#bdbdbd'; ctx.textAlign = 'right'; ctx.fillText('Fale comigo no WhatsApp', W - P, fy + (st ? 189 : 158)); ctx.textAlign = 'left';
+    const legal = 'Imagens ilustrativas. Material preliminar sujeito a alterações.';
+    ctx.font = '500 18px Manrope'; ctx.fillStyle = '#8a8a8a'; ctx.fillText(legal, P, H - (st ? 30 : 18));
+    $('pg-cap').value = `✨ ${pk.texto}\n📍 ${pk.endereco}\n\nQuer conhecer as plantas e condições de lançamento? Chame no WhatsApp: ${fone(k.whatsapp || '')}\n${k.nome || ''}${k.creci ? ' · CRECI ' + k.creci : ''}\n\n${legal}`;
   }
 
   const fileName = () => `${window.VP.slug(item().nome)}-${$('pg-mod').value}-${$('pg-fmt').value}.png`;
