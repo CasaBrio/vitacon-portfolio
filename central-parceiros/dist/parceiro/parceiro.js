@@ -85,6 +85,7 @@
       renderPicks();
     }
     loadPages();
+    if (window.VPPosts) window.VPPosts.init(me);
   }
   function renderPicks() {
     const q = $('n-busca').value.trim().toLowerCase();

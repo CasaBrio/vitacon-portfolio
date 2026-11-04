@@ -28,6 +28,10 @@
 .linkbox{font-family:var(--f-mono);font-size:14px;padding:12px;border-radius:10px;background:var(--night);border:1px solid var(--line);word-break:break-all;user-select:all}
 .hello{display:flex;justify-content:space-between;gap:16px;align-items:flex-end;flex-wrap:wrap}
 .views b{font-family:var(--f-mono);font-size:16px;color:var(--pronto)}
+.posts-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.pg-prev{background:var(--night);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;justify-content:center}
+.pg-prev canvas{width:100%;max-width:420px;height:auto;border-radius:8px;display:block}
+@media (max-width:820px){.posts-grid{grid-template-columns:1fr}.pg-prev{order:-1}}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:620px){.pick-list{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
 </style>
@@ -139,6 +143,33 @@
       </div>
     </section>
 
+    <section id="posts">
+      <div class="panel stack">
+        <div><div class="eyebrow">Posts para redes sociais</div><h2>Arte pronta com o seu nome</h2>
+          <p class="muted">Escolha o empreendimento e o modelo. A arte sai com o seu nome, CRECI e WhatsApp, pronta para o feed ou para o status.</p></div>
+        <div class="posts-grid">
+          <div class="stack">
+            <label for="pg-emp">Empreendimento<select id="pg-emp"></select></label>
+            <label for="pg-mod">Modelo<select id="pg-mod">
+              <option value="oferta">Oferta de unidade (de / por)</option>
+              <option value="destaque">Destaque do empreendimento</option>
+              <option value="investidor">Para investidor</option>
+            </select></label>
+            <label for="pg-uni" id="pg-uni-wrap">Unidade do tabelão<select id="pg-uni"></select></label>
+            <p class="muted" id="pg-note" style="font-size:13px"></p>
+            <label for="pg-fmt">Formato<select id="pg-fmt"><option value="feed">Feed (1080 × 1350)</option><option value="stories">Stories e status (1080 × 1920)</option></select></label>
+            <div class="row">
+              <button class="btn btn-primary" type="button" id="pg-down">Baixar imagem</button>
+              <button class="btn btn-ghost" type="button" id="pg-share">Compartilhar</button>
+            </div>
+            <label for="pg-cap">Legenda sugerida<textarea id="pg-cap" rows="7"></textarea></label>
+            <button class="btn btn-ghost btn-small" type="button" id="pg-copy" style="align-self:flex-start">Copiar legenda</button>
+          </div>
+          <div class="pg-prev"><canvas id="pg-canvas" width="1080" height="1350" aria-label="Prévia do post"></canvas></div>
+        </div>
+      </div>
+    </section>
+
     <section>
       <div class="hello" style="margin-bottom:12px">
         <div><div class="eyebrow">Acompanhamento</div><h2>Minhas páginas enviadas</h2></div>
@@ -153,6 +184,7 @@
 <script src="/central-config.js"></script>
 <script src="/vendor/supabase-2.118.0.js"></script>
 <script src="/parceiro/comum.js"></script>
+<script src="/parceiro/posts.js"></script>
 <script src="/parceiro/parceiro.js"></script>
 <script src="/app/pwa.js"></script>
 </body>
