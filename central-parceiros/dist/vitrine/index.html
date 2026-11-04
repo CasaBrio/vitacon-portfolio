@@ -229,6 +229,10 @@ html,body{overflow-x:hidden}
   .tag.has-go .t-short{display:inline}
 }
 .t-short{display:none}
+.comm{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--pronto) 10%,var(--night));border:1px solid color-mix(in srgb,var(--pronto) 30%,var(--line));font-variant-numeric:tabular-nums}
+.comm-label{width:100%;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.comm small{color:var(--muted);font-size:11.5px}
+.comm b{font-family:var(--f-mono);font-weight:600;font-size:14.5px;color:var(--pronto)}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */
@@ -341,7 +345,7 @@ html,body{overflow-x:hidden}
 
   <section aria-labelledby="h-comm">
     <div class="sec-head"><div><div class="eyebrow">Parcerias Vitacon</div><h2 id="h-comm">Taxas de comissão</h2>
-      <p>Bonificações de campanha aparecem nas fichas da Central. Confirme as regras de aplicação com o Luigi.</p></div></div>
+      <p>Cada card mostra a comissão estimada sobre o valor "a partir de", sem bonificações de campanha. Confirme as regras de aplicação com o Luigi.</p></div></div>
     <div class="comm">
       <div class="comm-card">
         <div class="eyebrow">Pessoa jurídica</div>

@@ -22,6 +22,10 @@
     ? 'R$ ' + (v / 1e6).toLocaleString('pt-BR', {maximumFractionDigits: 2}) + ' mi'
     : 'R$ ' + Math.round(v / 1000).toLocaleString('pt-BR') + ' mil';
   const pct = v => Math.round(v * 100) + '%';
+  // Taxas de comissão do programa de parcerias (mesmas da tabela da página).
+  const COMISSAO = {estoque: {pf: 0.03, pj: 0.045}, lanc: {pf: 0.03, pj: 0.04}};
+  const reais = v => 'R$ ' + Math.round(v).toLocaleString('pt-BR');
+  const comissao = e => { const t = COMISSAO[e.st === 'lanc' ? 'lanc' : 'estoque']; return {pf: e.preco * t.pf, pj: e.preco * t.pj, t}; };
   const wa = text => `https://wa.me/${WA}?text=${encodeURIComponent(text)}`;
   const waTabela = n => wa(`Olá Luigi, sou parceiro e tenho cliente com perfil para o ${n}. Pode me enviar a tabela e a disponibilidade atualizadas?`);
 
@@ -214,6 +218,11 @@
         </div>
         <div class="meta">${esc(e.tipologias)}${e.desconto ? ` · <b>até ${pct(e.desconto)} de desconto</b>` : ''}</div>
         <div class="meta cat">${esc(e.categorias)}</div>
+        ${(c => `<div class="comm" title="Estimativa sobre o valor a partir de, sem bonificações de campanha">
+          <span class="comm-label">Sua comissão a partir de</span>
+          <span><small>PF ${pct(c.t.pf).replace('%', '')}%</small> <b>${reais(c.pf)}</b></span>
+          <span><small>PJ ${(c.t.pj * 100).toLocaleString('pt-BR')}%</small> <b>${reais(c.pj)}</b></span>
+        </div>`)(comissao(e))}
         <div class="links">
           ${e.tabela ? `<a href="${esc(e.tabela)}" target="_blank" rel="noopener">Tabela do mês ↗</a>` : ''}
           ${e.explorar ? `<a href="${esc(e.explorar)}" target="_blank" rel="noopener">Explorar projeto ↗</a>` : ''}
