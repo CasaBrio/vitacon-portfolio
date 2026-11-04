@@ -282,7 +282,8 @@
     const el = $('para');
     if (/^para-[a-z0-9-]+$/i.test(h)) {
       el.textContent = `PREPARADO PARA ${h.slice(5).split('-').filter(Boolean).join(' ').toUpperCase()}`;
-    } else el.textContent = defaultPara;
+      el.dataset.para = '1';
+    } else if (!el.dataset.para) el.textContent = defaultPara;
   }
 
   $('copy-mail').addEventListener('click', ev => {

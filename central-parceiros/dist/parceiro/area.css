@@ -9,7 +9,7 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html,body{overflow-x:hidden}
+html,body{overflow-x:clip}
 body{margin:0;background:var(--night);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 a{color:inherit}

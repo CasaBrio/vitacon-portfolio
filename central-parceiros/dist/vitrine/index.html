@@ -222,7 +222,7 @@ body{margin:0}
 .tag-go{display:block;margin:8px auto 0;font-family:var(--f-body);font-weight:700;font-size:13px;padding:7px 12px;border-radius:8px;border:0;background:var(--accent);color:var(--accent-ink);cursor:pointer}
 /* Balão da torre no celular: compacto, acima do prédio, sem cobrir os andares */
 .stage{overflow:hidden}
-html,body{overflow-x:hidden}
+html,body{overflow-x:clip}
 @media (max-width:620px){
   .hero .stage{height:455px}
   .tag{top:4px;width:calc(100% - 8px);max-width:440px;text-align:left;padding:9px 12px}
@@ -308,6 +308,34 @@ html,body{overflow-x:hidden}
 .perfil-arg button{font-family:var(--f-body);font-size:12.5px;padding:7px 11px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap}
 @media (max-width:900px){.perfis{grid-template-columns:1fr 1fr}}
 @media (max-width:620px){.perfil{padding:12px}.perfil b{font-size:14px}.perfil-arg{grid-template-columns:1fr}}
+/* Menu superior fixo */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--night)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;padding-block:12px;flex-wrap:nowrap}
+.top::before{content:"";position:absolute;inset:0 -100vmax;z-index:-1;background:color-mix(in srgb,var(--night) 90%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+.top.scrolled::before{border-bottom-color:var(--line)}
+.top .brand{white-space:nowrap;flex:none}
+@media (max-width:380px){.top .brand{font-size:13px;letter-spacing:.03em}}
+.menu{display:flex;gap:2px;align-items:center;flex-wrap:nowrap;min-width:0}
+.menu a{font-size:13.5px;font-weight:600;text-decoration:none;color:var(--muted);padding:8px 10px;border-radius:8px;white-space:nowrap}
+.menu a:hover{color:var(--fg);background:var(--night-2)}
+.menu a.on{color:var(--fg);box-shadow:inset 0 -2px 0 var(--accent);border-radius:0}
+.top-actions{display:flex;gap:8px;align-items:center;flex:none}
+.burger{display:none;width:42px;height:38px;border-radius:10px;border:1px solid var(--line);background:transparent;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:4px;padding:0}
+.burger span{display:block;width:18px;height:2px;background:var(--fg);border-radius:2px;transition:transform .2s,opacity .2s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.drawer{position:absolute;left:0;right:0;top:100%;background:var(--night-2);border:1px solid var(--line);border-radius:0 0 16px 16px;padding:10px 16px 16px;box-shadow:0 24px 60px rgba(0,0,0,.5);max-height:calc(100vh - 80px);overflow:auto}
+.drawer nav{display:flex;flex-direction:column}
+.drawer nav a{padding:13px 4px;border-bottom:1px solid var(--line);text-decoration:none;font-weight:600;font-size:15.5px;color:var(--fg)}
+.drawer-btns{display:grid;gap:8px;margin-top:14px}
+.drawer-btns .btn{width:100%}
+section[id],#vitrine{scroll-margin-top:80px}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media (max-width:1080px){.menu a:nth-child(n+5){display:none}}
+@media (max-width:900px){.menu{display:none}.burger{display:inline-flex}.top-actions .area{display:none}}
+@media (max-width:420px){.top-actions .join{padding:7px 10px;font-size:12.5px}}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */
@@ -334,15 +362,39 @@ html,body{overflow-x:hidden}
 </head>
 <body>
 <div class="wrap">
-  <header class="top">
+  <header class="top" id="topo">
     <a class="brand" href="/vitrine/" style="text-decoration:none">VITACON <span>PARCEIROS</span></a>
-    <nav class="top-links">
-      <a class="chip-link" href="/mapa/" target="_blank" rel="noopener">Mapa ↗</a>
-      <a class="chip-link" href="/central">Central de Parceiros</a>
-      <a class="chip-link" href="/app" data-install-link>Instalar o app</a>
-      <a class="chip-link" href="/parceiro/">Área do parceiro</a>
-      <a class="chip-link join" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastre-se ↗</a>
+    <nav class="menu" id="menu" aria-label="Seções da página">
+      <a href="#vitrine">Vitrine</a>
+      <a href="#destaques">Destaques</a>
+      <a href="#lanc-sec">Lançamentos</a>
+      <a href="#pagina-cliente">Para o cliente</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#duvidas">Dúvidas</a>
+      <a href="/mapa/" target="_blank" rel="noopener">Mapa ↗</a>
     </nav>
+    <div class="top-actions">
+      <a class="chip-link area" href="/parceiro/">Área do parceiro</a>
+      <a class="chip-link join" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastre-se ↗</a>
+      <button type="button" class="burger" id="burger" aria-expanded="false" aria-controls="drawer" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    </div>
+    <div class="drawer" id="drawer" hidden>
+      <nav aria-label="Menu">
+        <a href="#vitrine">Vitrine de empreendimentos</a>
+        <a href="#destaques">Destaques do mês</a>
+        <a href="#lanc-sec">Lançamentos</a>
+        <a href="#pagina-cliente">Página para o cliente</a>
+        <a href="#como-funciona">Como funciona a parceria</a>
+        <a href="#duvidas">Dúvidas frequentes</a>
+        <a href="/mapa/" target="_blank" rel="noopener">Mapa dos empreendimentos ↗</a>
+        <a href="/central">Central de Parceiros</a>
+      </nav>
+      <div class="drawer-btns">
+        <a class="btn btn-ghost" href="/parceiro/">Área do parceiro</a>
+        <a class="btn btn-ghost" href="/app" data-install-link>Instalar o app</a>
+        <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Quero ser parceiro ↗</a>
+      </div>
+    </div>
   </header>
 
   <section class="hero" aria-label="Abertura">
@@ -379,7 +431,7 @@ html,body{overflow-x:hidden}
     </div>
   </section>
 
-  <section aria-labelledby="h-destaques">
+  <section aria-labelledby="h-destaques" id="destaques">
     <div class="sec-head"><div><div class="eyebrow">Para abrir a conversa com o cliente</div><h2 id="h-destaques">Destaques do mês</h2></div></div>
     <div class="picks" id="picks"></div>
   </section>
@@ -542,5 +594,22 @@ html,body{overflow-x:hidden}
 <script src="/catalogo-projetos.js"></script>
 <script src="/vitrine/vitrine.js"></script>
 <script src="/app/pwa.js"></script>
+<script>
+(() => {
+  const top = document.getElementById('topo'), burger = document.getElementById('burger'), drawer = document.getElementById('drawer');
+  const close = () => { drawer.hidden = true; burger.setAttribute('aria-expanded', 'false'); burger.setAttribute('aria-label', 'Abrir menu'); };
+  burger.addEventListener('click', () => { const open = drawer.hidden; drawer.hidden = !open; burger.setAttribute('aria-expanded', String(open)); burger.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu'); });
+  drawer.addEventListener('click', e => { if (e.target.closest('a')) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  document.addEventListener('click', e => { if (!drawer.hidden && !top.contains(e.target)) close(); });
+  addEventListener('scroll', () => top.classList.toggle('scrolled', scrollY > 10), {passive: true});
+  const links = [...document.querySelectorAll('#menu a[href^="#"]')];
+  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { links.forEach(a => a.classList.remove('on')); map.get(en.target.id)?.classList.add('on'); } }), {rootMargin: '-45% 0px -50% 0px'});
+    map.forEach((_, id) => { const el = document.getElementById(id); if (el) io.observe(el); });
+  }
+})();
+</script>
 </body>
 </html>
