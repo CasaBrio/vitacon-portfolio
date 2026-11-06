@@ -11,7 +11,7 @@ const TEMAS = {
 };
 const SERIES = {selic: 432, ipca12m: 13522};
 // Fontes e assuntos de fora do Brasil que o Google às vezes mistura nos resultados em português.
-const FORA = /jornal do brasil em portugal|vietnam|\.vn\b|hanói|portugal|lisboa|porto\b|angola|moçambique|sapo\.pt|\bVND\b/i;
+const FORA = /jornal do brasil em portugal|vietnam|\.vn\b|hanói|portugal|lisboa|porto\b|angola|moçambique|sapo\.pt|\bVND\b|yahoo finance|imdb|\.SA\)/i;
 
 const decode = s => String(s || '')
   .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
