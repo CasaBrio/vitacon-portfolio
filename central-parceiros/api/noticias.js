@@ -10,6 +10,8 @@ const TEMAS = {
   vitacon: {nome: 'Vitacon e Housi', q: 'Vitacon OR Housi when:60d'}
 };
 const SERIES = {selic: 432, ipca12m: 13522};
+// Fontes e assuntos de fora do Brasil que o Google às vezes mistura nos resultados em português.
+const FORA = /jornal do brasil em portugal|vietnam|\.vn\b|hanói|portugal|lisboa|porto\b|angola|moçambique|sapo\.pt|\bVND\b/i;
 
 const decode = s => String(s || '')
   .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
@@ -18,7 +20,7 @@ const decode = s => String(s || '')
 const tag = (xml, t) => { const m = xml.match(new RegExp(`<${t}[^>]*>([\\s\\S]*?)</${t}>`)); return m ? decode(m[1]) : ''; };
 
 async function tema(key) {
-  const url = 'https://news.google.com/rss/search?hl=pt-BR&gl=BR&ceid=BR:pt-419&q=' + encodeURIComponent(TEMAS[key].q);
+  const url = 'https://news.google.com/rss/search?hl=pt-BR&gl=BR&ceid=BR:pt-419&q=' + encodeURIComponent(TEMAS[key].q + ' -Portugal -Lisboa -Angola -Moçambique -Vietnã -Hanói');
   const r = await fetch(url, {headers: {'user-agent': 'Mozilla/5.0 (compatible; VitaconParceiros/1.0)'}, signal: AbortSignal.timeout(6000)});
   if (!r.ok) throw new Error('rss ' + r.status);
   const xml = await r.text();
@@ -28,7 +30,7 @@ async function tema(key) {
     let titulo = tag(it, 'title');
     while (fonte && titulo.endsWith(' - ' + fonte)) titulo = titulo.slice(0, -(fonte.length + 3)).trim();
     return {titulo, link: tag(it, 'link'), fonte, data: new Date(tag(it, 'pubDate')).toISOString()};
-  }).filter(n => n.titulo.length >= 30 && n.titulo !== n.fonte && !/jornal do brasil em portugal/i.test(n.titulo) && /^https:\/\//.test(n.link) && !seen.has(n.titulo) && seen.add(n.titulo))
+  }).filter(n => n.titulo.length >= 30 && n.titulo !== n.fonte && !FORA.test(n.titulo + ' ' + n.fonte) && /^https:\/\//.test(n.link) && !seen.has(n.titulo) && seen.add(n.titulo))
     .sort((a, b) => b.data.localeCompare(a.data)).slice(0, 12);
 }
 
