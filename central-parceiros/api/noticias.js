@@ -11,7 +11,7 @@ const TEMAS = {
 };
 const SERIES = {selic: 432, ipca12m: 13522};
 // Fontes e assuntos de fora do Brasil que o Google às vezes mistura nos resultados em português.
-const FORA = /jornal do brasil em portugal|vietnam|\.vn\b|hanói|portugal|lisboa|porto\b|angola|moçambique|sapo\.pt|\bVND\b|yahoo finance|imdb|\.SA\)/i;
+const FORA = /jornal do brasil em portugal|vietnam|\.vn\b|hanói|portugal|lisboa|porto\b|angola|moçambique|sapo\.pt|\bVND\b|yahoo finance|imdb|trademap|\.SA\)/i;
 
 const decode = s => String(s || '')
   .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
@@ -30,7 +30,7 @@ async function tema(key) {
     let titulo = tag(it, 'title');
     while (fonte && titulo.endsWith(' - ' + fonte)) titulo = titulo.slice(0, -(fonte.length + 3)).trim();
     return {titulo, link: tag(it, 'link'), fonte, data: new Date(tag(it, 'pubDate')).toISOString()};
-  }).filter(n => n.titulo.length >= 30 && n.titulo !== n.fonte && !FORA.test(n.titulo + ' ' + n.fonte) && /^https:\/\//.test(n.link) && !seen.has(n.titulo) && seen.add(n.titulo))
+  }).filter(n => n.titulo.length >= 30 && n.titulo !== n.fonte && !FORA.test(n.titulo + ' ' + n.fonte) && !/\b[A-Z]{4}11\b/.test(n.titulo) && /^https:\/\//.test(n.link) && !seen.has(n.titulo) && seen.add(n.titulo))
     .sort((a, b) => b.data.localeCompare(a.data)).slice(0, 12);
 }
 
