@@ -6,7 +6,7 @@ const TEMAS = {
   imobiliario: {nome: 'Mercado imobiliário', q: '"mercado imobiliário" OR "lançamentos imobiliários" OR incorporadoras when:7d'},
   credito: {nome: 'Crédito e financiamento', q: '"financiamento imobiliário" OR "crédito imobiliário" OR "Minha Casa Minha Vida" when:7d'},
   economia: {nome: 'Juros e economia', q: 'Selic OR Copom OR IPCA OR "taxa de juros" when:3d'},
-  investimento: {nome: 'Investir em imóveis', q: '"investimento em imóveis" OR "aluguel de curta temporada" OR "renda com aluguel" OR studios when:14d'},
+  investimento: {nome: 'Investir em imóveis', q: '"investir em imóveis" OR "investimento imobiliário" OR "investimento em imóveis" OR "aluguel de curta temporada" OR "rentabilidade do aluguel" OR "preço do aluguel" when:14d'},
   vitacon: {nome: 'Vitacon e Housi', q: 'Vitacon OR Housi when:60d'}
 };
 const SERIES = {selic: 432, ipca12m: 13522};
