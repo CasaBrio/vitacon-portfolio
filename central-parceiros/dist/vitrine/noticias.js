@@ -32,7 +32,7 @@
         </a>`).join('')}</div>` : '<div class="empty">Nenhuma notícia recente neste tema. Tente outro.</div>';
     const ind = data.indicadores || {};
     $('.nw-ind').innerHTML = [
-      ind.selic && `<div class="nw-chip"><small>Selic</small><b>${pct(ind.selic.valor)} a.a.</b><span>em ${esc(ind.selic.data)}</span></div>`,
+      ind.selic && `<div class="nw-chip"><small>Selic</small><b>${pct(ind.selic.valor)} a.a.</b><span>meta em vigor</span></div>`,
       ind.ipca12m && `<div class="nw-chip"><small>IPCA 12 meses</small><b>${pct(ind.ipca12m.valor)}</b><span>referência ${esc(String(ind.ipca12m.data).slice(3))}</span></div>`
     ].filter(Boolean).join('');
   }

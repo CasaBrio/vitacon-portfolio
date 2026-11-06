@@ -26,9 +26,9 @@ async function tema(key) {
   return xml.split('<item>').slice(1).map(it => {
     const fonte = tag(it, 'source');
     let titulo = tag(it, 'title');
-    if (fonte && titulo.endsWith(' - ' + fonte)) titulo = titulo.slice(0, -(fonte.length + 3));
+    while (fonte && titulo.endsWith(' - ' + fonte)) titulo = titulo.slice(0, -(fonte.length + 3)).trim();
     return {titulo, link: tag(it, 'link'), fonte, data: new Date(tag(it, 'pubDate')).toISOString()};
-  }).filter(n => n.titulo && /^https:\/\//.test(n.link) && !seen.has(n.titulo) && seen.add(n.titulo))
+  }).filter(n => n.titulo.length >= 30 && n.titulo !== n.fonte && !/jornal do brasil em portugal/i.test(n.titulo) && /^https:\/\//.test(n.link) && !seen.has(n.titulo) && seen.add(n.titulo))
     .sort((a, b) => b.data.localeCompare(a.data)).slice(0, 12);
 }
 
