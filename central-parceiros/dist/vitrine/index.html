@@ -341,6 +341,28 @@ html{scroll-behavior:smooth}
 .to-top:hover{border-color:var(--accent)}
 .to-top.show{opacity:1;transform:none;pointer-events:auto}
 @media (max-width:620px){.to-top{right:calc(21px + env(safe-area-inset-right,0px));bottom:calc(148px + env(safe-area-inset-bottom,0px));width:44px;height:48px}}
+/* Notícias */
+.nw-ind{display:flex;gap:8px;flex-wrap:wrap}
+.nw-chip{display:grid;grid-template-columns:auto auto;column-gap:10px;align-items:baseline;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--night-2)}
+.nw-chip small{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.nw-chip b{font-family:var(--f-mono);font-size:17px;color:var(--fg)}
+.nw-chip span{grid-column:1/-1;font-size:11px;color:var(--muted)}
+.nw-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.nw-tabs button{font-family:var(--f-body);font-size:13px;font-weight:600;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.nw-tabs button[aria-pressed="true"]{background:var(--fg);color:var(--night);border-color:var(--fg)}
+.nw-list{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:12px;align-items:start}
+.nw-top,.nw-item{display:flex;flex-direction:column;gap:8px;text-decoration:none;border:1px solid var(--line);border-radius:14px;background:var(--night-2);padding:16px;min-width:0;transition:border-color .2s}
+.nw-top:hover,.nw-item:hover{border-color:var(--glass)}
+.nw-top{padding:22px;background:linear-gradient(150deg,color-mix(in srgb,var(--accent) 16%,var(--night-2)),var(--night-2) 70%);border-color:color-mix(in srgb,var(--accent) 40%,var(--line));min-height:100%}
+.nw-top b{font-family:var(--f-display);font-weight:600;font-size:21px;line-height:1.3;text-wrap:balance}
+.nw-item b{font-size:14.5px;line-height:1.4;font-weight:700}
+.nw-meta{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.nw-go{margin-top:auto;font-size:13px;font-weight:700;color:var(--accent)}
+.nw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-width:0}
+.nw-list .empty,.nw-list .loading{grid-column:1/-1}
+.nw-note{margin:12px 0 0;color:var(--muted);font-size:12px}
+@media (max-width:900px){.nw-list{grid-template-columns:1fr}}
+@media (max-width:620px){.nw-grid{grid-template-columns:1fr}.nw-top b{font-size:18px}}
 .loading{grid-column:1/-1;color:var(--muted);padding:24px;text-align:center}
 
 /* Torre maior e em destaque */
@@ -374,6 +396,7 @@ html{scroll-behavior:smooth}
       <a href="#destaques">Destaques</a>
       <a href="#lanc-sec">Lançamentos</a>
       <a href="#pagina-cliente">Para o cliente</a>
+      <a href="#noticias">Notícias</a>
       <a href="#como-funciona">Como funciona</a>
       <a href="#duvidas">Dúvidas</a>
       <a href="/mapa/" target="_blank" rel="noopener">Mapa ↗</a>
@@ -389,6 +412,7 @@ html{scroll-behavior:smooth}
         <a href="#destaques">Destaques do mês</a>
         <a href="#lanc-sec">Lançamentos</a>
         <a href="#pagina-cliente">Página para o cliente</a>
+        <a href="#noticias">Notícias do mercado</a>
         <a href="#como-funciona">Como funciona a parceria</a>
         <a href="#duvidas">Dúvidas frequentes</a>
         <a href="/mapa/" target="_blank" rel="noopener">Mapa dos empreendimentos ↗</a>
@@ -526,6 +550,17 @@ html{scroll-behavior:smooth}
     </div>
   </section>
 
+  <section aria-labelledby="h-news" id="noticias">
+    <div class="sec-head">
+      <div><div class="eyebrow">Mercado em tempo real</div><h2 id="h-news">Notícias para a sua conversa com o cliente</h2>
+      <p>Mercado imobiliário, crédito, juros e investimento, atualizado ao longo do dia.</p></div>
+      <div class="nw-ind" aria-label="Indicadores"></div>
+    </div>
+    <div class="nw-tabs" role="group" aria-label="Temas"></div>
+    <div class="nw-list"><div class="loading">Carregando as notícias…</div></div>
+    <p class="nw-note">Manchetes do Google Notícias, com link para o veículo de origem. Indicadores: Banco Central do Brasil.</p>
+  </section>
+
   <section aria-labelledby="h-como" id="como-funciona">
     <div class="sec-head"><div><div class="eyebrow">Como começar</div><h2 id="h-como">Três passos para vender Vitacon</h2></div></div>
     <ol class="steps3">
@@ -599,6 +634,7 @@ html{scroll-behavior:smooth}
 <script src="/materiais-publicos.js"></script>
 <script src="/catalogo-projetos.js"></script>
 <script src="/vitrine/vitrine.js"></script>
+<script src="/vitrine/noticias.js"></script>
 <script src="/app/pwa.js"></script>
 <script>
 (() => {
