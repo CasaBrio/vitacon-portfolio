@@ -1,6 +1,6 @@
 # Central de Parceiros Vitacon — Luigi
 
-Versão estática com catálogo, filtros, campanhas HIS/HMP e Tabelão de outubro, destaques de descontos e materiais em PDF/Excel.
+Versão estática com catálogo, filtros, Tabelão de Estoque e Tabelão HIS/HMP da Black November (novembro/2026), destaques de descontos e materiais em PDF/Excel.
 
 ## Publicar na Vercel
 
@@ -26,13 +26,23 @@ node scripts/check-discount-highlights.cjs dist
 node scripts/check-tabelao.cjs dist
 ```
 
-Base atual de outubro: 290 registros (211 Tabelão e 79 HIS/HMP). Condições históricas permanecem identificadas. Preços, disponibilidade e condições dependem de confirmação.
+Base atual: Black November, 337 registros (258 do Tabelão de Estoque de 06/11 e 79 do Tabelão HIS/HMP de 04/11). As condições de outubro saíram da base; as referências de agosto e setembro continuam como histórico. Preços, disponibilidade e condições dependem de confirmação.
+
+Atualizar a base de um novo mês:
+
+```sh
+python3 scripts/import-november.py          # lê os PDFs em dist/materiais e gera dist/estoque.json
+python3 scripts/build-november-workbook.py  # gera dist/materiais/tabeloes-black-november-2026.xlsx
+```
+
+O desconto gravado é o que o valor de cada linha aplica sobre a tabela. Se a coluna de percentual do PDF divergir, a unidade recebe uma observação.
 
 ## Vitrine (/vitrine)
 
 - Lista oficial do mês: `dist/vitrine/oportunidades.json`, gerada a partir do catálogo de oportunidades em PDF.
 - PDF para download: `dist/materiais/catalogo-oportunidades-<mes>-<ano>.pdf` (o caminho fica no campo `pdf` do JSON).
 - Apresentação e book de cada empreendimento vêm de `catalogo-projetos.js` e `materiais-publicos.js` (campo `catalogo` liga o item ao nome do catálogo).
+- Downloads do mês: campo `tabelas` (título, subtítulo e arquivo) e materiais da campanha no campo `materiais`.
 - Para um novo mês: trocar o PDF, regenerar `oportunidades.json` (nome, bairro, endereço, status, metragens, valor a partir de, desconto, links de mapa, pasta e tabela) e publicar.
 
 ## Endereços

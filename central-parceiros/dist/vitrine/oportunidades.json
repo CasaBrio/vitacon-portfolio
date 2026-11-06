@@ -7,6 +7,23 @@
   "Tabelão HIS/HMP Black November (tabela 04/11/2026)"
  ],
  "pdf": "",
+ "tabelas": [
+  {
+   "titulo": "Tabelão de Estoque",
+   "sub": "PDF · tabela 06/11/2026",
+   "arquivo": "/materiais/tabelao-estoque-black-november-2026.pdf"
+  },
+  {
+   "titulo": "Tabelão HIS/HMP",
+   "sub": "PDF · tabela 04/11/2026",
+   "arquivo": "/materiais/tabelao-his-hmp-black-november-2026.pdf"
+  },
+  {
+   "titulo": "Excel dos tabelões",
+   "sub": "Planilha com filtros",
+   "arquivo": "/materiais/tabeloes-black-november-2026.xlsx"
+  }
+ ],
  "materiais": {
   "todos": "https://linktr.ee/VitaconBlackNovember",
   "apresentacao": "https://drive.google.com/drive/folders/17lEsFI85C9VdRqNWeVPkHH58yR_DvZIV?usp=sharing",
@@ -100,8 +117,8 @@
    "metragemMin": 21.88,
    "metragemMax": 30.47,
    "aPartirDe": 386303,
-   "descontoMax": 0.17,
-   "descontoMin": 0.17,
+   "descontoMax": 0.15,
+   "descontoMin": 0.15,
    "precoPromocional": false,
    "decorado": false,
    "unidades": 6,
@@ -123,7 +140,7 @@
    "metragemMax": 24.62,
    "aPartirDe": 386767,
    "descontoMax": 0.1,
-   "descontoMin": 0.1,
+   "descontoMin": 0.08,
    "precoPromocional": false,
    "decorado": false,
    "unidades": 10,

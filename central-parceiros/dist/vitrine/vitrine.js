@@ -144,8 +144,11 @@
       ['lancamento', 'Materiais Lançamento', 'Novidades da carteira'],
       ['private', 'Materiais Private', 'Vitacon Private']
     ].filter(([k]) => m[k]);
-    $('bn-links').innerHTML = L.map(([k, t, s]) => `<a href="${esc(m[k])}" target="_blank" rel="noopener"><b>${esc(t)} ↗</b><span>${esc(s)}</span></a>`).join('') +
+    const T = Array.isArray(data.tabelas) ? data.tabelas : [];
+    $('bn-links').innerHTML = T.map(t => `<a class="dl" href="${esc(t.arquivo)}" download><b>↓ ${esc(t.titulo)}</b><span>${esc(t.sub || '')}</span></a>`).join('') + L.map(([k, t, s]) => `<a href="${esc(m[k])}" target="_blank" rel="noopener"><b>${esc(t)} ↗</b><span>${esc(s)}</span></a>`).join('') +
       (m.todos ? `<a class="all" href="${esc(m.todos)}" target="_blank" rel="noopener"><b>Abrir todos os links ↗</b><span>${esc(m.todos.replace(/^https?:\/\//, ''))}</span></a>` : '');
+    const tb = $('tab-btns');
+    if (tb) tb.innerHTML = T.map((t, i) => `<a class="btn ${i ? 'btn-ghost' : 'btn-primary'}" href="${esc(t.arquivo)}" download>↓ ${esc(t.titulo)}</a>`).join('');
     const top = $('bn-cta');
     if (top && m.todos) { top.href = m.todos; top.hidden = false; top.textContent = `Materiais ${campanha} ↗`; }
     box.hidden = false;

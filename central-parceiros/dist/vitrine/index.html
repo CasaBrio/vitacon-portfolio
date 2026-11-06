@@ -400,6 +400,8 @@ html{scroll-behavior:smooth}
 .bn-links a:hover{border-color:var(--accent)}
 .bn-links a b{font-weight:700;font-size:14px}
 .bn-links a span{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.bn-links a.dl{border-color:color-mix(in srgb,var(--accent) 55%,var(--line))}
+.bn-links a.dl b{color:var(--accent)}
 .bn-links a.all{grid-column:1/-1;background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .bn-links a.all span{color:var(--accent-ink);opacity:.8}
 .off{font-family:var(--f-mono);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;background:#000;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:3px 7px;white-space:nowrap}
@@ -491,7 +493,7 @@ html{scroll-behavior:smooth}
       <div>
         <div class="eyebrow" style="color:var(--accent)">Campanha do mês</div>
         <h2 id="bn-title">Campanha do mês</h2>
-        <p>Apresentação da campanha e todos os materiais de divulgação em um só lugar. Baixe, personalize e envie para a sua base.</p>
+        <p>Tabelões para download, apresentação da campanha e todos os materiais de divulgação em um só lugar. Baixe, personalize e envie para a sua base.</p>
       </div>
       <div class="bn-links" id="bn-links"></div>
     </div>
@@ -533,7 +535,7 @@ html{scroll-behavior:smooth}
     <div class="sec-head">
       <div><div class="eyebrow" id="vit-month">Valores do mês</div><h2 id="h-vitrine">Vitrine de empreendimentos</h2>
       <p id="vit-sub">Filtre pelo perfil do seu cliente e peça a tabela direto no WhatsApp.</p></div>
-      <div class="row-btns"><a class="btn btn-ghost" href="/mapa/" target="_blank" rel="noopener">Ver no mapa ↗</a><a class="btn btn-primary" data-pdf href="#" download hidden>↓ Baixar catálogo em PDF</a></div>
+      <div class="row-btns"><a class="btn btn-ghost" href="/mapa/" target="_blank" rel="noopener">Ver no mapa ↗</a><a class="btn btn-primary" data-pdf href="#" download hidden>↓ Baixar catálogo em PDF</a><span id="tab-btns" class="row-btns" style="display:contents"></span></div>
     </div>
     <div class="perfis-wrap">
       <div class="eyebrow">Para qual cliente você está buscando?</div>
