@@ -1,6 +1,7 @@
 'use strict';
 // Vitrine de oportunidades.
-// Lista oficial do mês: /vitrine/oportunidades.json (gerado a partir do catálogo em PDF do mês).
+// Lista oficial do mês: /vitrine/oportunidades.json (gerado a partir dos tabelões do mês).
+// Campos de campanha (opcionais): campanha, materiais, descontoMin, unidades, hisHmp, precoPromocional, decorado.
 // Apresentação e book de cada empreendimento: catalogo-projetos.js e materiais-publicos.js da Central.
 (() => {
   const WA = '5511998885850';
@@ -29,7 +30,9 @@
   const comissao = e => { const t = COMISSAO[e.st === 'lanc' ? 'lanc' : 'estoque']; return {pf: e.preco * t.pf, pj: e.preco * t.pj, t}; };
   const wa = text => `https://wa.me/${WA}?text=${encodeURIComponent(text)}`;
   const waVisita = n => wa(`Olá Luigi, sou corretor(a) parceiro(a) e quero agendar uma visita ao ${n} com o meu cliente.\nMeu nome: \nData e horário de preferência: \nPerfil do cliente (morar ou investir): `);
-  const waTabela = n => wa(`Olá Luigi, sou parceiro e tenho cliente com perfil para o ${n}. Pode me enviar a tabela e a disponibilidade atualizadas?`);
+  let campanha = '';
+  const waTabela = n => wa(`Olá Luigi, sou parceiro e tenho cliente com perfil para o ${n}${campanha ? ' na ' + campanha : ''}. Pode me enviar as unidades disponíveis e as condições?`);
+  const offTxt = e => e.desconto ? (e.dmin && e.dmin !== e.desconto ? `${pct(e.dmin)} a ${pct(e.desconto)} off` : `${pct(e.desconto)} off`) : (e.promo ? 'Preço promocional' : '');
 
   const catalog = Array.isArray(window.CATALOGO_PROJETOS) ? window.CATALOGO_PROJETOS : [];
   const books = window.MATERIAL_PUBLICO || {};
@@ -41,7 +44,7 @@
   // Entradas por perfil de cliente: regra de seleção e argumento de venda de cada uma.
   const PERFIS = [
     {id: 'investidor', nome: 'Cliente investidor', sub: 'Studios com perfil para locação',
-      ok: e => /\bNR\b/.test(e.categorias) && /studio/i.test(e.tipologias) && e.preco <= 520000,
+      ok: e => (/\bNR\b/.test(e.categorias) || e.decorado) && /studio/i.test(e.tipologias) && e.preco <= 520000,
       arg: 'Unidades compactas em bairros com alta procura por locação. A Housi Decor entrega o apartamento decorado e pronto para alugar, e a Housi Gestão cuida de tudo: precificação dinâmica, limpeza, manutenção, vistorias e atendimento 24 horas. Só na capital paulista o déficit habitacional é de 369 mil moradias (Plano Municipal de Habitação).'},
     {id: 'primeiro', nome: 'Primeiro imóvel', sub: 'HIS e HMP, menores tickets',
       ok: e => /HIS|HMP/.test(e.categorias),
@@ -70,6 +73,11 @@
         min: it.metragemMin, max: it.metragemMax,
         preco: it.aPartirDe,
         desconto: it.descontoMax || 0,
+        dmin: it.descontoMin || 0,
+        promo: !!it.precoPromocional,
+        decorado: !!it.decorado,
+        unidades: it.unidades || 0,
+        his: it.hisHmp || null,
         ultimas: !!it.ultimasUnidades,
         mapa: it.mapa, pasta: it.pasta, tabela: it.tabela, foto: it.foto || '',
         explorar: slug && c.presentationAvailable !== false ? APRESENTACAO(slug) : '',
@@ -83,26 +91,64 @@
     const cheapest = [...D].sort((a, b) => a.preco - b.preco)[0];
     const maxDisc = Math.max(0, ...D.map(e => e.desconto));
     const count = k => D.filter(e => e.st === k).length;
+    campanha = data.campanha || '';
+    const units = D.reduce((s, e) => s + (e.unidades || 0), 0);
+    const maxBonus = Math.max(0, ...D.map(e => e.his ? e.his.bonusComissao : 0));
     $('h1-n').textContent = n;
-    $('lede').textContent = cheapest
+    if (campanha) {
+      $('h1').innerHTML = `${n} prédios. <em>Até ${pct(maxDisc)} off</em> na ${esc(campanha)}.`;
+      $('bn-strip').hidden = false;
+      $('bn-strip-name').textContent = campanha.toUpperCase();
+      $('bn-strip-mes').textContent = `Vitacon · ${mes.toLowerCase()}`;
+    }
+    $('lede').textContent = campanha && cheapest
+      ? `${units ? units + ' unidades' : n + ' empreendimentos'} com preço ${campanha}, a partir de ${brl(cheapest.preco)} no ${cheapest.nome}${cheapest.nome.toLowerCase().includes(cheapest.bairro.toLowerCase()) ? '' : ` (${cheapest.bairro})`}. Cada andar da torre é um empreendimento: toque para ver.`
+      : cheapest
       ? `${n} empreendimentos selecionados, a partir de ${brl(cheapest.preco)} no ${cheapest.nome}${cheapest.nome.toLowerCase().includes(cheapest.bairro.toLowerCase()) ? '' : ` (${cheapest.bairro})`}. Cada andar da torre é um empreendimento: toque para ver.`
       : 'Cada andar da torre é um empreendimento. Toque para ver.';
-    $('vit-month').textContent = mes ? `Valores de ${mes.toLowerCase()}` : 'Valores do mês';
-    defaultPara = mes ? `CATÁLOGO ${mes.toUpperCase()} · SELEÇÃO PARA PARCEIROS` : 'SELEÇÃO PARA PARCEIROS';
-    $('note').textContent = `${data.aviso || 'Estoque, valores e condições sujeitos a confirmação.'} Valores do catálogo ${mes}. Material de uso exclusivo de corretores e imobiliárias parceiras.`;
-    const stats = [
+    $('vit-month').textContent = campanha ? `Preços ${campanha} · ${mes.toLowerCase()}` : mes ? `Valores de ${mes.toLowerCase()}` : 'Valores do mês';
+    if (campanha) $('vit-sub').textContent = `Valores “a partir de” já com o desconto da ${campanha}. Filtre pelo perfil do seu cliente e peça as unidades direto no WhatsApp.`;
+    defaultPara = campanha ? `TABELÃO ${campanha.toUpperCase()} · SELEÇÃO PARA PARCEIROS` : mes ? `CATÁLOGO ${mes.toUpperCase()} · SELEÇÃO PARA PARCEIROS` : 'SELEÇÃO PARA PARCEIROS';
+    const fontes = (data.fontes || []).join(' e ');
+    $('note').textContent = `${data.aviso || 'Estoque, valores e condições sujeitos a confirmação.'} ${fontes ? `Valores dos tabelões: ${fontes}; preços “a partir de” já com o desconto da campanha e metragens das unidades disponíveis. Unidades HIS/HMP exigem enquadramento do comprador.` : `Valores do catálogo ${mes}.`} Material de uso exclusivo de corretores e imobiliárias parceiras.`;
+    const stats = campanha ? [
+      [units || n, units ? 'unidades na campanha' : 'empreendimentos'],
+      ['até ' + pct(maxDisc), 'de desconto ' + campanha],
+      ...(maxBonus ? [['+' + pct(maxBonus), 'de comissão em HIS/HMP']] : []),
+      [count('pronto'), 'prontos para morar']
+    ] : [
       [n, 'empreendimentos'],
       [count('pronto'), 'prontos para morar'],
       [count('obras'), 'em obras'],
       ['até ' + pct(maxDisc), 'de desconto']
     ];
     $('stats').innerHTML = stats.map(([b, s]) => `<div class="stat"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('');
-    ['pronto', 'obras', 'lanc'].forEach(k => { $('st-' + k).hidden = !count(k); });
+    ['pronto', 'obras', 'lanc'].forEach(k => { $('st-' + k).hidden = !count(k); const l = $('lg-' + k); if (l) l.hidden = !count(k); });
     document.querySelectorAll('[data-pdf]').forEach(a => {
       if (data.pdf) { a.href = data.pdf; a.hidden = false; } else a.hidden = true;
     });
     const label = $('pdf-label');
     if (label && mes) label.textContent = `Catálogo ${mes} em PDF`;
+    campaignBox(data);
+  }
+
+  // Bloco da campanha do mês com os materiais de divulgação (some se o JSON não tiver "materiais").
+  function campaignBox(data) {
+    const m = data.materiais, box = $('bn-sec');
+    if (!box) return;
+    if (!m || !campanha) { box.hidden = true; return; }
+    $('bn-title').textContent = `${campanha} Vitacon`;
+    const L = [
+      ['apresentacao', 'Apresentação', 'Deck da campanha'],
+      ['estoque', 'Materiais Estoque', 'Prontos e em obras'],
+      ['lancamento', 'Materiais Lançamento', 'Novidades da carteira'],
+      ['private', 'Materiais Private', 'Vitacon Private']
+    ].filter(([k]) => m[k]);
+    $('bn-links').innerHTML = L.map(([k, t, s]) => `<a href="${esc(m[k])}" target="_blank" rel="noopener"><b>${esc(t)} ↗</b><span>${esc(s)}</span></a>`).join('') +
+      (m.todos ? `<a class="all" href="${esc(m.todos)}" target="_blank" rel="noopener"><b>Abrir todos os links ↗</b><span>${esc(m.todos.replace(/^https?:\/\//, ''))}</span></a>` : '');
+    const top = $('bn-cta');
+    if (top && m.todos) { top.href = m.todos; top.hidden = false; top.textContent = `Materiais ${campanha} ↗`; }
+    box.hidden = false;
   }
 
   function picks() {
@@ -111,11 +157,12 @@
     const items = [
       ['Menor ticket', by(e => e.preco), e => `${S[e.st]} · ${e.bairro} · a partir de ${brl(e.preco)}`],
       ['Maior desconto', by(e => e.desconto, true), e => `até ${pct(e.desconto)} off · ${e.bairro} · a partir de ${brl(e.preco)}`],
+      ['Bônus HIS/HMP', by(e => e.his ? -e.his.bonusComissao * 1e8 - e.preco : 1e15), e => e.his ? `+${pct(e.his.bonusComissao)} de comissão · ${e.bairro} · a partir de ${brl(e.preco)}` : ''],
       ['Últimas unidades', D.find(e => e.ultimas), e => `${S[e.st]} · ${e.bairro} · a partir de ${brl(e.preco)}`],
       ['Maior metragem', by(e => e.max || 0, true), e => `até ${m2(e.max)} m² · ${e.bairro} · a partir de ${brl(e.preco)}`]
     ];
     const seen = new Set();
-    $('picks').innerHTML = items.filter(([, e]) => e && !seen.has(e.id) && seen.add(e.id)).map(([t, e, f]) =>
+    $('picks').innerHTML = items.filter(([, e, f]) => e && f(e) && !seen.has(e.id) && seen.add(e.id)).slice(0, 4).map(([t, e, f]) =>
       `<button type="button" class="pick" data-id="${e.id}"><div class="eyebrow">${esc(t)}</div><strong>${esc(e.nome)}</strong><span>${esc(f(e))}</span></button>`).join('');
     $('picks').querySelectorAll('.pick').forEach(b => b.addEventListener('click', () => focusCard(D.find(e => e.id === b.dataset.id))));
   }
@@ -231,14 +278,16 @@
       <article class="card" id="card-${e.id}">
         ${e.foto ? `<div class="ph"><img src="${esc(e.foto)}" alt="Perspectiva ilustrativa do ${esc(e.nome)}" loading="lazy" onerror="this.parentNode.remove()"><span>Imagem ilustrativa</span></div>` : ''}
         <div class="card-top"><div><h3>${esc(e.nome)}</h3><div class="bairro">${esc(e.bairro)}</div></div>
-        <div class="pills"><span class="pill ${e.st}">${S[e.st]}</span>${e.ultimas ? '<span class="pill last">Últimas unidades</span>' : ''}</div></div>
+        <div class="pills"><span class="pill ${e.st}">${S[e.st]}</span>${e.ultimas ? '<span class="pill last">Últimas unidades</span>' : ''}${campanha && offTxt(e) ? `<span class="off">${esc(offTxt(e))}</span>` : ''}</div></div>
         ${e.endereco ? `<a class="addr" href="${esc(e.mapa)}" target="_blank" rel="noopener">${esc(e.endereco)} ↗</a>` : ''}
         <div class="nums">
           <div><small>Metragem</small><b>${e.min === e.max ? m2(e.min) : m2(e.min) + '–' + m2(e.max)} m²</b></div>
           <div class="price"><small>A partir de</small><b>${brl(e.preco)}</b></div>
         </div>
-        <div class="meta">${esc(e.tipologias)}${e.desconto ? ` · <b>até ${pct(e.desconto)} de desconto</b>` : ''}</div>
+        <div class="meta">${esc(e.tipologias)}${e.desconto ? ` · <b>até ${pct(e.desconto)} de desconto</b>` : ''}${e.unidades ? ` · ${e.unidades} ${e.unidades > 1 ? 'unidades' : 'unidade'}` : ''}</div>
         <div class="meta cat">${esc(e.categorias)}</div>
+        ${e.his ? `<div class="his"><b>HIS/HMP · Nível ${e.his.nivel} · +${pct(e.his.bonusComissao)} de comissão</b><small>${e.his.unidades} ${e.his.unidades > 1 ? 'unidades' : 'unidade'} · fluxo ${esc(e.his.fluxo)} · exige enquadramento</small></div>` : ''}
+        ${e.promo ? `<div class="promo">Preço promocional${campanha ? ' ' + esc(campanha) : ''}${e.decorado ? ' · unidades decoradas e com renda' : ''}</div>` : ''}
         ${(c => `<div class="card-comm" title="Estimativa sobre o valor a partir de, sem bonificações de campanha">
           <span class="comm-label">Sua comissão a partir de</span>
           <span><small>PF ${pct(c.t.pf).replace('%', '')}%</small> <b>${reais(c.pf)}</b></span>

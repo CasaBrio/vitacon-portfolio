@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=Manrope:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: a night-time tower of 21 floors (one per empreendimento) opens the page, then a filterable vitrine of cards that hands off to the Central de Parceiros. Single dark look, by choice. */
+/* Layout: a night-time tower (one floor per empreendimento) opens the page, then a filterable vitrine of cards that hands off to the Central de Parceiros. Single dark look, by choice. */
 :root{
   --night:#10132d;
   --night-2:#171b3d;
@@ -389,6 +389,26 @@ html{scroll-behavior:smooth}
 .signup .eyebrow{color:var(--accent)}
 .signup .btn{font-size:15px;padding:15px 22px}
 @media (max-width:620px){.signup{grid-template-columns:1fr;padding:22px}}
+/* Campanha do mês (Black November) */
+.bn-strip{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;background:#000;border:1px solid var(--accent);border-radius:999px;padding:6px 12px 6px 6px;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase}
+.bn-strip b{background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:3px 9px;font-weight:600}
+.bn{display:grid;grid-template-columns:1.1fr .9fr;gap:20px;align-items:center;background:linear-gradient(135deg,#000 0%,#000 55%,color-mix(in srgb,var(--accent) 22%,#000));border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:18px;padding:24px}
+.bn h2{margin:4px 0 8px}
+.bn p{margin:0;color:var(--muted);max-width:56ch}
+.bn-links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bn-links a{display:flex;flex-direction:column;gap:2px;text-decoration:none;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03);min-width:0}
+.bn-links a:hover{border-color:var(--accent)}
+.bn-links a b{font-weight:700;font-size:14px}
+.bn-links a span{font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis}
+.bn-links a.all{grid-column:1/-1;background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.bn-links a.all span{color:var(--accent-ink);opacity:.8}
+.off{font-family:var(--f-mono);font-weight:600;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;background:#000;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:3px 7px;white-space:nowrap}
+.his{font-size:12.5px;border:1px dashed color-mix(in srgb,var(--pronto) 60%,var(--line));border-radius:10px;padding:9px 11px;line-height:1.45}
+.his b{color:var(--pronto)}
+.his small{display:block;color:var(--muted);font-size:11.5px}
+.promo{font-size:12.5px;border:1px dashed color-mix(in srgb,var(--accent) 60%,var(--line));border-radius:10px;padding:9px 11px}
+@media (max-width:900px){.bn{grid-template-columns:1fr}}
+@media (max-width:620px){.bn-links{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -432,12 +452,14 @@ html{scroll-behavior:smooth}
 
   <section class="hero" aria-label="Abertura">
     <div class="hero-copy">
+      <div class="bn-strip" id="bn-strip" hidden><b id="bn-strip-name"></b><span id="bn-strip-mes"></span></div>
       <div class="para" id="para">SELEÇÃO PARA PARCEIROS</div>
-      <h1><span id="h1-n">Os</span> prédios. <em>Uma vitrine</em> para sua próxima proposta.</h1>
+      <h1 id="h1"><span id="h1-n">Os</span> prédios. <em>Uma vitrine</em> para sua próxima proposta.</h1>
       <p class="lede" id="lede">Cada andar da torre é um empreendimento com unidades no tabelão do mês. Toque em um andar para ver.</p>
       <div class="ctas">
         <a class="btn btn-primary" href="#vitrine">Ver as oportunidades ↓</a>
-        <a class="btn btn-ghost pdf-cta" data-pdf href="/materiais/catalogo-oportunidades-outubro-2026.pdf" download>↓ <span id="pdf-label">Catálogo em PDF</span></a>
+        <a class="btn btn-ghost pdf-cta" data-pdf href="#" download hidden>↓ <span id="pdf-label">Catálogo em PDF</span></a>
+        <a class="btn btn-ghost" id="bn-cta" href="#" target="_blank" rel="noopener" hidden></a>
         <a class="btn btn-ghost" href="/mapa/" target="_blank" rel="noopener">Mapa dos empreendimentos ↗</a>
       </div>
       <div class="stats" id="stats"></div>
@@ -446,9 +468,9 @@ html{scroll-behavior:smooth}
       <div class="tag" id="tag"><b>Toque em um andar</b><small>arraste para girar · cada andar é um empreendimento</small></div>
       <div class="tower" id="tower"></div>
       <div class="legend">
-        <span><i class="dot" style="background:var(--pronto)"></i>Pronto</span>
-        <span><i class="dot" style="background:var(--obras)"></i>Em obras</span>
-        <span><i class="dot" style="background:var(--lanc)"></i>Lançamento</span>
+        <span id="lg-pronto"><i class="dot" style="background:var(--pronto)"></i>Pronto</span>
+        <span id="lg-obras"><i class="dot" style="background:var(--obras)"></i>Em obras</span>
+        <span id="lg-lanc"><i class="dot" style="background:var(--lanc)"></i>Lançamento</span>
       </div>
     </div>
   </section>
@@ -461,6 +483,17 @@ html{scroll-behavior:smooth}
         <p>Depois do cadastro no Vitacon Partners, o nosso backoffice de parcerias confere os seus dados e inclui você no CVCRM, o CRM oficial da Vitacon, o mesmo dos nossos executivos. Lá você consulta tabelas e espelhos em tempo real e acompanha leads, clientes e vendas até o recebimento da comissão.</p>
       </div>
       <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Quero me cadastrar ↗</a>
+    </div>
+  </section>
+
+  <section aria-labelledby="bn-title" id="bn-sec" hidden>
+    <div class="bn">
+      <div>
+        <div class="eyebrow" style="color:var(--accent)">Campanha do mês</div>
+        <h2 id="bn-title">Campanha do mês</h2>
+        <p>Apresentação da campanha e todos os materiais de divulgação em um só lugar. Baixe, personalize e envie para a sua base.</p>
+      </div>
+      <div class="bn-links" id="bn-links"></div>
     </div>
   </section>
 
@@ -499,8 +532,8 @@ html{scroll-behavior:smooth}
   <section id="vitrine" aria-labelledby="h-vitrine">
     <div class="sec-head">
       <div><div class="eyebrow" id="vit-month">Valores do mês</div><h2 id="h-vitrine">Vitrine de empreendimentos</h2>
-      <p>Filtre pelo perfil do seu cliente e peça a tabela direto no WhatsApp.</p></div>
-      <div class="row-btns"><a class="btn btn-ghost" href="/mapa/" target="_blank" rel="noopener">Ver no mapa ↗</a><a class="btn btn-primary" data-pdf href="/materiais/catalogo-oportunidades-outubro-2026.pdf" download>↓ Baixar catálogo em PDF</a></div>
+      <p id="vit-sub">Filtre pelo perfil do seu cliente e peça a tabela direto no WhatsApp.</p></div>
+      <div class="row-btns"><a class="btn btn-ghost" href="/mapa/" target="_blank" rel="noopener">Ver no mapa ↗</a><a class="btn btn-primary" data-pdf href="#" download hidden>↓ Baixar catálogo em PDF</a></div>
     </div>
     <div class="perfis-wrap">
       <div class="eyebrow">Para qual cliente você está buscando?</div>
@@ -520,6 +553,7 @@ html{scroll-behavior:smooth}
         <option value="400000">Até R$ 400 mil</option>
         <option value="500000">Até R$ 500 mil</option>
         <option value="700000">Até R$ 700 mil</option>
+        <option value="1000000">Até R$ 1 mi</option>
       </select>
       <select id="f-sort" aria-label="Ordenar">
         <option value="preco">Menor preço</option>
