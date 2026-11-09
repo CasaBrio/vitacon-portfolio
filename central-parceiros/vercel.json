@@ -80,7 +80,7 @@
       "destination": "/c/index.html"
     },
     {
-      "source": "/empreendimentos/:slug",
+      "source": "/empreendimentos/:slug/",
       "destination": "https://luigi.sperandeoluis.chatgpt.site/empreendimentos/:slug/"
     },
     {
