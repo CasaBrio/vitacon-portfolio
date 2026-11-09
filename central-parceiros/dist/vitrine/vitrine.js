@@ -5,7 +5,7 @@
 // Apresentação e book de cada empreendimento: catalogo-projetos.js e materiais-publicos.js da Central.
 (() => {
   const WA = '5511998885850';
-  const APRESENTACAO = slug => `https://luigi.sperandeoluis.chatgpt.site/empreendimentos/${slug}/?origem=parceiros`;
+  const APRESENTACAO = slug => `/empreendimentos/${slug}/`;
   const S = {pronto: 'Pronto', obras: 'Em obras', lanc: 'Lançamento'};
   const KEEP = new Set(['ON', 'VN', 'H']);
   const SMALL = new Set(['de', 'da', 'do', 'das', 'dos', 'e']);
@@ -179,7 +179,7 @@
       const from = inList ? ` · a partir de ${brl(inList.preco)}` : '';
       const btns = [
         p.launchUrl && `<a class="btn btn-primary" href="${esc(p.launchUrl)}" target="_blank" rel="noopener">Materiais ↗</a>`,
-        slug && p.presentationAvailable !== false && `<a class="btn btn-ghost" href="${esc(APRESENTACAO(slug))}" target="_blank" rel="noopener">Explorar projeto ↗</a>`,
+        slug && p.presentationAvailable !== false && `<a class="btn btn-ghost" href="${esc(APRESENTACAO(slug))}">Explorar projeto</a>`,
         slug && books[slug] && `<a class="btn btn-ghost" href="${esc(books[slug])}" target="_blank" rel="noopener">Book ↗</a>`,
         `<a class="btn btn-ghost" href="${esc(wa(`Olá Luigi, sou parceiro e gostaria de solicitar as tabelas e os espelhos de vendas atualizados do ${n}.`))}" target="_blank" rel="noopener">Pedir tabela e espelho</a>`
       ].filter(Boolean).join('');
@@ -299,7 +299,7 @@
         <div class="links">
           <a class="card-links-visit" href="${esc(waVisita(e.nome))}" target="_blank" rel="noopener">Agendar visita ↗</a>
           ${e.tabela ? `<a href="${esc(e.tabela)}" target="_blank" rel="noopener">Tabela do mês ↗</a>` : ''}
-          ${e.explorar ? `<a href="${esc(e.explorar)}" target="_blank" rel="noopener">Explorar projeto ↗</a>` : ''}
+          ${e.explorar ? `<a href="${esc(e.explorar)}">Explorar projeto</a>` : ''}
           ${e.book ? `<a href="${esc(e.book)}" target="_blank" rel="noopener">Book ↗</a>` : ''}
           ${e.pasta ? `<a href="${esc(e.pasta)}" target="_blank" rel="noopener">Materiais ↗</a>` : ''}
         </div>
@@ -358,7 +358,7 @@
     render(); applyHash();
     addEventListener('hashchange', applyHash);
   }).catch(() => {
-    grid.innerHTML = '<div class="empty">Não foi possível carregar as oportunidades agora. Abra a <a href="/central">Central de Parceiros</a> ou fale com o Luigi pelo WhatsApp.</div>';
+    grid.innerHTML = '<div class="empty">Não foi possível carregar as oportunidades agora. Recarregue a página em instantes ou fale com o Luigi pelo WhatsApp.</div>';
     applyHash();
   });
 })();

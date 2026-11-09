@@ -54,34 +54,34 @@
       "source": "/v",
       "destination": "/vitrine/",
       "permanent": false
+    },
+    {
+      "source": "/central",
+      "destination": "/vitrine/",
+      "permanent": false
+    },
+    {
+      "source": "/central.html",
+      "destination": "/vitrine/",
+      "permanent": false
     }
   ],
   "rewrites": [
+    {
+      "source": "/",
+      "destination": "/vitrine/index.html"
+    },
     {
       "source": "/c/exemplo",
       "destination": "/c/index.html"
     },
     {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "parceirosvitacon.com.br"
-        }
-      ],
-      "destination": "/vitrine/index.html"
-    },
-    {
-      "source": "/",
-      "destination": "/central.html"
-    },
-    {
-      "source": "/central",
-      "destination": "/central.html"
-    },
-    {
       "source": "/c/:id",
       "destination": "/c/index.html"
+    },
+    {
+      "source": "/empreendimentos/:path*",
+      "destination": "https://luigi.sperandeoluis.chatgpt.site/empreendimentos/:path*"
     }
   ]
 }
