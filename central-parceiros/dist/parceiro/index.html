@@ -36,6 +36,15 @@
 .pg-prev{background:var(--night);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;justify-content:center}
 .pg-prev canvas{width:100%;max-width:420px;height:auto;border-radius:8px;display:block}
 @media (max-width:820px){.posts-grid{grid-template-columns:1fr}.pg-prev{order:-1}}
+.atalhos{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:12px}
+.atalho{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--night);color:var(--fg);text-decoration:none}
+.atalho:hover{border-color:var(--accent)}
+.atalho b{font-size:17px}
+.atalho small{color:var(--muted);font-size:13px;line-height:1.45;flex:1}
+.atalho .ir{font-weight:700;color:var(--accent);font-size:14px}
+.atalho.destaque{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--night))}
+.inicio.novo{border-color:var(--pronto)}
+@media (max-width:820px){.atalhos{grid-template-columns:1fr}}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:620px){.pick-list{grid-template-columns:1fr}.two{grid-template-columns:1fr}}
 </style>
@@ -143,6 +152,36 @@
         <div class="eyebrow" id="a-imob">Área do parceiro</div>
         <h1 id="a-hello">Olá</h1>
         <p class="muted">Monte uma seleção de empreendimentos e envie ao seu cliente. Ele vê a página com o seu nome e fala direto com você.</p>
+      </div>
+    </section>
+
+    <section id="inicio">
+      <div class="panel stack inicio">
+        <div>
+          <div class="eyebrow" id="i-eyebrow">Comece por aqui</div>
+          <h2 id="i-title">Ferramentas do parceiro</h2>
+          <p class="muted" id="i-text">Salve esta página nos favoritos ou instale o app: tudo o que você precisa para vender Vitacon fica aqui.</p>
+        </div>
+        <div class="atalhos">
+          <a class="atalho destaque" href="/vitrine/">
+            <span class="eyebrow" id="i-camp">Oportunidades do mês</span>
+            <b>Vitrine de oportunidades</b>
+            <small id="i-vit">Empreendimentos com preço a partir de, descontos do mês, tabelões e materiais para baixar.</small>
+            <span class="ir">Abrir a Vitrine →</span>
+          </a>
+          <a class="atalho" href="/central">
+            <span class="eyebrow">Unidade a unidade</span>
+            <b>Central de Parceiros</b>
+            <small>Estoque completo com filtros, condições por unidade e simulador de rentabilidade.</small>
+            <span class="ir">Abrir a Central →</span>
+          </a>
+          <a class="atalho" href="#f-nova">
+            <span class="eyebrow">Para o seu cliente</span>
+            <b>Página e posts com o seu nome</b>
+            <small>Monte a seleção do cliente logo abaixo e gere artes para as redes com o seu contato.</small>
+            <span class="ir">Começar ↓</span>
+          </a>
+        </div>
       </div>
     </section>
 

@@ -81,6 +81,7 @@
     const {error: e2} = await db.auth.signInWithPassword({email, password: senha});
     b.disabled = false;
     if (e2) { $('l-email').value = email; view('v-login'); show($('l-msg'), 'Acesso criado. Entre com o seu e-mail e a senha que você criou.', 'ok'); return; }
+    try { sessionStorage.setItem('vp-boas-vindas', '1'); } catch (_) {}
     $('f-cad').reset();
     if (new URLSearchParams(location.search).has('cadastro')) history.replaceState(null, '', location.pathname);
     route();
@@ -121,11 +122,21 @@
   async function app() {
     view('v-app');
     $('a-hello').textContent = `Olá, ${me.nome.split(' ')[0]}`;
+    let novo = false; try { novo = sessionStorage.getItem('vp-boas-vindas') === '1'; } catch (_) {}
+    if (novo) {
+      $('i-eyebrow').textContent = 'Cadastro feito'; $('i-title').textContent = 'Bem-vindo! Comece pela Vitrine do mês';
+      $('i-text').textContent = 'A Vitrine reúne as oportunidades com os melhores preços e condições deste mês. Depois, monte a página do seu cliente e as artes para as redes aqui na sua área.';
+      $('inicio').querySelector('.inicio').classList.add('novo');
+    }
     $('a-imob').textContent = [me.imobiliaria, me.creci && 'CRECI ' + me.creci].filter(Boolean).join(' · ') || 'Área do parceiro';
     if (!appReady) {
       appReady = true;
       if (!$('n-msg').value) $('n-msg').placeholder = 'Ex.: Separei estas opções que combinam com o que você procura. Qualquer dúvida, me chame no WhatsApp.';
       try { base = await window.VP.oportunidades(); } catch (_) { base = {itens: []}; }
+      if (base.itens.length) {
+        $('i-camp').textContent = [base.campanha, base.mes].filter(Boolean).join(' · ') || 'Oportunidades do mês';
+        $('i-vit').textContent = `${base.itens.length} empreendimentos com preço a partir de, descontos do mês, tabelões e materiais para baixar.`;
+      }
       chosen = new Set([...chosen].filter(id => base.itens.some(i => i.id === id)));
       renderPicks();
     }
