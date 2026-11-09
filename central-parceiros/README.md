@@ -55,7 +55,8 @@ O desconto gravado é o que o valor de cada linha aplica sobre a tabela. Se a co
 ## Área do parceiro e página do cliente
 
 - /parceiro/ → login do corretor (e-mail e senha), troca da senha provisória, criação e acompanhamento das páginas.
+- /parceiro/?cadastro → autocadastro do corretor (nome, e-mail, WhatsApp, imobiliária, CRECI, se já está no Vitacon Partners e a própria senha). Entra na hora; no painel o cadastro aparece "A conferir" até o Luigi cruzar com o Vitacon Partners. Banco: `parceiros-autocadastro.sql`.
 - /c/<código> → página pública que o cliente recebe (sem comissão nem materiais internos), com o nome e o WhatsApp do corretor.
-- /admin/parceiros/ → o Luigi cria os acessos, ativa ou desativa parceiros e vê as páginas enviadas e as aberturas.
+- /admin/parceiros/ → o Luigi vê os cadastros novos (aba "A conferir"), marca como conferido, exporta a lista em CSV (abre no Excel), cria acessos manualmente, ativa ou desativa parceiros e vê as páginas enviadas e as aberturas.
 - Banco: rodar `parceiros-schema.sql` uma vez no Supabase (SQL Editor).
 - Supabase > Authentication: o cadastro por e-mail precisa ficar habilitado. O e-mail do parceiro é confirmado pelo painel (admin_ativar_login) e as novas senhas provisórias saem pelo painel (admin_nova_senha), sem depender de envio de e-mail.

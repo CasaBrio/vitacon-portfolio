@@ -36,7 +36,16 @@
       return;
     }
     parceiros = a.data; paginas = b.data;
-    kpis(); render();
+    parceiros.sort((x, y) => (x.conferido - y.conferido) || (new Date(y.created_at) - new Date(x.created_at)));
+    kpis(); avisoNovos(); render();
+  }
+  const aConferir = () => parceiros.filter(p => !p.conferido);
+  function avisoNovos() {
+    const n = aConferir().length;
+    document.title = (n ? `(${n}) ` : '') + 'Parceiros e páginas | Central Vitacon';
+    $('t-conf').textContent = `A conferir (${n})`; $('t-conf').hidden = !n;
+    $('novos').hidden = !n;
+    if (n) $('novos-txt').innerHTML = `<b>${n} ${n === 1 ? 'novo cadastro' : 'novos cadastros'}</b> pela Área do Parceiro. Confira no Vitacon Partners e marque como conferido.`;
   }
   function kpis() {
     const since = Date.now() - 30 * 864e5;
@@ -49,7 +58,7 @@
   }
   const pName = id => parceiros.find(p => p.user_id === id);
   function render() {
-    $('t-pag').setAttribute('aria-pressed', tab === 'pag'); $('t-par').setAttribute('aria-pressed', tab === 'par');
+    $('t-pag').setAttribute('aria-pressed', tab === 'pag'); $('t-par').setAttribute('aria-pressed', tab === 'par'); $('t-conf').setAttribute('aria-pressed', tab === 'conf');
     if (tab === 'pag') {
       $('list').innerHTML = paginas.length ? `<div class="table-wrap"><table>
         <thead><tr><th>Criada em</th><th>Parceiro</th><th>Cliente</th><th>Empreendimentos</th><th>Aberturas</th><th>Última abertura</th><th></th></tr></thead>
@@ -63,25 +72,42 @@
           <td><a class="btn btn-ghost btn-small" href="/c/${r.id}?previa=1" target="_blank" rel="noopener">Ver</a></td></tr>`; }).join('')}</tbody></table></div>`
         : '<div class="empty">Nenhuma página enviada ainda.</div>';
     } else {
-      $('list').innerHTML = parceiros.length ? `<div class="table-wrap"><table>
+      const lista = tab === 'conf' ? aConferir() : parceiros;
+      $('list').innerHTML = lista.length ? `<div class="table-wrap"><table>
         <thead><tr><th>Parceiro</th><th>Contato</th><th>Páginas</th><th>Aberturas</th><th>Status</th><th></th></tr></thead>
-        <tbody>${parceiros.map(p => { const mine = paginas.filter(r => r.parceiro_id === p.user_id); return `<tr data-id="${p.user_id}">
-          <td><b>${esc(p.nome)}</b><div class="muted">${esc([p.imobiliaria, p.creci && 'CRECI ' + p.creci].filter(Boolean).join(' · '))}</div><div class="muted">desde ${data(p.created_at)}</div></td>
+        <tbody>${lista.map(p => { const mine = paginas.filter(r => r.parceiro_id === p.user_id); return `<tr data-id="${p.user_id}">
+          <td><b>${esc(p.nome)}</b><div class="muted">${esc([p.imobiliaria, p.creci && 'CRECI ' + p.creci].filter(Boolean).join(' · '))}</div><div class="muted">${p.origem === 'cadastro' ? 'cadastrou-se' : 'acesso criado'} em ${data(p.created_at)}</div>${p.origem === 'cadastro' ? `<div class="muted">Vitacon Partners: ${p.vitacon_partners ? 'diz que já é cadastrado' : 'diz que ainda não é'}</div>` : ''}</td>
           <td>${esc(p.email)}<div class="muted">${esc(fone(p.whatsapp))}</div></td>
           <td>${mine.length}</td>
           <td>${mine.reduce((s, r) => s + r.visualizacoes, 0)}</td>
-          <td>${p.ativo ? '<span class="pill pronto">Ativo</span>' : '<span class="pill off">Desativado</span>'}${p.trocar_senha ? '<div class="muted">ainda não trocou a senha</div>' : ''}</td>
-          <td><div class="row"><button class="btn btn-ghost btn-small" type="button" data-act="senha">Nova senha</button><button class="btn ${p.ativo ? 'btn-danger' : 'btn-ghost'} btn-small" type="button" data-act="toggle">${p.ativo ? 'Desativar' : 'Reativar'}</button></div></td></tr>`; }).join('')}</tbody></table></div>`
-        : '<div class="empty">Nenhum parceiro com acesso ainda. Crie o primeiro acima.</div>';
+          <td>${p.ativo ? '<span class="pill pronto">Ativo</span>' : '<span class="pill off">Desativado</span>'}${p.conferido ? '' : ' <span class="pill novo">A conferir</span>'}${p.trocar_senha ? '<div class="muted">ainda não trocou a senha</div>' : ''}</td>
+          <td><div class="row">${p.conferido ? '' : '<button class="btn btn-primary btn-small" type="button" data-act="conf">Conferido</button>'}<button class="btn btn-ghost btn-small" type="button" data-act="senha">Nova senha</button><button class="btn ${p.ativo ? 'btn-danger' : 'btn-ghost'} btn-small" type="button" data-act="toggle">${p.ativo ? 'Desativar' : 'Reativar'}</button></div></td></tr>`; }).join('')}</tbody></table></div>`
+        : `<div class="empty">${tab === 'conf' ? 'Nenhum cadastro novo para conferir.' : 'Nenhum parceiro com acesso ainda.'}</div>`;
     }
   }
   $('t-pag').addEventListener('click', () => { tab = 'pag'; render(); });
   $('t-par').addEventListener('click', () => { tab = 'par'; render(); });
+  $('t-conf').addEventListener('click', () => { tab = 'conf'; render(); });
+  $('novos-ver').addEventListener('click', () => { tab = 'conf'; render(); $('list').scrollIntoView({behavior: 'smooth'}); });
+  /* Exportar parceiros (para cruzar com o Vitacon Partners) */
+  $('t-csv').addEventListener('click', () => {
+    const cols = [['Nome', p => p.nome], ['E-mail', p => p.email], ['WhatsApp', p => fone(p.whatsapp)], ['Imobiliária', p => p.imobiliaria || ''], ['CRECI', p => p.creci || ''],
+      ['Origem', p => p.origem === 'cadastro' ? 'Cadastrou-se no site' : 'Criado pelo Luigi'], ['Diz estar no Vitacon Partners', p => p.vitacon_partners == null ? '' : (p.vitacon_partners ? 'Sim' : 'Não')],
+      ['Conferido', p => p.conferido ? 'Sim' : 'Não'], ['Status', p => p.ativo ? 'Ativo' : 'Desativado'], ['Data', p => data(p.created_at)],
+      ['Páginas enviadas', p => paginas.filter(r => r.parceiro_id === p.user_id).length]];
+    const cell = v => `"${String(v).replace(/"/g, '""')}"`;
+    const csv = '\ufeff' + [cols.map(c => cell(c[0])).join(';'), ...parceiros.map(p => cols.map(c => cell(c[1](p))).join(';'))].join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {type: 'text/csv;charset=utf-8'}));
+    a.download = `parceiros-area-vitacon-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  });
   $('t-reload').addEventListener('click', load);
   $('list').addEventListener('click', async ev => {
     const b = ev.target.closest('button[data-act]'); if (!b) return;
     const id = b.closest('tr').dataset.id, p = pName(id);
     b.disabled = true;
+    if (b.dataset.act === 'conf') { await db.from('parceiros').update({conferido: true}).eq('user_id', id); load(); return; }
     if (b.dataset.act === 'senha') {
       const nova = gerar();
       const {error} = await db.rpc('admin_nova_senha', {p_user: id, p_senha: nova});

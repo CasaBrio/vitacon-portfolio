@@ -5,8 +5,8 @@
   const {esc, brl, m2, S, data, show, copy} = window.VP;
   const MAX = 6;
   const db = window.VP.client('vitacon-parceiro');
-  const views = ['v-login', 'v-senha', 'v-bloq', 'v-app'];
-  const view = id => { views.forEach(v => { $(v).hidden = v !== id; }); $('btn-sair').hidden = id === 'v-login'; $('btn-senha').hidden = id !== 'v-app'; };
+  const views = ['v-login', 'v-cadastro', 'v-senha', 'v-bloq', 'v-app'];
+  const view = id => { views.forEach(v => { $(v).hidden = v !== id; }); $('btn-sair').hidden = id === 'v-login' || id === 'v-cadastro'; $('btn-senha').hidden = id !== 'v-app'; };
 
   let me = null, base = null, chosen = new Set(), recovery = false, appReady = false;
   const pre = new URLSearchParams(location.search).get('add');
@@ -39,6 +39,51 @@
     const msg = `Olá Luigi, esqueci a senha da Área do Parceiro${email ? ' (e-mail ' + email + ')' : ''}. Pode me enviar uma nova senha provisória?`;
     $('l-msg').hidden = false; $('l-msg').className = 'msg ok';
     $('l-msg').innerHTML = `O Luigi envia uma nova senha provisória pelo WhatsApp. <a href="https://wa.me/5511998885850?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" style="font-weight:700">Pedir nova senha ↗</a>`;
+  });
+
+  /* Cadastro */
+  const abrirCadastro = () => { view('v-cadastro'); show($('c-msg'), ''); const e = $('l-email').value.trim(); if (e && !$('c-email').value) $('c-email').value = e; $('c-nome').focus(); };
+  $('c-abrir').addEventListener('click', abrirCadastro);
+  $('c-voltar').addEventListener('click', () => view('v-login'));
+  if (new URLSearchParams(location.search).has('cadastro')) setTimeout(async () => { const {data: {session}} = await db.auth.getSession(); if (!session) abrirCadastro(); }, 0);
+  $('c-vp').addEventListener('change', () => { $('c-vp-aviso').hidden = $('c-vp').value !== 'nao'; $('c-vp-aviso').className = 'msg'; });
+  const ERROS = {
+    email_invalido: 'Confira o e-mail.', senha_curta: 'A senha precisa ter pelo menos 8 caracteres.', nome_invalido: 'Informe o seu nome completo.',
+    whatsapp_invalido: 'Confira o WhatsApp: informe o DDD e o número.', dados_longos: 'Algum campo ficou longo demais.',
+    muitos_cadastros: 'Muitos cadastros agora. Tente de novo em alguns minutos.'
+  };
+  $('f-cad').addEventListener('submit', async ev => {
+    ev.preventDefault();
+    if ($('c-site').value) return;
+    const email = $('c-email').value.trim().toLowerCase(), senha = $('c-senha').value;
+    const zapN = window.VP.zap($('c-zap').value);
+    if (zapN.length < 10 || zapN.length > 13) { show($('c-msg'), ERROS.whatsapp_invalido, 'error'); return; }
+    if (senha.length < 8) { show($('c-msg'), ERROS.senha_curta, 'error'); return; }
+    if (senha !== $('c-conf').value) { show($('c-msg'), 'As duas senhas não são iguais.', 'error'); return; }
+    const b = $('c-go'); b.disabled = true; show($('c-msg'), '');
+    const {data: r, error} = await db.rpc('parceiro_autocadastro', {
+      p_email: email, p_senha: senha, p_nome: $('c-nome').value.trim(), p_whatsapp: zapN,
+      p_imobiliaria: $('c-imob').value.trim() || null, p_creci: $('c-creci').value.trim() || null,
+      p_vitacon_partners: $('c-vp').value === 'sim'
+    });
+    if (error || r !== 'ok') {
+      b.disabled = false;
+      if (r === 'email_existente') {
+        $('c-msg').hidden = false; $('c-msg').className = 'msg error';
+        $('c-msg').innerHTML = 'Esse e-mail já tem acesso. Entre com a sua senha ou use "Esqueci a senha" na tela de login. <button type="button" class="chip-link" id="c-ir-login">Ir para o login</button>';
+        $('c-ir-login').onclick = () => { $('l-email').value = email; view('v-login'); $('l-senha').focus(); };
+        return;
+      }
+      const code = Object.keys(ERROS).find(k => error && String(error.message).includes(k));
+      show($('c-msg'), code ? ERROS[code] : 'Não foi possível criar o acesso agora. Tente de novo em instantes.', 'error');
+      return;
+    }
+    const {error: e2} = await db.auth.signInWithPassword({email, password: senha});
+    b.disabled = false;
+    if (e2) { $('l-email').value = email; view('v-login'); show($('l-msg'), 'Acesso criado. Entre com o seu e-mail e a senha que você criou.', 'ok'); return; }
+    $('f-cad').reset();
+    if (new URLSearchParams(location.search).has('cadastro')) history.replaceState(null, '', location.pathname);
+    route();
   });
 
   /* Senha */

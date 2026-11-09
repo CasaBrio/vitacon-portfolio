@@ -19,6 +19,8 @@
 .pw input{font-family:var(--f-mono)}
 .sendbox{white-space:pre-line;font-family:var(--f-mono);font-size:13px;padding:12px;border-radius:10px;background:var(--night);border:1px solid var(--line);user-select:all}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.novos{justify-content:space-between;align-items:center;border-color:var(--accent)}
+.pill.novo{background:var(--accent);color:var(--accent-ink)}
 .tabs button[aria-pressed="true"]{background:var(--fg);color:var(--night);border-color:var(--fg)}
 @media (max-width:900px){.kpis{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:620px){.form-grid{grid-template-columns:1fr}}
@@ -54,9 +56,13 @@
 
     <section class="kpis" id="kpis"></section>
 
+    <section id="novos" hidden>
+      <div class="panel row novos"><span id="novos-txt"></span><button class="btn btn-primary btn-small" type="button" id="novos-ver">Ver cadastros</button></div>
+    </section>
+
     <section>
       <form class="panel stack" id="f-novo">
-        <div><div class="eyebrow">Novo acesso</div><h2>Liberar um parceiro</h2></div>
+        <div><div class="eyebrow">Novo acesso</div><h2>Liberar um parceiro</h2><p class="muted" style="font-size:13px">Os corretores também podem se cadastrar sozinhos em <b>/parceiro/?cadastro</b>. Use este formulário só quando quiser criar o acesso por eles.</p></div>
         <div class="form-grid">
           <label for="p-nome">Nome completo<input id="p-nome" required maxlength="100"></label>
           <label for="p-email">E-mail<input id="p-email" type="email" required maxlength="160"></label>
@@ -79,6 +85,8 @@
       <div class="tabs" role="group" aria-label="Lista">
         <button type="button" class="chip-link" id="t-pag" aria-pressed="true">Páginas enviadas</button>
         <button type="button" class="chip-link" id="t-par" aria-pressed="false">Parceiros</button>
+        <button type="button" class="chip-link" id="t-conf" aria-pressed="false" hidden>A conferir</button>
+        <button type="button" class="chip-link" id="t-csv">Exportar parceiros (Excel)</button>
         <button type="button" class="chip-link" id="t-reload">Atualizar</button>
       </div>
       <div id="list"><div class="empty">Carregando…</div></div>

@@ -67,15 +67,46 @@
         <button class="chip-link" type="button" id="l-esqueci" style="align-self:flex-start">Esqueci a senha</button>
         <div class="msg" id="l-msg" hidden></div>
       </form>
-      <div class="panel stack">
-        <h3>Ainda não tem acesso?</h3>
-        <p class="muted">O acesso é liberado para parceiros cadastrados no programa Vitacon Partners. Faça o seu cadastro e o Luigi envia o seu login.</p>
-        <div class="row">
-          <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Cadastrar no Vitacon Partners ↗</a>
-          <a class="btn btn-ghost" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20parceiro%20e%20gostaria%20de%20receber%20o%20acesso%20%C3%A0%20%C3%81rea%20do%20Parceiro." target="_blank" rel="noopener">Pedir acesso ao Luigi</a>
-        </div>
+      <div class="panel stack" id="c-intro">
+        <h3>Primeira vez aqui?</h3>
+        <p class="muted">Crie o seu acesso em um minuto, com a sua própria senha. Não precisa esperar o envio de login.</p>
+        <div class="row"><button class="btn btn-primary" type="button" id="c-abrir">Criar meu acesso</button></div>
       </div>
     </div>
+  </section>
+
+  <!-- Cadastro do parceiro -->
+  <section id="v-cadastro" hidden>
+    <form class="narrow panel stack" id="f-cad" autocomplete="on">
+      <div>
+        <div class="eyebrow">Cadastro de parceiro</div>
+        <h2>Crie o seu acesso</h2>
+        <p class="muted">Área exclusiva para corretores e imobiliárias parceiras da Vitacon. Use <b>o mesmo e-mail do seu cadastro no Vitacon Partners</b>: assim o seu cadastro é conferido mais rápido. Os seus dados aparecem nas páginas e artes que você enviar aos clientes.</p>
+      </div>
+      <label for="c-nome">Nome completo<input id="c-nome" autocomplete="name" required minlength="2" maxlength="100"></label>
+      <label for="c-email">E-mail<input id="c-email" type="email" autocomplete="email" required maxlength="160"></label>
+      <div class="two">
+        <label for="c-zap">WhatsApp com DDD<input id="c-zap" inputmode="tel" autocomplete="tel" required placeholder="11 99999-9999"></label>
+        <label for="c-creci">CRECI<input id="c-creci" maxlength="30" placeholder="Opcional"></label>
+      </div>
+      <label for="c-imob">Imobiliária<input id="c-imob" maxlength="100" autocomplete="organization" placeholder="Deixe em branco se for autônomo"></label>
+      <label for="c-vp">Você já é cadastrado no Vitacon Partners?<select id="c-vp" required>
+        <option value="">Selecione</option>
+        <option value="sim">Sim, já sou cadastrado</option>
+        <option value="nao">Ainda não</option>
+      </select></label>
+      <p class="msg" id="c-vp-aviso" hidden>Faça também o cadastro no <a href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener" style="font-weight:700">Vitacon Partners ↗</a>. Ele é necessário para receber comissão nas vendas.</p>
+      <div class="two">
+        <label for="c-senha">Crie uma senha (mínimo 8)<input id="c-senha" type="password" autocomplete="new-password" minlength="8" maxlength="72" required></label>
+        <label for="c-conf">Repita a senha<input id="c-conf" type="password" autocomplete="new-password" minlength="8" maxlength="72" required></label>
+      </div>
+      <label class="hp" aria-hidden="true" style="position:absolute;left:-9999px">Site<input id="c-site" tabindex="-1" autocomplete="off"></label>
+      <div class="row">
+        <button class="btn btn-primary" type="submit" id="c-go">Criar acesso e entrar</button>
+        <button class="btn btn-ghost" type="button" id="c-voltar">Já tenho acesso</button>
+      </div>
+      <div class="msg" id="c-msg" hidden></div>
+    </form>
   </section>
 
   <!-- Nova senha (primeiro acesso, recuperação ou troca) -->
