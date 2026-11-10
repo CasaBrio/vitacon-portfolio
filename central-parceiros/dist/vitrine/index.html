@@ -172,6 +172,7 @@ select{font-family:var(--f-body);font-size:13px;padding:8px 10px;border-radius:1
 .mgr p{margin:0;color:var(--muted);max-width:56ch}
 .mgr ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:14px}
 .mgr ul li::before{content:"→ ";color:var(--accent)}
+#gerente.dupla{display:grid;gap:16px}
 @media (max-width:620px){.mgr{grid-template-columns:1fr}.mgr img{max-width:260px}}
 .empty{grid-column:1/-1;color:var(--muted);padding:24px;border:1px dashed var(--line);border-radius:14px;text-align:center}
 
@@ -517,7 +518,7 @@ html{scroll-behavior:smooth}
           <li>Monto a proposta e acompanho cada etapa até a assinatura</li>
         </ul>
         <div class="contact">
-          <a class="btn btn-primary" href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20corretor%20e%20quero%20falar%20sobre%20a%20parceria%20Vitacon." target="_blank" rel="noopener">WhatsApp (11) 99888-5850</a>
+          <a class="btn btn-primary" data-luigi href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20corretor%20e%20quero%20falar%20sobre%20a%20parceria%20Vitacon." target="_blank" rel="noopener">WhatsApp (11) 99888-5850</a>
           <span id="mail">luigi@vitacon.com.br</span>
           <button type="button" id="copy-mail">Copiar e-mail</button>
         </div>
@@ -645,7 +646,7 @@ html{scroll-behavior:smooth}
     <div class="sec-head"><div><div class="eyebrow">Dúvidas frequentes</div><h2 id="h-faq">Perguntas dos parceiros</h2></div></div>
     <div class="faq">
       <details><summary>Como faço para ser parceiro Vitacon?</summary><p>Faça o cadastro no <a href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Vitacon Partners</a>. A solicitação vai para o nosso backoffice de parcerias, que confere os seus dados e inclui você no <b>CVCRM</b>, o CRM oficial da Vitacon. Em seguida o Luigi libera a sua Área do parceiro neste site.</p></details>
-      <details><summary>Onde vejo tabelas e espelhos de vendas?</summary><p>Em tempo real no <b>CVCRM</b>, o CRM oficial da Vitacon, o mesmo que os nossos executivos internos usam. Se você ainda não tem acesso, peça ao Luigi por e-mail (<a href="mailto:luigi@vitacon.com.br">luigi@vitacon.com.br</a>), <a href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20parceiro%20e%20preciso%20do%20acesso%20ao%20CVCRM." target="_blank" rel="noopener">WhatsApp</a> ou telefone, (11) 99888-5850. Nesta vitrine ficam os valores de referência do catálogo do mês.</p></details>
+      <details><summary>Onde vejo tabelas e espelhos de vendas?</summary><p>Em tempo real no <b>CVCRM</b>, o CRM oficial da Vitacon, o mesmo que os nossos executivos internos usam. Se você ainda não tem acesso, peça ao Luigi por e-mail (<a href="mailto:luigi@vitacon.com.br">luigi@vitacon.com.br</a>), <a data-luigi href="https://wa.me/5511998885850?text=Ol%C3%A1%20Luigi%2C%20sou%20parceiro%20e%20preciso%20do%20acesso%20ao%20CVCRM." target="_blank" rel="noopener">WhatsApp</a> ou telefone, (11) 99888-5850. Nesta vitrine ficam os valores de referência do catálogo do mês.</p></details>
       <details><summary>Como acompanho minhas vendas e comissões?</summary><p>Pelo <b>CVCRM</b>. Lá você acompanha os seus leads, clientes e o fluxo de cada venda até o recebimento da comissão. O Luigi acompanha junto com você cada etapa, da visita à assinatura.</p></details>
       <details><summary>Quanto ganho de comissão?</summary><p>No estoque, 4,5% como pessoa jurídica e 3% como pessoa física. Em lançamentos, 4% como PJ e 3% como PF. Cada card mostra o valor estimado em reais sobre o preço "a partir de". Bonificações de campanha são somadas conforme as regras de cada mês.</p></details>
       <details><summary>O que são HIS, HMP, NR e R2V nos cards?</summary><p><b>HIS</b> e <b>HMP</b> são unidades de habitação de interesse social e de mercado popular, com limite de renda familiar definido pela Prefeitura de São Paulo. Em 2026: HIS-1 até 3 salários mínimos (R$ 4.863), HIS-2 até 6 (R$ 9.726) e HMP até 10 (R$ 16.210). O comprador precisa comprovar o enquadramento. <b>NR</b> é unidade de uso não residencial e <b>R2V</b> é unidade residencial em edifício.</p></details>
@@ -668,6 +669,7 @@ html{scroll-behavior:smooth}
   <a class="btn btn-ghost" href="/parceiro/" id="mbar-area" hidden>Área do parceiro</a>
 </nav>
 
+<script src="/executivo.js"></script>
 <script src="/central-config.js"></script>
 <script src="/analytics.js"></script>
 <script src="/materiais-publicos.js"></script>

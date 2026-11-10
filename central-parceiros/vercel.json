@@ -72,6 +72,14 @@
       "destination": "/vitrine/index.html"
     },
     {
+      "source": "/titto",
+      "destination": "/vitrine/index.html"
+    },
+    {
+      "source": "/luigi",
+      "destination": "/vitrine/index.html"
+    },
+    {
       "source": "/c/exemplo",
       "destination": "/c/index.html"
     },

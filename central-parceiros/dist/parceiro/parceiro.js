@@ -38,7 +38,7 @@
     const email = $('l-email').value.trim();
     const msg = `Olá Luigi, esqueci a senha da Área do Parceiro${email ? ' (e-mail ' + email + ')' : ''}. Pode me enviar uma nova senha provisória?`;
     $('l-msg').hidden = false; $('l-msg').className = 'msg ok';
-    $('l-msg').innerHTML = `O Luigi envia uma nova senha provisória pelo WhatsApp. <a href="https://wa.me/5511998885850?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" style="font-weight:700">Pedir nova senha ↗</a>`;
+    $('l-msg').innerHTML = `O Luigi envia uma nova senha provisória pelo WhatsApp. <a data-luigi href="https://wa.me/5511998885850?text=${encodeURIComponent(msg)}" target="_blank" rel="noopener" style="font-weight:700">Pedir nova senha ↗</a>`;
   });
 
   /* Cadastro */
@@ -64,7 +64,8 @@
     const {data: r, error} = await db.rpc('parceiro_autocadastro', {
       p_email: email, p_senha: senha, p_nome: $('c-nome').value.trim(), p_whatsapp: zapN,
       p_imobiliaria: $('c-imob').value.trim() || null, p_creci: $('c-creci').value.trim() || null,
-      p_vitacon_partners: $('c-vp').value === 'sim'
+      p_vitacon_partners: $('c-vp').value === 'sim',
+      p_executivo: window.EXECUTIVO?.slug || null
     });
     if (error || r !== 'ok') {
       b.disabled = false;

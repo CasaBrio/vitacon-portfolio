@@ -24,7 +24,7 @@
     if (!config || pending >= 3 || sent >= 100) return;
     let host = null;
     try { host = document.referrer ? new URL(document.referrer).hostname.slice(0,100) : null; } catch (_) {}
-    const source = new URLSearchParams(location.search).get('utm_source');
+    const source = new URLSearchParams(location.search).get('utm_source') || window.EXECUTIVO?.slug;
     const row = {id:crypto.randomUUID(),visitor_key:visitorKey,event_name:name,project_name:data.empreendimento || null,material:data.material || null,action_name:data.acao || data.secao || data.origem || null,device:window.innerWidth<768?'Celular':window.innerWidth<1100?'Tablet':'Computador',referrer_host:host,source:source && /^[a-zA-Z0-9_-]{1,50}$/.test(source)?source:null};
     pending++;sent++;
     fetch(config.url+'/rest/v1/central_analytics_events',{method:'POST',headers:{apikey:config.key,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(row),keepalive:true}).catch(()=>{}).finally(()=>pending--);

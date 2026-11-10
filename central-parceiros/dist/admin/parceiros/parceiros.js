@@ -76,7 +76,7 @@
       $('list').innerHTML = lista.length ? `<div class="table-wrap"><table>
         <thead><tr><th>Parceiro</th><th>Contato</th><th>Páginas</th><th>Aberturas</th><th>Status</th><th></th></tr></thead>
         <tbody>${lista.map(p => { const mine = paginas.filter(r => r.parceiro_id === p.user_id); return `<tr data-id="${p.user_id}">
-          <td><b>${esc(p.nome)}</b><div class="muted">${esc([p.imobiliaria, p.creci && 'CRECI ' + p.creci].filter(Boolean).join(' · '))}</div><div class="muted">${p.origem === 'cadastro' ? 'cadastrou-se' : 'acesso criado'} em ${data(p.created_at)}</div>${p.origem === 'cadastro' ? `<div class="muted">Vitacon Partners: ${p.vitacon_partners ? 'diz que já é cadastrado' : 'diz que ainda não é'}</div>` : ''}</td>
+          <td><b>${esc(p.nome)}</b><div class="muted">${esc([p.imobiliaria, p.creci && 'CRECI ' + p.creci].filter(Boolean).join(' · '))}</div><div class="muted">${p.origem === 'cadastro' ? 'cadastrou-se' : 'acesso criado'} em ${data(p.created_at)}${p.executivo ? ' · via ' + esc(p.executivo.charAt(0).toUpperCase() + p.executivo.slice(1)) : ''}</div>${p.origem === 'cadastro' ? `<div class="muted">Vitacon Partners: ${p.vitacon_partners ? 'diz que já é cadastrado' : 'diz que ainda não é'}</div>` : ''}</td>
           <td>${esc(p.email)}<div class="muted">${esc(fone(p.whatsapp))}</div></td>
           <td>${mine.length}</td>
           <td>${mine.reduce((s, r) => s + r.visualizacoes, 0)}</td>
@@ -92,7 +92,7 @@
   /* Exportar parceiros (para cruzar com o Vitacon Partners) */
   $('t-csv').addEventListener('click', () => {
     const cols = [['Nome', p => p.nome], ['E-mail', p => p.email], ['WhatsApp', p => fone(p.whatsapp)], ['Imobiliária', p => p.imobiliaria || ''], ['CRECI', p => p.creci || ''],
-      ['Origem', p => p.origem === 'cadastro' ? 'Cadastrou-se no site' : 'Criado pelo Luigi'], ['Diz estar no Vitacon Partners', p => p.vitacon_partners == null ? '' : (p.vitacon_partners ? 'Sim' : 'Não')],
+      ['Origem', p => p.origem === 'cadastro' ? 'Cadastrou-se no site' : 'Criado pelo Luigi'], ['Executivo', p => p.executivo ? p.executivo.charAt(0).toUpperCase() + p.executivo.slice(1) : 'Luigi'], ['Diz estar no Vitacon Partners', p => p.vitacon_partners == null ? '' : (p.vitacon_partners ? 'Sim' : 'Não')],
       ['Conferido', p => p.conferido ? 'Sim' : 'Não'], ['Status', p => p.ativo ? 'Ativo' : 'Desativado'], ['Data', p => data(p.created_at)],
       ['Páginas enviadas', p => paginas.filter(r => r.parceiro_id === p.user_id).length]];
     const cell = v => `"${String(v).replace(/"/g, '""')}"`;
