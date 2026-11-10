@@ -1,8 +1,8 @@
 'use strict';
 // Executivos de parcerias com link próprio: parceirosvitacon.com.br/<slug> (ex.: /titto).
-// Quem entra pelo link vê o contato do executivo em todo o site, e o aparelho guarda a escolha para as próximas visitas.
-// parceirosvitacon.com.br/luigi volta para o contato do Luigi. Para um novo executivo: incluir abaixo,
-// colocar a foto em /vitrine/<slug>.jpg e adicionar a rota /<slug> no vercel.json.
+// Só quem entra pelo link do executivo vê o contato dele; o endereço normal mostra apenas o Luigi.
+// Nada fica guardado no aparelho: os links internos (mapa, Área do Parceiro, app) levam ?ex=<slug> adiante.
+// Para um novo executivo: incluir abaixo, colocar a foto em /vitrine/<slug>.jpg e adicionar a rota /<slug> no vercel.json.
 // Links com data-luigi continuam com o Luigi (ex.: senha esquecida, FAQ que cita o Luigi).
 (() => {
   const LUIGI = '5511998885850', LUIGI_FONE = '(11) 99888-5850';
@@ -10,14 +10,11 @@
     titto: {nome: 'Titto', cargo: 'Coordenador de Parcerias', email: 'tito.aquino@executivoassociado.com.br',
       whatsapp: '5511916632424', fone: '(11) 91663-2424', foto: '/vitrine/titto.jpg'}
   };
-  const KEY = 'vitacon-executivo';
-  let slug = (new URLSearchParams(location.search).get('ex') || location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
-  try {
-    if (slug === 'luigi') { localStorage.removeItem(KEY); slug = ''; }
-    else if (EXECUTIVOS[slug]) localStorage.setItem(KEY, slug);
-    else slug = localStorage.getItem(KEY) || '';
-  } catch (_) { if (!EXECUTIVOS[slug]) slug = ''; }
-  const ex = EXECUTIVOS[slug] ? Object.freeze({slug, ...EXECUTIVOS[slug]}) : null;
+  try { localStorage.removeItem('vitacon-executivo'); } catch (_) { /* versão anterior guardava o executivo */ }
+  const q = (new URLSearchParams(location.search).get('ex') || '').toLowerCase();
+  const seg = (location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
+  const slug = EXECUTIVOS[q] ? q : EXECUTIVOS[seg] ? seg : '';
+  const ex = slug ? Object.freeze({slug, ...EXECUTIVOS[slug]}) : null;
   window.EXECUTIVO = ex;
   if (!ex) return;
 
@@ -25,8 +22,22 @@
   const nome = s => s.replace(/\bLuigi\b/g, ex.nome).split(LUIGI_FONE).join(ex.fone);
 
   // Troca os WhatsApp do Luigi pelo do executivo, com a saudação no nome dele.
+  const INTERNAS = /^\/(vitrine|mapa|parceiro|app)(\/|$)|^\/$/;
+  const levar = root => {
+    const as = root.matches?.('a[href]') ? [root] : [];
+    as.push(...root.querySelectorAll('a[href]'));
+    as.forEach(a => {
+      let url;
+      try { url = new URL(a.getAttribute('href'), location.href); } catch (_) { return; }
+      if (url.origin !== location.origin || !INTERNAS.test(url.pathname) || url.searchParams.get('ex') === ex.slug) return;
+      if (url.pathname === location.pathname && a.getAttribute('href').startsWith('#')) return;
+      url.searchParams.set('ex', ex.slug);
+      a.href = url.pathname + url.search + url.hash;
+    });
+  };
   const trocar = root => {
     if (!root.querySelectorAll) return;
+    levar(root);
     const links = root.matches?.('a[href*="wa.me/' + LUIGI + '"]') ? [root] : [];
     links.push(...root.querySelectorAll('a[href*="wa.me/' + LUIGI + '"]'));
     links.forEach(a => {
