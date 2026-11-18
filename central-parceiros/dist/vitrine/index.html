@@ -455,6 +455,13 @@ html{scroll-behavior:smooth}
 @media (max-width:1000px){.portf{grid-template-columns:repeat(3,1fr)}}
 @media (max-width:760px){.portf{grid-template-columns:1fr 1fr}}
 @media (max-width:420px){.portf{grid-template-columns:1fr}}
+.signup-comm{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.signup-comm a{display:flex;align-items:baseline;gap:6px;text-decoration:none;color:var(--fg);background:var(--night-2);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.signup-comm a:hover{border-color:var(--accent)}
+.signup-comm b{font-family:var(--f-display);font-weight:700;font-size:18px;color:var(--accent)}
+.signup-comm span{font-size:12.5px;color:var(--muted)}
+.signup-ctas{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+@media (max-width:760px){.signup-ctas{width:100%}.signup-ctas .btn{justify-content:center}}
 </style>
 </head>
 <body>
@@ -464,12 +471,13 @@ html{scroll-behavior:smooth}
     <nav class="menu" id="menu" aria-label="Seções da página">
       <a href="#vitrine">Vitrine</a>
       <a href="#portfolio">Portfólio</a>
+      <a href="#como-funciona">Seja parceiro</a>
+      <a href="#lanc-sec">Lançamentos</a>
+      <a href="#comissoes">Comissões</a>
       <a href="/mapa/" target="_blank" rel="noopener">Mapa ↗</a>
       <a href="#noticias">Notícias</a>
-      <a href="#lanc-sec">Lançamentos</a>
       <a href="#pagina-cliente">Para o cliente</a>
       <a href="#destaques">Destaques</a>
-      <a href="#como-funciona">Como funciona</a>
       <a href="#duvidas">Dúvidas</a>
     </nav>
     <div class="top-actions">
@@ -481,12 +489,13 @@ html{scroll-behavior:smooth}
       <nav aria-label="Menu">
         <a href="#vitrine">Vitrine de empreendimentos</a>
         <a href="#portfolio">Portfólio completo</a>
+        <a href="#como-funciona">Seja parceiro: como começar</a>
+        <a href="#comissoes">Taxas de comissão</a>
         <a href="/mapa/" target="_blank" rel="noopener">Mapa dos empreendimentos ↗</a>
         <a href="#destaques">Destaques do mês</a>
         <a href="#lanc-sec">Lançamentos</a>
         <a href="#pagina-cliente">Página para o cliente</a>
         <a href="#noticias">Notícias do mercado</a>
-        <a href="#como-funciona">Como funciona a parceria</a>
         <a href="#duvidas">Dúvidas frequentes</a>
       </nav>
       <div class="drawer-btns">
@@ -528,8 +537,16 @@ html{scroll-behavior:smooth}
         <div class="eyebrow">Programa de parcerias Vitacon</div>
         <h2 id="h-signup">Cadastre-se para receber informações privilegiadas</h2>
         <p>Depois do cadastro no Vitacon Partners, o nosso backoffice de parcerias confere os seus dados e inclui você no CVCRM, o CRM oficial da Vitacon, o mesmo dos nossos executivos. Lá você consulta tabelas e espelhos em tempo real e acompanha leads, clientes e vendas até o recebimento da comissão.</p>
+        <div class="signup-comm" aria-label="Comissões">
+          <a href="#comissoes"><b>4,5%</b><span>estoque · PJ</span></a>
+          <a href="#comissoes"><b>4,0%</b><span>lançamentos · PJ</span></a>
+          <a href="#comissoes"><b>3,0%</b><span>pessoa física</span></a>
+        </div>
       </div>
-      <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Quero me cadastrar ↗</a>
+      <div class="signup-ctas">
+        <a class="btn btn-primary" href="https://vitaconpartners.com.br/acesso" target="_blank" rel="noopener">Quero me cadastrar ↗</a>
+        <a class="btn btn-ghost" href="#como-funciona">Como funciona a parceria ↓</a>
+      </div>
     </div>
   </section>
 
@@ -681,7 +698,7 @@ html{scroll-behavior:smooth}
     </div>
   </section>
 
-  <section aria-labelledby="h-comm">
+  <section aria-labelledby="h-comm" id="comissoes">
     <div class="sec-head"><div><div class="eyebrow">Parcerias Vitacon</div><h2 id="h-comm">Taxas de comissão</h2>
       <p>Cada card mostra a comissão estimada sobre o valor "a partir de", sem bonificações de campanha. Confirme as regras de aplicação com o Luigi.</p></div></div>
     <div class="comm">
