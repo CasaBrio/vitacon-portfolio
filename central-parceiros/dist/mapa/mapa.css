@@ -6,3 +6,6 @@
 .back-links a{text-decoration:none}
 .back-vitrine{background:#10132d;color:#fff!important;padding:8px 14px;border-radius:999px;font-weight:700}
 .back-vitrine:hover{background:#ff8a3d;color:#1a0f05!important}
+
+.button.primary{background:#6931c9;color:#fff;border-color:#6931c9}.button.primary:hover{background:#5a27b0}
+.leaflet-popup-content .pop-link{display:block;margin-top:8px;font-size:12px;font-weight:700;color:#6931c9;text-decoration:none}

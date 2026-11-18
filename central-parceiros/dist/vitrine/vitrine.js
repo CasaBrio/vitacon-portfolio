@@ -83,6 +83,7 @@
         his: it.hisHmp || null,
         ultimas: !!it.ultimasUnidades,
         mapa: it.mapa, pasta: it.pasta, tabela: it.tabela, foto: it.foto || '',
+        slug,
         explorar: slug && c.presentationAvailable !== false ? APRESENTACAO(slug) : '',
         book: slug ? books[slug] || '' : ''
       };
@@ -232,7 +233,7 @@
         ? `Olá Luigi, sou parceiro e tenho cliente interessado no ${p.nome}. Pode me avisar sobre o lançamento e as condições?`
         : `Olá Luigi, sou parceiro e tenho cliente com perfil para o ${p.nome}. Pode me enviar as unidades disponíveis, a tabela e o espelho atualizados?`;
       const area = p.area && !/consulte/i.test(p.area) ? p.area : '';
-      return `<article class="portf-card" data-s="${p.fase}">
+      return `<article class="portf-card" data-s="${p.fase}" id="portf-${esc(p.slug)}">
         <div class="portf-ph"><i aria-hidden="true">${esc(sigla(p.nome))}</i><img src="${esc(fotosVtc[p.slug] || FOTO(p.slug))}"${fotosVtc[p.slug] ? ` data-alt="${esc(FOTO(p.slug))}"` : ''} alt="Perspectiva ilustrativa do ${esc(p.nome)}" loading="lazy" onerror="vtFotoErro(this)"><span class="pill ${p.fase}">${FASE_TXT[p.fase]}</span></div>
         <div class="portf-body"><h3>${esc(p.nome)}</h3><div class="bairro">${esc(p.publicDistrict || '')}</div>
           <div class="meta">${area ? esc(area) + ' · ' : ''}valores sob consulta</div>
@@ -346,7 +347,7 @@
     tower.querySelectorAll('.floor').forEach(f => f.classList.toggle('dim', f.dataset.id.startsWith('L-') ? !lancOk : !ids.has(f.dataset.id)));
     count.textContent = `${r.length} de ${D.length} empreendimentos`;
     grid.innerHTML = r.length ? r.map(e => `
-      <article class="card" id="card-${e.id}">
+      <article class="card" id="card-${e.id}" data-slug="${esc(e.slug || '')}">
         ${e.foto ? `<div class="ph"><img src="${esc(e.foto)}" alt="Perspectiva ilustrativa do ${esc(e.nome)}" loading="lazy" onerror="this.parentNode.remove()"><span>Imagem ilustrativa</span></div>` : ''}
         <div class="card-top"><div><h3>${esc(e.nome)}</h3><div class="bairro">${esc(e.bairro)}</div></div>
         <div class="pills"><span class="pill ${e.st}">${S[e.st]}</span>${e.ultimas ? '<span class="pill last">Últimas unidades</span>' : ''}${campanha && offTxt(e) ? `<span class="off">${esc(offTxt(e))}</span>` : ''}</div></div>
@@ -396,9 +397,27 @@
     c.classList.add('flash'); setTimeout(() => c.classList.remove('flash'), 1800);
   }
 
+  /* Vindo do mapa (/vitrine/#emp-<slug>): leva ao card da campanha, ao lançamento ou ao card do portfólio. */
+  function goToEmp(slug) {
+    const e = D.find(x => x.slug === slug);
+    if (e) return focusCard(e);
+    if ($('launch-' + slug)) return focusLaunch({slug});
+    let c = $('portf-' + slug);
+    if (!c && $('portf-seg')) { portfFase = 'all'; $('portf-seg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.f === 'all'))); renderPortf(); c = $('portf-' + slug); }
+    if (!c) return;
+    c.scrollIntoView({behavior: 'auto', block: 'center'});
+    c.classList.add('flash'); setTimeout(() => c.classList.remove('flash'), 1800);
+  }
+
   /* Link personalizado: /vitrine/#para-nome-da-imobiliaria */
   function applyHash() {
     const h = decodeURIComponent(location.hash.slice(1));
+    if (/^emp-[a-z0-9-]+$/i.test(h) && D.length) {
+      // A página ainda muda de altura (fotos, notícias) logo depois de abrir; reposiciona até assentar.
+      const slug = h.slice(4), alvo = () => document.getElementById('portf-' + slug) || document.getElementById('launch-' + slug) || document.querySelector(`.card[data-slug="${slug}"]`);
+      setTimeout(() => goToEmp(slug), 150);
+      [700, 1400, 2400].forEach(t => setTimeout(() => { const c = alvo(); if (c) { const r = c.getBoundingClientRect(); if (r.top < 60 || r.bottom > innerHeight) c.scrollIntoView({behavior: 'auto', block: 'center'}); } }, t));
+    }
     const el = $('para');
     if (/^para-[a-z0-9-]+$/i.test(h)) {
       el.textContent = `PREPARADO PARA ${h.slice(5).split('-').filter(Boolean).join(' ').toUpperCase()}`;
