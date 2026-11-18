@@ -189,6 +189,57 @@
     }).join('');
   }
 
+
+  /* Portfólio completo: empreendimentos do catálogo que não estão na campanha do mês nem nos lançamentos em destaque.
+     Sem preço (valores sob consulta); a lista vem de catalogo-projetos.js e se atualiza sozinha quando o tabelão muda. */
+  const FASE = {'Prontos': 'pronto', 'Em Obras': 'obras', 'Em Lançamento': 'lanc', 'Breve Lançamento': 'lanc', 'Futuro Lançamento': 'futuro'};
+  const FASE_TXT = {pronto: 'Pronto', obras: 'Em obras', lanc: 'Lançamento', futuro: 'Futuro lançamento'};
+  const FASE_SEG = {all: 'Todos', pronto: 'Prontos', obras: 'Em obras', lanc: 'Lançamento', futuro: 'Futuros'};
+  const FOTO = slug => `https://elkvnyjzybigivshivox.supabase.co/storage/v1/object/public/vitrine/fachadas/${slug}.jpg`;
+  let portfFase = 'all', P = [];
+  function portfolio(data) {
+    const sec = $('portfolio');
+    if (!sec) return;
+    const inCamp = new Set((data.itens || []).map(it => it.catalogo));
+    const ordem = ['pronto', 'obras', 'lanc', 'futuro'];
+    P = catalog.filter(p => p.slug && !inCamp.has(p.name) && !p.featuredLaunch)
+      .map(p => ({...p, fase: FASE[p.phase] || 'futuro', nome: nice(p.name.replace(/\s+—\s+/, ' · '))}))
+      .sort((a, b) => ordem.indexOf(a.fase) - ordem.indexOf(b.fase) || a.nome.localeCompare(b.nome, 'pt'));
+    if (!P.length) { sec.hidden = true; return; }
+    if (campanha) $('portf-sub').textContent = `Além dos ${D.length} empreendimentos da ${campanha}, estes também fazem parte do portfólio Vitacon. Valores e unidades sob consulta: peça a tabela atualizada direto ao Luigi.`;
+    const n = k => P.filter(p => p.fase === k).length;
+    $('portf-seg').innerHTML = Object.entries(FASE_SEG).filter(([k]) => k === 'all' || n(k))
+      .map(([k, t]) => `<button type="button" data-f="${k}" aria-pressed="${k === portfFase}">${esc(t)}${k === 'all' ? '' : ` (${n(k)})`}</button>`).join('');
+    $('portf-seg').addEventListener('click', ev => {
+      const b = ev.target.closest('button'); if (!b) return;
+      portfFase = b.dataset.f;
+      $('portf-seg').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+      renderPortf();
+    });
+    renderPortf();
+  }
+  function renderPortf() {
+    const r = P.filter(p => portfFase === 'all' || p.fase === portfFase);
+    $('portf-count').textContent = `${r.length} de ${P.length} empreendimentos`;
+    const sigla = n => n.replace(/^(Vitacon|ON|VN|Vita|H)\s+/i, '').split(/\s+/).filter(w => !SMALL.has(w.toLowerCase()) && !/^\d/.test(w) && w !== '·').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    $('portf').innerHTML = r.map(p => {
+      const futuro = p.fase === 'futuro';
+      const msg = futuro
+        ? `Olá Luigi, sou parceiro e tenho cliente interessado no ${p.nome}. Pode me avisar sobre o lançamento e as condições?`
+        : `Olá Luigi, sou parceiro e tenho cliente com perfil para o ${p.nome}. Pode me enviar as unidades disponíveis, a tabela e o espelho atualizados?`;
+      const area = p.area && !/consulte/i.test(p.area) ? p.area : '';
+      return `<article class="portf-card" data-s="${p.fase}">
+        <div class="portf-ph"><i aria-hidden="true">${esc(sigla(p.nome))}</i><img src="${esc(FOTO(p.slug))}" alt="Perspectiva ilustrativa do ${esc(p.nome)}" loading="lazy" onerror="this.remove()"><span class="pill ${p.fase}">${FASE_TXT[p.fase]}</span></div>
+        <div class="portf-body"><h3>${esc(p.nome)}</h3><div class="bairro">${esc(p.publicDistrict || '')}</div>
+          <div class="meta">${area ? esc(area) + ' · ' : ''}valores sob consulta</div>
+          <div class="portf-links">
+            <a class="wa" href="${esc(wa(msg))}" target="_blank" rel="noopener">${futuro ? 'Quero ser avisado' : 'Pedir tabela'}</a>
+            ${p.presentationAvailable !== false ? `<a href="${esc(APRESENTACAO(p.slug))}">Explorar</a>` : ''}
+            ${books[p.slug] ? `<a href="${esc(books[p.slug])}" target="_blank" rel="noopener">Book ↗</a>` : ''}
+          </div></div></article>`;
+    }).join('');
+  }
+
   /* Torre 3D: um andar por empreendimento, o mais barato na base.
      A rotação é feita em JavaScript (funciona no iPhone e no Android) e dá para girar arrastando o dedo. */
   const tower = $('tower'), tag = $('tag'), stage = $('stage');
@@ -348,7 +399,7 @@
 
   fetch('/vitrine/oportunidades.json', {cache: 'no-store'}).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(data => {
     build(data);
-    header(data); picks(); launches(); buildTower();
+    header(data); picks(); launches(); portfolio(data); buildTower();
     [...new Set(D.map(e => e.bairro).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt')).forEach(b => fB.add(new Option(b, b)));
     document.querySelector('.seg').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) { setStatus(b.dataset.st); render(); } });
     [fB, fT, fS].forEach(s => s.addEventListener('change', render));
