@@ -36,6 +36,9 @@
 
   const catalog = Array.isArray(window.CATALOGO_PROJETOS) ? window.CATALOGO_PROJETOS : [];
   const books = window.MATERIAL_PUBLICO || {};
+  const fotosVtc = window.FOTOS_VITACON || {};
+  // Foto do site da Vitacon primeiro; se não abrir, tenta a do Supabase (data-alt) e depois some.
+  window.vtFotoErro = img => { const alt = img.dataset.alt; if (alt) { img.removeAttribute('data-alt'); img.src = alt; } else img.remove(); };
   const byName = new Map(catalog.map(p => [p.name, p]));
 
   let D = [];
@@ -183,8 +186,9 @@
         slug && books[slug] && `<a class="btn btn-ghost" href="${esc(books[slug])}" target="_blank" rel="noopener">Book ↗</a>`,
         `<a class="btn btn-ghost" href="${esc(wa(`Olá Luigi, sou parceiro e gostaria de solicitar as tabelas e os espelhos de vendas atualizados do ${n}.`))}" target="_blank" rel="noopener">Pedir tabela e espelho</a>`
       ].filter(Boolean).join('');
-      const foto = (D.find(e => e.nome.toLowerCase() === n.toLowerCase()) || {}).foto || `https://elkvnyjzybigivshivox.supabase.co/storage/v1/object/public/vitrine/fachadas/${slug}.jpg`;
-      return `<article class="launch has-ph" id="launch-${esc(slug)}"><div class="launch-ph"><img src="${esc(foto)}" alt="Perspectiva ilustrativa do ${esc(n)}" loading="lazy" onerror="this.parentNode.remove()"></div><div class="launch-body"><div class="eyebrow">Lançamento · ${esc(p.publicDistrict || '')}</div><h3>${esc(n)}</h3>
+      const sup = (D.find(e => e.nome.toLowerCase() === n.toLowerCase()) || {}).foto || `https://elkvnyjzybigivshivox.supabase.co/storage/v1/object/public/vitrine/fachadas/${slug}.jpg`;
+      const foto = fotosVtc[slug] || sup;
+      return `<article class="launch has-ph" id="launch-${esc(slug)}"><div class="launch-ph"><img src="${esc(foto)}"${foto !== sup ? ` data-alt="${esc(sup)}"` : ''} alt="Perspectiva ilustrativa do ${esc(n)}" loading="lazy" onerror="if(this.dataset.alt)vtFotoErro(this);else this.parentNode.remove()"></div><div class="launch-body"><div class="eyebrow">Lançamento · ${esc(p.publicDistrict || '')}</div><h3>${esc(n)}</h3>
         <p>${esc([p.area, p.address].filter(Boolean).join(' · '))}${esc(from)}</p><div class="row">${btns}</div></div></article>`;
     }).join('');
   }
@@ -229,7 +233,7 @@
         : `Olá Luigi, sou parceiro e tenho cliente com perfil para o ${p.nome}. Pode me enviar as unidades disponíveis, a tabela e o espelho atualizados?`;
       const area = p.area && !/consulte/i.test(p.area) ? p.area : '';
       return `<article class="portf-card" data-s="${p.fase}">
-        <div class="portf-ph"><i aria-hidden="true">${esc(sigla(p.nome))}</i><img src="${esc(FOTO(p.slug))}" alt="Perspectiva ilustrativa do ${esc(p.nome)}" loading="lazy" onerror="this.remove()"><span class="pill ${p.fase}">${FASE_TXT[p.fase]}</span></div>
+        <div class="portf-ph"><i aria-hidden="true">${esc(sigla(p.nome))}</i><img src="${esc(fotosVtc[p.slug] || FOTO(p.slug))}"${fotosVtc[p.slug] ? ` data-alt="${esc(FOTO(p.slug))}"` : ''} alt="Perspectiva ilustrativa do ${esc(p.nome)}" loading="lazy" onerror="vtFotoErro(this)"><span class="pill ${p.fase}">${FASE_TXT[p.fase]}</span></div>
         <div class="portf-body"><h3>${esc(p.nome)}</h3><div class="bairro">${esc(p.publicDistrict || '')}</div>
           <div class="meta">${area ? esc(area) + ' · ' : ''}valores sob consulta</div>
           <div class="portf-links">
