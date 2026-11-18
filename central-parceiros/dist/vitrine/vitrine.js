@@ -184,7 +184,7 @@
         `<a class="btn btn-ghost" href="${esc(wa(`Olá Luigi, sou parceiro e gostaria de solicitar as tabelas e os espelhos de vendas atualizados do ${n}.`))}" target="_blank" rel="noopener">Pedir tabela e espelho</a>`
       ].filter(Boolean).join('');
       const foto = (D.find(e => e.nome.toLowerCase() === n.toLowerCase()) || {}).foto || `https://elkvnyjzybigivshivox.supabase.co/storage/v1/object/public/vitrine/fachadas/${slug}.jpg`;
-      return `<article class="launch has-ph"><div class="launch-ph"><img src="${esc(foto)}" alt="Perspectiva ilustrativa do ${esc(n)}" loading="lazy" onerror="this.parentNode.remove()"></div><div class="launch-body"><div class="eyebrow">Lançamento · ${esc(p.publicDistrict || '')}</div><h3>${esc(n)}</h3>
+      return `<article class="launch has-ph" id="launch-${esc(slug)}"><div class="launch-ph"><img src="${esc(foto)}" alt="Perspectiva ilustrativa do ${esc(n)}" loading="lazy" onerror="this.parentNode.remove()"></div><div class="launch-body"><div class="eyebrow">Lançamento · ${esc(p.publicDistrict || '')}</div><h3>${esc(n)}</h3>
         <p>${esc([p.area, p.address].filter(Boolean).join(' · '))}${esc(from)}</p><div class="row">${btns}</div></div></article>`;
     }).join('');
   }
@@ -279,8 +279,18 @@
   const endDrag = () => { if (drag?.moved) holdUntil = performance.now() + 1500; drag = null; };
   addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
 
+  // Lançamentos em destaque ficam no topo da torre (sem preço; o toque leva ao card do lançamento).
+  const towerLaunches = () => catalog.filter(p => p.featuredLaunch && p.slug && !D.some(e => e.nome.toLowerCase() === nice(p.name).toLowerCase()))
+    .map(p => ({id: 'L-' + p.slug, nome: nice(p.name), bairro: p.publicDistrict || '', st: 'lanc', launch: true, area: p.area || '', slug: p.slug}));
+  function focusLaunch(e) {
+    const c = $('launch-' + e.slug);
+    if (!c) return;
+    c.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
+    c.classList.add('flash'); setTimeout(() => c.classList.remove('flash'), 1800);
+  }
   function buildTower() {
-    const floors = [...D].sort((a, b) => a.preco - b.preco);
+    const floors = [...[...D].sort((a, b) => a.preco - b.preco), ...towerLaunches()];
+    const lg = $('lg-lanc'); if (lg && floors.some(e => e.st === 'lanc')) lg.hidden = false;
     tower.style.setProperty('--n', floors.length);
     tower.style.height = `calc(var(--h) * ${floors.length})`;
     tower.innerHTML = '';
@@ -288,21 +298,23 @@
       const f = document.createElement('div');
       f.className = 'floor'; f.dataset.s = e.st; f.dataset.id = e.id; f.tabIndex = 0;
       f.setAttribute('role', 'button');
-      f.setAttribute('aria-label', `${e.nome}, ${e.bairro}, a partir de ${brl(e.preco)}`);
+      f.setAttribute('aria-label', e.launch ? `${e.nome}, ${e.bairro}, lançamento` : `${e.nome}, ${e.bairro}, a partir de ${brl(e.preco)}`);
       f.style.bottom = `calc(var(--h) * ${i})`;
       f.style.animationDelay = (0.15 + i * 0.05) + 's';
       f.innerHTML = '<div class="face f-front"></div><div class="face f-back"></div><div class="face f-left"></div><div class="face f-right"></div>' + (i === floors.length - 1 ? '<div class="roof"></div>' : '');
       const show = (withLink) => {
-        tag.innerHTML = `<b>${esc(e.nome)}</b><small>${esc(e.bairro)}<span class="t-st"> · ${S[e.st]}</span> · <span class="t-long">a partir de</span><span class="t-short">desde</span> ${brl(e.preco)}</small>` +
+        tag.innerHTML = (e.launch
+          ? `<b>${esc(e.nome)}</b><small>${esc(e.bairro)} · <span class="t-long">Lançamento · </span>${esc(e.area)}</small>`
+          : `<b>${esc(e.nome)}</b><small>${esc(e.bairro)}<span class="t-st"> · ${S[e.st]}</span> · <span class="t-long">a partir de</span><span class="t-short">desde</span> ${brl(e.preco)}</small>`) +
           (withLink ? `<button type="button" class="tag-go">Ver detalhes ↓</button>` : '');
         tag.classList.toggle('has-go', !!withLink);
         const b = tag.querySelector('.tag-go');
-        if (b) b.addEventListener('click', () => focusCard(e));
+        if (b) b.addEventListener('click', () => (e.launch ? focusLaunch : focusCard)(e));
         tower.querySelectorAll('.floor').forEach(x => x.classList.toggle('on', x === f));
       };
       f._show = show;
       // Computador: clicar leva ao card. Celular: o toque mostra o nome e o botão "Ver detalhes".
-      const go = () => { if (drag?.moved) return; holdUntil = performance.now() + 5000; if (fine) { show(); focusCard(e); } else show(true); };
+      const go = () => { if (drag?.moved) return; holdUntil = performance.now() + 5000; if (fine) { show(); (e.launch ? focusLaunch : focusCard)(e); } else show(true); };
       if (fine) f.addEventListener('mouseenter', show);
       f.addEventListener('focus', show); f.addEventListener('click', go);
       f.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); go(); } });
@@ -326,7 +338,8 @@
   }
   function render() {
     const r = list(), ids = new Set(r.map(e => e.id));
-    tower.querySelectorAll('.floor').forEach(f => f.classList.toggle('dim', !ids.has(f.dataset.id)));
+    const lancOk = (st === 'all' || st === 'lanc') && !perfil && !fB.value && !fT.value;
+    tower.querySelectorAll('.floor').forEach(f => f.classList.toggle('dim', f.dataset.id.startsWith('L-') ? !lancOk : !ids.has(f.dataset.id)));
     count.textContent = `${r.length} de ${D.length} empreendimentos`;
     grid.innerHTML = r.length ? r.map(e => `
       <article class="card" id="card-${e.id}">
